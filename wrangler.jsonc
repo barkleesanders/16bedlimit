@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sixteen-bed-limit",
+  "main": "src/index.tsx",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "ai": { "binding": "AI" },
+  "vars": {
+    "SITE_ORIGIN": "https://16bedlimit.org"
+  }
+}
