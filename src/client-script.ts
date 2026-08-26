@@ -129,7 +129,7 @@ async function ask(question) {
     }
 
     if (!acc) {
-      holder.innerHTML = '<p>I could not produce an answer just then. Try rephrasing, or email <a href="mailto:hello@16bedlimit.org">hello@16bedlimit.org</a>.</p>';
+      holder.innerHTML = '<p>I could not produce an answer just then. Try rephrasing, or email <a href="mailto:hello@16bedlimit.com">hello@16bedlimit.com</a>.</p>';
     } else {
       history.push({ role: 'user', content: question });
       history.push({ role: 'assistant', content: acc });

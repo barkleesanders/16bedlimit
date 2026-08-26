@@ -1,5 +1,5 @@
 /**
- * VERIFIED DATA LAYER — 16bedlimit.org
+ * VERIFIED DATA LAYER — 16bedlimit.com
  *
  * GROUND RULE: every number in this file carries `source` (a live URL) and
  * `retrieved` (ISO date it was fetched). Nothing is estimated, interpolated,
@@ -757,7 +757,7 @@ export const ARGUMENTS = {
  * 9. CONTACT
  * ------------------------------------------------------------------ */
 
-export const CONTACT_EMAIL = 'hello@16bedlimit.org';
+export const CONTACT_EMAIL = 'hello@16bedlimit.com';
 
 export const CONTACT_INTENTS = [
   {
@@ -1069,7 +1069,7 @@ export function buildKnowledgeBase(): string {
   return lines.join('\n');
 }
 
-export const SYSTEM_PROMPT = `You are the reference assistant for 16bedlimit.org, a public explainer about Medicaid's Institution for Mental Diseases (IMD) exclusion.
+export const SYSTEM_PROMPT = `You are the reference assistant for 16bedlimit.com, a public explainer about Medicaid's Institution for Mental Diseases (IMD) exclusion.
 
 HOW TO ANSWER
 - Answer only from the REFERENCE below. It is the entire corpus you have.

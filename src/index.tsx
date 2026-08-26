@@ -35,10 +35,51 @@ import {
 } from './data';
 import { CSS } from './styles';
 
+interface RateLimiter {
+  limit(options: { key: string }): Promise<{ success: boolean }>;
+}
+
 type Bindings = {
   AI: Ai;
   SITE_ORIGIN: string;
+  CHAT_LIMIT: RateLimiter;
+  MEDIA_LIMIT: RateLimiter;
 };
+
+/**
+ * Per-IP gate on the metered AI routes. Returns a 429 Response when the caller
+ * is over budget, or null to proceed.
+ *
+ * Fails OPEN by design: if the binding is unavailable the site keeps answering
+ * questions rather than going dark. A limiter outage should degrade cost
+ * control, not the public explainer. The failure is logged so it is visible.
+ */
+async function rateLimited(
+  limiter: RateLimiter | undefined,
+  request: Request,
+  route: string,
+): Promise<Response | null> {
+  if (!limiter) return null;
+  const ip = request.headers.get('cf-connecting-ip') ?? 'unknown';
+  try {
+    const { success } = await limiter.limit({ key: `${route}:${ip}` });
+    if (success) return null;
+    console.log(JSON.stringify({ event: 'rate_limited', route }));
+    return Response.json(
+      { error: 'Too many requests. Wait a minute and try again.' },
+      { status: 429, headers: { 'retry-after': '60' } },
+    );
+  } catch (err) {
+    console.log(
+      JSON.stringify({
+        event: 'rate_limiter_unavailable',
+        route,
+        error: err instanceof Error ? err.message : String(err),
+      }),
+    );
+    return null;
+  }
+}
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -117,7 +158,7 @@ const api = new Hono<{ Bindings: Bindings }>();
 
 api.get('/', (c) =>
   c.json({
-    name: '16bedlimit.org data API',
+    name: '16bedlimit.com data API',
     description:
       "Verified figures behind the site's explanation of Medicaid's institution for mental diseases (IMD) exclusion. Every figure carries its source.",
     retrieved: RETRIEVED,
@@ -259,6 +300,9 @@ async function runChatStream(
 }
 
 app.post('/api/chat', async (c) => {
+  const limited = await rateLimited(c.env.CHAT_LIMIT, c.req.raw, 'chat');
+  if (limited) return limited;
+
   let body: { question?: unknown; history?: unknown };
   try {
     body = await c.req.json();
@@ -327,6 +371,9 @@ app.post('/api/chat', async (c) => {
  * Whichever answers is reported in x-stt-model.
  */
 app.post('/api/stt', async (c) => {
+  const limited = await rateLimited(c.env.MEDIA_LIMIT, c.req.raw, 'stt');
+  if (limited) return limited;
+
   const buf = await c.req.arrayBuffer();
   if (!buf.byteLength) return c.json({ error: 'No audio received.' }, 400);
   if (buf.byteLength > 12_000_000) return c.json({ error: 'That clip is too long.' }, 413);
@@ -388,6 +435,9 @@ function extractTranscript(r: unknown): string {
 
 /* ---- text to speech ---- */
 app.post('/api/tts', async (c) => {
+  const limited = await rateLimited(c.env.MEDIA_LIMIT, c.req.raw, 'tts');
+  if (limited) return limited;
+
   let body: { text?: unknown };
   try {
     body = await c.req.json();
