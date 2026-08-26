@@ -33,6 +33,7 @@ import {
   WAIVER_TRACKER,
   WHY_SIXTEEN,
 } from './data';
+import { OG_HEIGHT, OG_WIDTH, ogPng } from './og-image';
 import { CSS } from './styles';
 
 interface RateLimiter {
@@ -129,6 +130,19 @@ app.get('/app.js', (c) =>
     'content-type': 'text/javascript; charset=utf-8',
     'cache-control': 'public, max-age=3600',
   }),
+);
+
+// Plain Response rather than c.body(): Hono's Data type does not include
+// Uint8Array, and widening it with a cast would be the wrong direction.
+app.get(
+  '/og.png',
+  () =>
+    new Response(ogPng(), {
+      headers: {
+        'content-type': 'image/png',
+        'cache-control': 'public, max-age=86400, s-maxage=604800',
+      },
+    }),
 );
 
 app.get('/robots.txt', (c) =>
@@ -498,7 +512,14 @@ function mailto(intent: (typeof CONTACT_INTENTS)[number]): string {
 const KEY_YEARS = new Set([1965, 1988]);
 
 app.get('/', (c) => {
-  const origin = c.env.SITE_ORIGIN || new URL(c.req.url).origin;
+  // Self-referencing on purpose. Absolute social URLs must resolve at the
+  // moment a scraper reads them, and SITE_ORIGIN can legitimately name a
+  // domain that is not serving yet (freshly registered, DNS still moving).
+  // Pointing og:image at a host that 404s produces a broken card that
+  // Facebook and X then cache. Using the origin the request actually arrived
+  // on is correct on workers.dev today and on the custom domain tomorrow,
+  // with no redeploy in between.
+  const origin = new URL(c.req.url).origin;
   const title = 'The 16-Bed Limit — how one Medicaid rule shaped American psychiatric care';
   const desc =
     'Medicaid will not pay for adults aged 21 to 64 in a psychiatric facility with more than 16 beds. The average psychiatric hospital has 108. Here is the rule, the data, and the bills that would change it.';
@@ -511,11 +532,29 @@ app.get('/', (c) => {
         <title>{title}</title>
         <meta name="description" content={desc} />
         <link rel="canonical" href={`${origin}/`} />
-        <meta property="og:title" content="The 16-Bed Limit" />
+        <meta property="og:site_name" content="The 16-Bed Limit" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:title" content="Medicaid stops paying at 16 beds." />
         <meta property="og:description" content={desc} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="article" />
         <meta property="og:url" content={`${origin}/`} />
+        <meta property="og:image" content={`${origin}/og.png`} />
+        <meta property="og:image:secure_url" content={`${origin}/og.png`} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content={String(OG_WIDTH)} />
+        <meta property="og:image:height" content={String(OG_HEIGHT)} />
+        <meta
+          property="og:image:alt"
+          content="Medicaid stops paying at 16 beds. Federal bed limit 16, average psychiatric hospital 108, fewer than 8 percent of hospitals eligible, 36,150 state psychiatric beds in 2023."
+        />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Medicaid stops paying at 16 beds." />
+        <meta name="twitter:description" content={desc} />
+        <meta name="twitter:image" content={`${origin}/og.png`} />
+        <meta
+          name="twitter:image:alt"
+          content="Medicaid stops paying at 16 beds. The average psychiatric hospital has 108."
+        />
         <meta name="theme-color" content="#f6f4ef" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
