@@ -225,6 +225,39 @@ const CHAT_MODELS = [
   { id: '@cf/openai/gpt-oss-120b', maxTokens: 2500 },
 ] as const;
 
+interface ChatMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+/**
+ * Workers AI's generated model registry types every model id as a distinct
+ * literal with its own params shape, so a runtime-selected id cannot be
+ * checked against it statically. Rather than assert the RESULT type, we let
+ * the value stay `unknown` and narrow it with a real `instanceof` check — a
+ * model that does not stream is then a caught error that fails over to the
+ * next model, instead of a lie the type system was told to believe.
+ */
+async function runChatStream(
+  ai: Ai,
+  modelId: string,
+  maxTokens: number,
+  messages: ChatMessage[],
+): Promise<ReadableStream> {
+  const params = { messages, stream: true, max_tokens: maxTokens, temperature: 0.2 };
+
+  // The two casts below are confined to this one call and are about the model
+  // ID being dynamic, not about the result. The result is proven below.
+  const result: unknown = await ai.run(modelId as keyof AiModels, params as never);
+
+  if (!(result instanceof ReadableStream)) {
+    throw new Error(
+      `${modelId} returned ${result === null ? 'null' : typeof result} rather than a stream`,
+    );
+  }
+  return result;
+}
+
 app.post('/api/chat', async (c) => {
   let body: { question?: unknown; history?: unknown };
   try {
@@ -261,12 +294,7 @@ app.post('/api/chat', async (c) => {
   let lastErr = '';
   for (const model of CHAT_MODELS) {
     try {
-      const stream = (await c.env.AI.run(model.id as keyof AiModels, {
-        messages,
-        stream: true,
-        max_tokens: model.maxTokens,
-        temperature: 0.2,
-      } as never)) as unknown as ReadableStream;
+      const stream = await runChatStream(c.env.AI, model.id, model.maxTokens, messages);
 
       return new Response(stream, {
         headers: {
