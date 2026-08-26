@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "bd_16bedlimit",
+  "project_id": "bef227e6-d06e-4a86-8309-b58139b57956"
+}
