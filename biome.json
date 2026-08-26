@@ -9,7 +9,11 @@
       "!src/og-image.ts",
       "!**/__fixtures__",
       "!**/fixtures",
-      "!**/__snapshots__"
+      "!**/__snapshots__",
+      "!**/.beads",
+      "!**/.claude",
+      "!**/.wrangler",
+      "!**/coverage"
     ]
   },
   "formatter": {
