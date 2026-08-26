@@ -7,6 +7,16 @@
   "observability": { "enabled": true },
   "ai": { "binding": "AI" },
 
+  // Custom domain is canonical. workers_dev is turned off here AND via the
+  // CF API — a deploy does not disengage an already-enabled subdomain from
+  // config alone, and it silently re-opens the preview hostname each time.
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "16bedlimit.com", "custom_domain": true },
+    { "pattern": "www.16bedlimit.com", "custom_domain": true }
+  ],
+
   // The three AI routes are unauthenticated and call a metered service, so
   // they are the site's only real abuse/cost surface. Keyed per client IP.
   // `period` accepts only 10 or 60 (Cloudflare rate-limit binding).

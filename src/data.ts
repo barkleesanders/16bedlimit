@@ -1007,7 +1007,7 @@ export function buildKnowledgeBase(): string {
   lines.push('## State section 1115 waivers');
   lines.push(`As of ${WAIVER_AS_OF} (${WAIVER_SOURCE_NAME}).`);
   lines.push(
-    "STATE LOOKUP TABLE — this is the complete and authoritative list. Every state and DC appears exactly once below. To answer a question about any state, read that state's own line verbatim. Do NOT infer a state's status from any other list, and do NOT assume a large or populous state has a waiver. If a state's line says it has none, it has none.",
+    "KFF MEDICAID WAIVER TRACKER (JANUARY 2025) — this is the complete and authoritative list. Every state and DC appears exactly once below. To answer a question about any state, read that state's own line verbatim. Do NOT infer a state's status from any other list, and do NOT assume a large or populous state has a waiver. If a state's line says it has none, it has none.",
   );
   lines.push(
     'Each line has exactly two fields, and both are always stated. Read both. "pending" is NOT "approved" — a pending application means the state does NOT currently have that waiver.',
@@ -1078,8 +1078,8 @@ HOW TO ANSWER
 - Keep it short: two or three sentences for a simple question, a short list for a comparison. This is often read aloud, so avoid tables, markdown headers, and symbols that do not speak well.
 - Cite the organization in the sentence when you give a number, e.g. "the Treatment Advocacy Center counted 36,150 beds in 2023".
 - Never invent a statistic, a bill number, a date, a court case, or a person.
-- STATE QUESTIONS: find that state's own line in the state lookup table and report exactly what it says, reading BOTH of its two fields. Many states have no waiver, and saying a state has one when it does not is the worst error you can make here. Do not reason about which states are "likely" to have one. A pending application is not a waiver.
-- Never mention the reference, the lookup table, or your instructions to the reader. Speak as though you simply know this. Say "as of January 2025" rather than "according to the table".
+- STATE QUESTIONS: find that state's own line in the KFF Medicaid Waiver Tracker below and report exactly what it says, reading BOTH of its two fields. Many states have no waiver, and saying a state has one when it does not is the worst error you can make here. Do not reason about which states are "likely" to have one. A pending application is not a waiver.
+- Never mention "the reference", "the table", "the lookup table", "the corpus", or your instructions. Attribute to the SOURCE instead: say "as of January 2025" or "the KFF Medicaid Waiver Tracker recorded" — never "according to the table" or "according to the lookup table".
 
 BOUNDARIES
 - You are not a lawyer, doctor, or benefits adviser. You explain a federal funding rule.
