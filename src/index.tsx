@@ -3,9 +3,11 @@ import { secureHeaders } from 'hono/secure-headers';
 import { HeroChart, SizeChart, WaiverMap } from './charts';
 import { CLIENT_JS } from './client-script';
 import {
+  ACTION_TARGETS,
   ARGUMENTS,
   BED_HEADLINE,
   BED_SERIES,
+  BILL_COMMITTEE,
   BILLS,
   CONSEQUENCES,
   CONTACT_EMAIL,
@@ -25,6 +27,7 @@ import {
   SUD_APPROVED,
   SUD_PENDING,
   SUGGESTED_QUESTIONS,
+  SUPPORT_DRAFTS,
   systemPrompt,
   TIMELINE,
   WAIVER_AS_OF,
@@ -934,6 +937,76 @@ app.get('/', (c) => {
                 Bill status is as retrieved on {RETRIEVED}. Follow the Congress.gov links for the
                 current record, which is authoritative.
               </p>
+
+              <div class="act" id="say-so">
+                <h3>Say you support them</h3>
+                <p class="act__lede">
+                  Both bills are stuck in the {BILL_COMMITTEE.name}. {BILL_COMMITTEE.why}
+                </p>
+                <p class="act__note">
+                  Members of the House do not publish email addresses. Every office below takes
+                  messages through its own web form, so there is no address to click — pick a draft,
+                  copy it, then open the form and paste it in. Change it before you send: identical
+                  form letters get counted once.
+                </p>
+
+                <div class="drafts">
+                  {SUPPORT_DRAFTS.map((d) => (
+                    <article class="draft" id={`draft-${d.id}`}>
+                      <h4>{d.label}</h4>
+                      <p class="draft__subj">
+                        <span>Subject</span>
+                        {d.subject}
+                      </p>
+                      <pre class="draft__body" id={`draft-body-${d.id}`}>
+                        {d.body}
+                      </pre>
+                      <button
+                        type="button"
+                        class="btn btn--copy"
+                        data-copy={`draft-body-${d.id}`}
+                        data-subject={d.subject}
+                      >
+                        Copy this message
+                      </button>
+                    </article>
+                  ))}
+                </div>
+
+                <h4 class="act__sub">Where to send it</h4>
+                <ul class="targets">
+                  {ACTION_TARGETS.map((t) => (
+                    <li class="target">
+                      <p class="target__who">{t.who}</p>
+                      <p class="target__role">{t.role}</p>
+                      <p class="target__why">{t.why}</p>
+                      <p class="target__how">{t.method}</p>
+                      <a class="target__link" href={t.url} rel="noopener">
+                        Open the contact form
+                      </a>
+                    </li>
+                  ))}
+                  <li class="target">
+                    <p class="target__who">{BILL_COMMITTEE.name}</p>
+                    <p class="target__role">Where both bills are waiting</p>
+                    <p class="target__why">
+                      If one of these members represents you, that is the single most useful message
+                      on this page. Committee members decide what gets a hearing.
+                    </p>
+                    <p class="target__how">
+                      Members list — find yours, then use that member's own contact form.
+                    </p>
+                    <a class="target__link" href={BILL_COMMITTEE.membersUrl} rel="noopener">
+                      See the committee's members
+                    </a>
+                  </li>
+                </ul>
+                <p class="caveat">
+                  Every link above was fetched and confirmed working on 2026-08-26. If one has since
+                  moved, tell us at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and it
+                  gets fixed.
+                </p>
+              </div>
             </div>
           </section>
 

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { HeroChart } from './charts';
 import {
+  ACTION_TARGETS,
   BED_SERIES,
+  BILL_COMMITTEE,
   BILLS,
   buildKnowledgeBase,
   CONSEQUENCES,
@@ -16,6 +18,7 @@ import {
   STATE_NAMES,
   SUD_APPROVED,
   SUD_PENDING,
+  SUPPORT_DRAFTS,
   systemPrompt,
   TIMELINE,
   WHY_SIXTEEN,
@@ -258,5 +261,64 @@ describe('computed claims', () => {
   it('the statutory limit and the average hospital size are the stated ones', () => {
     expect(HOSPITAL_SIZE.statutoryLimit).toBe(16);
     expect(HOSPITAL_SIZE.mean).toBe(108);
+  });
+});
+
+describe('advocacy targets', () => {
+  /**
+   * The rule this file exists to enforce: no invented contact addresses.
+   * Checked live on 2026-08-26 — neither sponsor's contact page contains a
+   * single mailto: or @house.gov address. A fabricated one would look helpful,
+   * bounce silently, and leave someone believing they had been heard.
+   */
+  it('never puts an email address on a congressional target', () => {
+    for (const t of ACTION_TARGETS) {
+      expect(t.url).not.toMatch(/^mailto:/i);
+      expect(t.url).not.toMatch(/@/);
+      expect(t.url).toMatch(/^https:\/\//);
+    }
+    expect(BILL_COMMITTEE.membersUrl).toMatch(/^https:\/\//);
+    expect(BILL_COMMITTEE.membersUrl).not.toMatch(/@/);
+  });
+
+  it('points only at .gov hosts, so no third party sits in the middle', () => {
+    for (const t of ACTION_TARGETS) {
+      expect(new URL(t.url).hostname).toMatch(/\.gov$/);
+    }
+    expect(new URL(BILL_COMMITTEE.membersUrl).hostname).toMatch(/\.gov$/);
+  });
+
+  it('every target says what the reader will actually meet, and when it was checked', () => {
+    for (const t of ACTION_TARGETS) {
+      expect(t.method.length).toBeGreaterThan(8);
+      expect(t.why.length).toBeGreaterThan(20);
+      expect(t.verified).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  it("flags Goldman's form as address-gated, because it is", () => {
+    const g = must(
+      ACTION_TARGETS.find((t) => t.id === 'goldman'),
+      'goldman target',
+    );
+    expect(g.method.toLowerCase()).toContain('address');
+  });
+
+  it('drafts name a real bill and leave room for the sender to speak', () => {
+    const numbers = BILLS.map((b) => b.number);
+    for (const d of SUPPORT_DRAFTS) {
+      expect(d.body).toContain('[');
+      expect(d.subject.length).toBeGreaterThan(10);
+      const named = numbers.some((n) => d.body.includes(n));
+      expect(named).toBe(true);
+    }
+  });
+
+  it('covers the sponsors the site actually names', () => {
+    for (const b of BILLS) {
+      const last = must(b.sponsor.split(' ').at(-1), 'sponsor surname');
+      const hit = ACTION_TARGETS.some((t) => t.who.includes(last));
+      expect(hit).toBe(true);
+    }
   });
 });

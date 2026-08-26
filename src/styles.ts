@@ -392,4 +392,34 @@ footer p { font-size: 14px; color: var(--ink-2); }
   body { background: white; }
   .chart__scroll { break-inside: avoid; }
 }
+
+/* --- support-your-bill block --- */
+.act{margin-top:2.6rem;border-top:1px solid var(--rule,oklch(0.88 0.008 260));padding-top:1.8rem}
+.act h3{font-family:var(--mono);font-size:1.15rem;letter-spacing:-.01em;margin-bottom:.6rem}
+.act__lede{max-width:62ch;margin-bottom:.7rem}
+.act__note{max-width:62ch;font-size:.9rem;color:oklch(0.46 0.016 260);margin-bottom:1.4rem}
+.act__sub{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  color:oklch(0.50 0.016 260);margin:2rem 0 .9rem}
+.drafts{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.draft{border:1px solid var(--rule,oklch(0.88 0.008 260));background:oklch(0.995 0.003 85);padding:1rem}
+.draft h4{font-family:var(--mono);font-size:.92rem;margin-bottom:.7rem;line-height:1.35}
+.draft__subj{font-size:.82rem;margin-bottom:.6rem;line-height:1.45}
+.draft__subj span{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:oklch(0.55 0.014 260);margin-bottom:.15rem}
+.draft__body{white-space:pre-wrap;font-family:var(--mono);font-size:.76rem;line-height:1.6;
+  max-height:14rem;overflow-y:auto;background:oklch(0.972 0.005 85);padding:.7rem;
+  border:1px solid oklch(0.91 0.007 260);margin-bottom:.8rem}
+.btn--copy{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;padding:.5rem .8rem;
+  border:1px solid oklch(0.30 0.014 260);background:oklch(0.235 0.014 260);color:oklch(0.98 0.004 85);
+  cursor:pointer;width:100%}
+.btn--copy:hover{background:oklch(0.32 0.016 260)}
+.btn--copy.is-done{background:oklch(0.42 0.10 150);border-color:oklch(0.42 0.10 150)}
+.targets{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));list-style:none;padding:0}
+.target{border:1px solid var(--rule,oklch(0.88 0.008 260));padding:.95rem;background:oklch(0.995 0.003 85)}
+.target__who{font-family:var(--mono);font-size:.9rem;font-weight:700;margin-bottom:.15rem}
+.target__role{font-size:.78rem;color:oklch(0.50 0.016 260);margin-bottom:.55rem}
+.target__why{font-size:.85rem;line-height:1.5;margin-bottom:.55rem}
+.target__how{font-size:.78rem;color:oklch(0.46 0.016 260);margin-bottom:.7rem;line-height:1.45}
+.target__link{font-family:var(--mono);font-size:.78rem}
+@media (max-width:640px){.draft__bodymax-height:11rem}
 `;

@@ -218,7 +218,7 @@ export const BED_SERIES: BedPoint[] = [
   {
     year: 2010,
     beds: 43318,
-    source: 'http://tacreports.nonprofitsoapbox.com/going-going-gone/findings',
+    source: 'https://www.tac.org/wp-content/uploads/2023/11/Going-Going-Gone.pdf',
     sourceName: 'Treatment Advocacy Center, "Going, Going, Gone" (2016)',
   },
   {
@@ -790,6 +790,134 @@ export const ARGUMENTS = {
 
 export const CONTACT_EMAIL = 'hello@16bedlimit.com';
 
+/* ------------------------------------------------------------------ *
+ * TELLING CONGRESS YOU SUPPORT THESE BILLS
+ *
+ * ⚠️ THERE ARE NO EMAIL ADDRESSES HERE, AND THAT IS NOT AN OVERSIGHT.
+ *
+ * Members of the House do not publish mailboxes. Checked directly on
+ * 2026-08-26: goldman.house.gov/contact and ritchietorres.house.gov/contact
+ * contain zero mailto: links and zero @house.gov addresses between them
+ * (a grep proven to work against a known-good string first). Both route
+ * through web forms, and Goldman's posts to /address_authentication, so it
+ * asks for a district address before it will take the message.
+ *
+ * Inventing "rep.goldman@house.gov" would produce a link that looks helpful,
+ * silently bounces, and leaves someone believing they were heard. So every
+ * route below is the office's own contact page, fetched and confirmed to
+ * return 200 on the date shown.
+ * ------------------------------------------------------------------ */
+
+export interface ActionTarget {
+  id: string;
+  who: string;
+  role: string;
+  /** Why this office, specifically, for these bills. */
+  why: string;
+  /** The office's own contact page. Verified live, never constructed. */
+  url: string;
+  /** What the person will actually meet when they click. */
+  method: string;
+  verified: string;
+}
+
+export const BILL_COMMITTEE = {
+  name: 'House Energy and Commerce Committee',
+  why: 'Both bills were referred here and neither has moved. A bill that is never scheduled never gets a vote, so this is the committee that decides whether either one is considered at all.',
+  membersUrl: 'https://energycommerce.house.gov/representatives',
+  verified: '2026-08-26',
+} as const;
+
+export const ACTION_TARGETS: ActionTarget[] = [
+  {
+    id: 'goldman',
+    who: 'Rep. Dan Goldman',
+    role: 'Sponsor, H.R. 5462 — New York’s 10th district',
+    why: 'He introduced the bill that would raise the limit from 16 beds to 36. Messages of support to a sponsor are counted by their staff and cited when they ask leadership for a hearing.',
+    url: 'https://goldman.house.gov/contact',
+    method:
+      'Web form. Asks for a district address first — if you live elsewhere, write to your own representative below instead.',
+    verified: '2026-08-26',
+  },
+  {
+    id: 'torres',
+    who: 'Rep. Ritchie Torres',
+    role: 'Sponsor, H.R. 6727 — New York’s 15th district',
+    why: 'He introduced the bill that would repeal the exclusion outright rather than move the threshold.',
+    url: 'https://ritchietorres.house.gov/contact',
+    method: 'Web form.',
+    verified: '2026-08-26',
+  },
+  {
+    id: 'yours',
+    who: 'Your own representative',
+    role: 'Whoever holds your district',
+    why: 'This is the message that carries the most weight, because offices weigh their own constituents. If your representative sits on Energy and Commerce, it counts for more still.',
+    url: 'https://www.house.gov/representatives/find-your-representative',
+    method: 'Enter your address, then use the contact form on your member’s own site.',
+    verified: '2026-08-26',
+  },
+  {
+    id: 'senators',
+    who: 'Your two senators',
+    role: 'Statewide',
+    why: 'These particular bills are in the House, so a senator cannot vote on them yet. Writing anyway matters because any repeal or threshold change ultimately needs the Senate, and companion bills start with senators who already hear about it.',
+    url: 'https://www.senate.gov/senators/senators-contact.htm',
+    method: 'Pick your state, then use each senator’s own form.',
+    verified: '2026-08-26',
+  },
+];
+
+/**
+ * Draft messages. Deliberately short, first-person, and free of anything the
+ * reader cannot personally vouch for — a form letter that asserts facts the
+ * sender has not checked is worth less than three honest sentences.
+ */
+export const SUPPORT_DRAFTS = [
+  {
+    id: 'hr5462',
+    label: 'Support H.R. 5462 (raise the limit to 36 beds)',
+    subject: 'Please support H.R. 5462, the Michelle Alyssa Go Act',
+    body: `I am writing to ask you to support H.R. 5462, the Michelle Alyssa Go Act.
+
+Medicaid will not pay for adults aged 21 to 64 who are treated in a psychiatric or addiction facility with more than 16 beds. The average psychiatric hospital in this country has 108 beds, so the rule reaches almost all of them. H.R. 5462 would raise that threshold to 36 beds for facilities that meet the standards in the bill.
+
+The bill is sitting in the Energy and Commerce Committee and has not moved.
+
+[If you have a personal reason for writing — a family member who could not get a bed, or work you do in this system — put it here in your own words. It is the part staff actually read.]
+
+Thank you for your time.`,
+  },
+  {
+    id: 'hr6727',
+    label: 'Support H.R. 6727 (repeal the exclusion)',
+    subject: 'Please support H.R. 6727, Repealing the IMD Exclusion Act',
+    body: `I am writing to ask you to support H.R. 6727, the Repealing the IMD Exclusion Act.
+
+Medicaid currently pays nothing toward care for adults aged 21 to 64 in a psychiatric or addiction facility with more than 16 beds. H.R. 6727 would strike that exclusion from Title XIX, so coverage would follow the patient rather than the size of the building.
+
+The bill is sitting in the Energy and Commerce Committee and has not moved.
+
+[If you have a personal reason for writing, put it here in your own words. It is the part staff actually read.]
+
+Thank you for your time.`,
+  },
+  {
+    id: 'both',
+    label: 'Ask my own representative to back both',
+    subject: 'The Medicaid 16-bed rule — H.R. 5462 and H.R. 6727',
+    body: `I am a constituent, and I am writing about the Medicaid rule that stops federal payment for adults aged 21 to 64 in psychiatric facilities with more than 16 beds.
+
+Two bills would change it. H.R. 5462 would raise the threshold to 36 beds. H.R. 6727 would repeal the exclusion entirely. Both are in the Energy and Commerce Committee and neither has moved.
+
+I would like to know your position on each, and whether you will cosponsor either one.
+
+[Add your own reason for caring about this — it matters more than anything else in this message.]
+
+Thank you.`,
+  },
+];
+
 export const CONTACT_INTENTS = [
   {
     id: 'records',
@@ -854,7 +982,7 @@ export const FUNDING_ROUTES = [
     cannot:
       'May not contribute to, or coordinate with, a candidate or party committee. Must register and report to the FEC.',
     authority:
-      'https://www.fec.gov/help-candidates-and-committees/registering-pac/independent-expenditure-only-political-committees/',
+      'https://www.fec.gov/help-candidates-and-committees/registering-pac/types-nonconnected-pacs/',
     authorityName: 'FEC — Independent expenditure-only committees',
   },
   {

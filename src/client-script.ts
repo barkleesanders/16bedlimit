@@ -237,6 +237,37 @@ mic && mic.addEventListener('click', async () => {
   }
 });
 
+/* ---------------- copy a draft message ---------------- */
+/* The targets are web forms, not mailboxes, so the useful action is "put this
+   on the clipboard" rather than a mailto: that would go nowhere. */
+document.addEventListener('click', async (e) => {
+  const btn = e.target && e.target.closest ? e.target.closest('.btn--copy') : null;
+  if (!btn) return;
+  const src = document.getElementById(btn.getAttribute('data-copy'));
+  if (!src) return;
+  const subject = btn.getAttribute('data-subject') || '';
+  const text = (subject ? subject + '\n\n' : '') + src.textContent;
+  const done = (msg) => {
+    const was = btn.textContent;
+    btn.textContent = msg;
+    btn.classList.add('is-done');
+    setTimeout(() => { btn.textContent = was; btn.classList.remove('is-done'); }, 2200);
+  };
+  try {
+    await navigator.clipboard.writeText(text);
+    done('Copied — now open a form below');
+  } catch (_) {
+    /* Clipboard API needs a secure context and permission. Selecting the text
+       is the honest fallback: the person can still hit Cmd-C. */
+    const r = document.createRange();
+    r.selectNodeContents(src);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+    done('Selected — press Cmd/Ctrl+C');
+  }
+});
+
 /* ---------------- deep link ---------------- */
 if (location.hash === '#ask') open();
 `;
