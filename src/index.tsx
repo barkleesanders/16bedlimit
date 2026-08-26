@@ -12,6 +12,7 @@ import {
   CONSEQUENCES,
   CONTACT_EMAIL,
   CONTACT_INTENTS,
+  FEDERAL_LEVERS,
   FUNDING_ROUTES,
   HERO_CAVEAT,
   HOSPITAL_SIZE,
@@ -20,6 +21,7 @@ import {
   PREVALENCE,
   PRISON_SERIES,
   RETRIEVED,
+  SITE_QUESTIONS,
   SMI_APPROVED,
   SMI_PENDING,
   SOURCES,
@@ -633,6 +635,7 @@ app.get('/', (c) => {
               <a href="#history">History</a>
               <a href="#instead">Consequences</a>
               <a href="#bills">Bills</a>
+              <a href="#levers">Who decides</a>
               <a href="#act">Contact</a>
               <a href="#sources">Sources</a>
             </nav>
@@ -689,6 +692,34 @@ app.get('/', (c) => {
             <HeroChart />
             <p class="caveat">{HERO_CAVEAT}</p>
             <p class="caveat">{INCARCERATION_NOTE}</p>
+
+            {/* Call to action at the top, where it is actually seen. The full
+                contact section at the bottom stays — this is the entry point
+                for the reader who will not scroll that far. */}
+            <div class="cta" id="cta">
+              <p class="cta__kicker">If you want to do something about this</p>
+              <div class="cta__row">
+                <a class="cta__btn cta__btn--primary" href="#say-so">
+                  Tell Congress you support the bills
+                </a>
+                <a class="cta__btn" href="#act">
+                  Send records or your story
+                </a>
+                <a class="cta__btn" href="#levers">
+                  Who can actually change it
+                </a>
+              </div>
+              <p class="cta__ask">
+                Or ask a question — the assistant answers only from the sources on this page:
+              </p>
+              <div class="cta__qs">
+                {SITE_QUESTIONS.map((q) => (
+                  <button type="button" class="cta__q" data-ask={q.ask}>
+                    {q.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* ---------------- THE RULE ---------------- */}
@@ -1047,6 +1078,38 @@ app.get('/', (c) => {
           </section>
 
           {/* ---------------- ACT ---------------- */}
+          <section id="levers">
+            <div class="wrap">
+              <span class="sec__idx">07b — Who can change it</span>
+              <h2>Four offices, three different kinds of power</h2>
+              <p class="lede">
+                Only Congress can change the statute. CMS cannot repeal it — but CMS approves the
+                waivers that let a state work around it, which is the faster lever and the one a
+                state official or provider can actually move. Writing the wrong ask to the right
+                office is a wasted letter, so each entry says what that office can and cannot do.
+              </p>
+              <ul class="levers">
+                {FEDERAL_LEVERS.map((l) => (
+                  <li class="lever">
+                    <p class="lever__body">{l.body}</p>
+                    <p class="lever__power">{l.power}</p>
+                    <p class="lever__ask">
+                      <span>The ask</span>
+                      {l.ask}
+                    </p>
+                    <a class="lever__link" href={l.url} rel="noopener">
+                      {l.urlLabel}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p class="caveat">
+                None of these offices publishes an email address; each link opens its own contact
+                page or member list. All four were fetched and confirmed working on 2026-08-26.
+              </p>
+            </div>
+          </section>
+
           <section id="act">
             <div class="wrap">
               <span class="sec__idx">08 — Get in touch</span>

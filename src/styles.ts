@@ -422,4 +422,34 @@ footer p { font-size: 14px; color: var(--ink-2); }
 .target__how{font-size:.78rem;color:oklch(0.46 0.016 260);margin-bottom:.7rem;line-height:1.45}
 .target__link{font-family:var(--mono);font-size:.78rem}
 @media (max-width:640px){.draft__bodymax-height:11rem}
+
+/* --- top-of-page call to action --- */
+.cta{margin:2.2rem 0 0;padding:1.3rem 1.4rem;border:1px solid oklch(0.235 0.014 260);
+  background:oklch(0.995 0.003 85)}
+.cta__kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:oklch(0.50 0.016 260);margin-bottom:.85rem}
+.cta__row{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.2rem}
+.cta__btn{font-family:var(--mono);font-size:.8rem;letter-spacing:.02em;padding:.6rem .9rem;
+  border:1px solid oklch(0.235 0.014 260);text-decoration:none;color:oklch(0.235 0.014 260);
+  background:transparent}
+.cta__btn:hover{background:oklch(0.94 0.006 260)}
+.cta__btn--primary{background:oklch(0.235 0.014 260);color:oklch(0.98 0.004 85)}
+.cta__btn--primary:hover{background:oklch(0.32 0.016 260)}
+.cta__ask{font-size:.86rem;color:oklch(0.44 0.016 260);margin-bottom:.6rem}
+.cta__qs{display:flex;flex-wrap:wrap;gap:.45rem}
+.cta__q{font-family:var(--mono);font-size:.75rem;padding:.42rem .7rem;cursor:pointer;
+  border:1px dashed oklch(0.62 0.02 260);background:transparent;color:oklch(0.35 0.016 260)}
+.cta__q:hover{border-style:solid;background:oklch(0.94 0.006 260)}
+
+/* --- federal levers --- */
+.levers{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  list-style:none;padding:0;margin-top:1.4rem}
+.lever{border:1px solid var(--rule,oklch(0.88 0.008 260));padding:1rem;background:oklch(0.995 0.003 85)}
+.lever__body{font-family:var(--mono);font-size:.88rem;font-weight:700;line-height:1.35;margin-bottom:.5rem}
+.lever__power{font-size:.85rem;line-height:1.5;margin-bottom:.6rem}
+.lever__ask{font-size:.82rem;line-height:1.5;margin-bottom:.7rem;color:oklch(0.40 0.016 260)}
+.lever__ask span{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+  text-transform:uppercase;color:oklch(0.55 0.014 260);margin-bottom:.15rem}
+.lever__link{font-family:var(--mono);font-size:.78rem}
+@media (max-width:640px){.cta__row{flex-direction:column}.cta__btn{text-align:center}}
 `;

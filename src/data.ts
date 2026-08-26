@@ -869,6 +869,104 @@ export const ACTION_TARGETS: ActionTarget[] = [
 ];
 
 /**
+ * Who can actually change this, at each federal level.
+ *
+ * The distinction matters and the site should not blur it: **only Congress can
+ * change the statute.** CMS cannot repeal the exclusion — but CMS approves the
+ * section 1115 waivers that let individual states work around it, which is the
+ * fastest lever that exists today and the one a state official or provider can
+ * actually move. HHS sets the policy direction CMS operates under.
+ *
+ * Writing to CMS asking them to "repeal the IMD exclusion" is a wasted letter.
+ * Writing to CMS about a waiver is not. Each entry below says which is which.
+ *
+ * Every URL fetched and confirmed on 2026-08-26. medicaid.gov and hhs.gov
+ * answer 403 to an automated fetch and 200 in a real browser — a WAF block, not
+ * a dead page; both were opened in Chrome to confirm the titles.
+ */
+export interface FederalLever {
+  id: string;
+  body: string;
+  /** What this office can and cannot do about the exclusion. */
+  power: string;
+  /** The realistic ask — writing the wrong ask to the right office is wasted. */
+  ask: string;
+  url: string;
+  urlLabel: string;
+  verified: string;
+}
+
+/**
+ * The questions the top-of-page call to action offers.
+ *
+ * `label` is the short button; `ask` is the full sentence actually sent to the
+ * assistant, because a three-word button makes a poor prompt. Each one is
+ * answerable from this site's own corpus — they are not general-knowledge
+ * questions, and the assistant has no web access to bluff with.
+ */
+export const SITE_QUESTIONS = [
+  {
+    label: 'What is the 16-bed rule?',
+    ask: 'Explain the Medicaid IMD exclusion and the 16-bed limit in plain language.',
+  },
+  {
+    label: 'Does my state have a waiver?',
+    ask: 'Which states have an approved section 1115 waiver for mental health, and which only have one for addiction treatment?',
+  },
+  {
+    label: 'Who is trying to change it?',
+    ask: 'Which bills would change the IMD exclusion, who introduced them, and where are they stuck?',
+  },
+  {
+    label: 'How do I show support?',
+    ask: 'How can I tell Congress I support H.R. 5462 and H.R. 6727, and who should I write to?',
+  },
+] as const;
+
+export const FEDERAL_LEVERS: FederalLever[] = [
+  {
+    id: 'ec-health',
+    body: 'House Energy and Commerce — Health Subcommittee',
+    power:
+      'Holds Medicaid jurisdiction in the House, and is where both H.R. 5462 and H.R. 6727 were referred. Nothing reaches a floor vote without moving through here first.',
+    ask: 'Ask them to schedule a hearing or markup on the two bills by number.',
+    url: 'https://energycommerce.house.gov/committees/subcommittee/health',
+    urlLabel: 'Subcommittee members',
+    verified: '2026-08-26',
+  },
+  {
+    id: 'senate-finance',
+    body: 'Senate Finance Committee',
+    power:
+      'Medicaid jurisdiction in the Senate. Any repeal or threshold change ultimately needs a Senate vehicle, and it starts here.',
+    ask: 'Ask whether a Senate companion to H.R. 5462 or H.R. 6727 is being drafted.',
+    url: 'https://www.finance.senate.gov/about/membership',
+    urlLabel: 'Committee membership',
+    verified: '2026-08-26',
+  },
+  {
+    id: 'cms',
+    body: 'CMS — Centers for Medicare and Medicaid Services',
+    power:
+      'Cannot repeal the exclusion; it is written into the statute. CMS does approve the section 1115 waivers that let a state get around it, which is why 37 states have an addiction-treatment waiver and only 15 have one for mental health.',
+    ask: 'A waiver question, not a repeal question — whether your state has applied, where an application stands, or what a state would need to submit. Asking CMS to repeal the rule is asking the wrong agency.',
+    url: 'https://www.medicaid.gov/about-us/contact-us/index.html',
+    urlLabel: 'Medicaid.gov contact',
+    verified: '2026-08-26',
+  },
+  {
+    id: 'hhs',
+    body: 'HHS — Office of Intergovernmental and External Affairs',
+    power:
+      'CMS sits inside HHS, and this is the office that handles outside stakeholders. It sets the direction CMS applies when it weighs waiver applications.',
+    ask: 'Policy direction on behavioral-health waivers, rather than an individual case.',
+    url: 'https://www.hhs.gov/about/agencies/iea/index.html',
+    urlLabel: 'HHS IEA',
+    verified: '2026-08-26',
+  },
+];
+
+/**
  * Draft messages. Deliberately short, first-person, and free of anything the
  * reader cannot personally vouch for — a form letter that asserts facts the
  * sender has not checked is worth less than three honest sentences.

@@ -237,6 +237,19 @@ mic && mic.addEventListener('click', async () => {
   }
 });
 
+/* ---------------- top-of-page question buttons ---------------- */
+/* These open the assistant and ask immediately, rather than scrolling the
+   reader to a box they then have to think of a question for. The full sentence
+   lives in data-ask because the button label is too terse to be a good prompt. */
+document.addEventListener('click', (e) => {
+  const b = e.target && e.target.closest ? e.target.closest('.cta__q') : null;
+  if (!b) return;
+  const q = b.getAttribute('data-ask');
+  if (!q) return;
+  open();
+  ask(q);
+});
+
 /* ---------------- copy a draft message ---------------- */
 /* The targets are web forms, not mailboxes, so the useful action is "put this
    on the clipboard" rather than a mailto: that would go nowhere. */
