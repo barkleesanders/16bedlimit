@@ -64,7 +64,6 @@ describe('provenance', () => {
     for (const c of [...CONSEQUENCES, ...PREVALENCE]) expect(c.source, c.stat).toMatch(httpsUrl);
     for (const b of BILLS) {
       expect(b.congressUrl, b.number).toMatch(httpsUrl);
-      expect(b.govtrackUrl, b.number).toMatch(httpsUrl);
     }
     for (const f of FUNDING_ROUTES) expect(f.authority, f.vehicle).toMatch(httpsUrl);
     for (const s of SOURCES) expect(s.url, s.name).toMatch(httpsUrl);

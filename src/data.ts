@@ -715,7 +715,6 @@ export interface Bill {
   effect: string;
   status: string;
   congressUrl: string;
-  govtrackUrl: string;
   priorVersion?: string;
 }
 
@@ -734,7 +733,6 @@ export const BILLS: Bill[] = [
       'Redefines an institution for mental diseases to exclude facilities of 36 beds or fewer, if they meet certain standards. Facilities up to 36 beds could bill Medicaid.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/5462',
-    govtrackUrl: 'https://www.govtrack.us/congress/bills/119/hr5462',
     priorVersion: 'H.R. 8575 (118th Congress)',
   },
   {
@@ -750,7 +748,6 @@ export const BILLS: Bill[] = [
       'Strikes the exclusion from Title XIX entirely, so Medicaid could cover services for eligible patients in an IMD regardless of age, where the facility meets required care and staffing standards.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/6727',
-    govtrackUrl: 'https://www.govtrack.us/congress/bills/119/hr6727',
     priorVersion: 'H.R. 10266 (118th Congress)',
   },
 ];

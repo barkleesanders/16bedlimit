@@ -956,9 +956,6 @@ app.get('/', (c) => {
                         <a href={b.congressUrl} rel="noopener">
                           Congress.gov
                         </a>
-                        <a href={b.govtrackUrl} rel="noopener">
-                          GovTrack
-                        </a>
                       </div>
                     </div>
                   </article>
