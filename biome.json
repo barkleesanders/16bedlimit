@@ -1,7 +1,16 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
   "files": {
-    "includes": ["**", "!.wrangler", "!dist", "!node_modules", "!src/og-image.ts"]
+    "includes": [
+      "**",
+      "!.wrangler",
+      "!dist",
+      "!node_modules",
+      "!src/og-image.ts",
+      "!**/__fixtures__",
+      "!**/fixtures",
+      "!**/__snapshots__"
+    ]
   },
   "formatter": {
     "enabled": true,
