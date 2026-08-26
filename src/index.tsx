@@ -33,6 +33,7 @@ import {
   WAIVER_TRACKER,
   WHY_SIXTEEN,
 } from './data';
+import { FRESHNESS_KEY, type FreshnessReport, runFreshnessCheck } from './freshness';
 import { OG_HEIGHT, OG_WIDTH, ogPng } from './og-image';
 import { CSS } from './styles';
 
@@ -45,6 +46,9 @@ type Bindings = {
   SITE_ORIGIN: string;
   CHAT_LIMIT: RateLimiter;
   MEDIA_LIMIT: RateLimiter;
+  /** Stores the weekly data-freshness report. Optional so a missing binding
+   *  degrades to "not checked yet" rather than throwing on every request. */
+  FRESHNESS?: KVNamespace;
 };
 
 /**
@@ -253,6 +257,33 @@ api.get('/funding', (c) =>
 );
 api.get('/sources', (c) => c.json({ retrieved: RETRIEVED, sources: SOURCES }));
 
+/**
+ * The site's own staleness, exposed. If the weekly check found a newer upstream
+ * release than what is plotted, this says so — including when the check itself
+ * failed, which is reported as "unknown" and never as "current".
+ */
+api.get('/freshness', async (c) => {
+  const kv = c.env.FRESHNESS;
+  if (!kv) {
+    return c.json({
+      status: 'unconfigured',
+      note: 'No freshness store is bound, so no automated check has run. The figures on this site are unaffected: each one carries its own source and retrieval date.',
+    });
+  }
+  const raw = await kv.get(FRESHNESS_KEY);
+  if (!raw) {
+    return c.json({
+      status: 'not-yet-checked',
+      note: 'The weekly check has not run since this store was created.',
+    });
+  }
+  return c.json(JSON.parse(raw) as FreshnessReport);
+});
+
+// NOTE: every api.* route must be registered ABOVE this line. Hono's
+// app.route() copies the sub-app's routes at call time, so a route added after
+// the mount is silently unreachable — it returns the site's 404 page with no
+// error anywhere. /api/freshness shipped that way once.
 app.route('/api', api);
 
 /* ================================================================
@@ -613,10 +644,14 @@ app.get('/', (c) => {
               Medicaid stops paying at <b>16 beds</b>.
             </h1>
             <p class="hero__lede">
-              If an adult between 21 and 64 is a patient in a psychiatric or addiction treatment
-              facility with more than 16 beds, federal Medicaid pays nothing toward their care. The
-              average psychiatric hospital in the United States has 108 beds. This is that rule, the
-              numbers around it, and what Congress is being asked to do about it.
+              Medicaid has refused to pay for adults in psychiatric institutions since it was
+              created in 1965, and since 1988 the statute has drawn that line at 16 beds. If an
+              adult between 21 and 64 is treated in a psychiatric or addiction facility with more
+              than 16 beds, federal Medicaid pays nothing toward their care.
+            </p>
+            <p class="hero__lede hero__lede--turn">
+              The average psychiatric hospital in the United States has 108 beds. So the rule does
+              not fund small hospitals. It defunds almost all of them.
             </p>
 
             <div class="readout">
@@ -1154,4 +1189,52 @@ app.notFound((c) =>
   ),
 );
 
-export default app;
+/**
+ * Weekly cron. Asks each upstream agency whether it has published anything
+ * newer than what this site plots, and stores the answer.
+ *
+ * It writes a REPORT, never a figure. See src/freshness.ts for why: a scraper
+ * that edited the numbers would remove the only property that makes them worth
+ * reading. When this flags something, a person opens the document.
+ */
+export default {
+  fetch: app.fetch,
+  async scheduled(_event: ScheduledController, env: Bindings, ctx: ExecutionContext) {
+    ctx.waitUntil(
+      (async () => {
+        // The previous report is an input, not just an archive: change-watch
+        // probes need last week's fingerprint to have anything to compare.
+        let previous: FreshnessReport | undefined;
+        if (env.FRESHNESS) {
+          const raw = await env.FRESHNESS.get(FRESHNESS_KEY);
+          if (raw) {
+            try {
+              previous = JSON.parse(raw) as FreshnessReport;
+            } catch {
+              // A corrupt record must not stop the check. Losing one week of
+              // fingerprint history costs a single extra "first recorded" run.
+              previous = undefined;
+            }
+          }
+        }
+        const report = await runFreshnessCheck(previous);
+        if (env.FRESHNESS) {
+          await env.FRESHNESS.put(FRESHNESS_KEY, JSON.stringify(report));
+        }
+        // Logged either way so a run with no store still leaves a trace.
+        console.log(
+          JSON.stringify({
+            event: 'freshness_check',
+            anyNewer: report.anyNewer,
+            anyUnknown: report.anyUnknown,
+            probes: report.probes.map((r) => ({
+              key: r.key,
+              status: r.status,
+              seen: r.latestSeen,
+            })),
+          }),
+        );
+      })(),
+    );
+  },
+};

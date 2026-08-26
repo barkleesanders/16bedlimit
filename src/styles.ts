@@ -97,6 +97,8 @@ a:hover { color: var(--signal); }
   margin: 0 0 1.2rem; max-width: 20ch;
 }
 .hero h1 b { color: var(--signal); font-weight: 700; }
+.hero__lede--turn{margin-top:.85rem;font-weight:500;color:var(--ink,oklch(0.235 0.014 260))}
+.hero__lede--turn::before{content:"";display:block;width:34px;height:2px;background:oklch(0.545 0.196 27);margin:0 0 .8rem}
 .hero__lede { font-size: clamp(1.05rem, 2.4vw, 1.28rem); max-width: 64ch; color: var(--ink-2); margin: 0 0 2rem; }
 
 /* readout panel */
@@ -189,6 +191,8 @@ p { max-width: 68ch; }
 .tick { font-family: var(--mono); font-size: 12px; fill: var(--ink-3); }
 .axlab { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; fill: var(--ink-3); text-transform: uppercase; }
 
+.data-end{stroke:oklch(0.62 0.02 260);stroke-width:1;opacity:.55}
+.data-end-label{fill:oklch(0.50 0.016 260);font-family:var(--mono);font-size:9.5px;letter-spacing:.04em}
 .marker-line { stroke: var(--signal); stroke-width: 1.5; stroke-dasharray: 5 4; }
 .marker-box { fill: var(--signal); }
 .marker-text { font-family: var(--mono); font-size: 12px; font-weight: 700; fill: oklch(0.995 0.003 85); }
@@ -215,6 +219,7 @@ p { max-width: 68ch; }
 .mark-line--soft { stroke: var(--ink-3); stroke-dasharray: 4 3; }
 .mark-dot { fill: var(--ink); }
 .mark-lab { font-family: var(--mono); font-size: 15px; font-weight: 700; fill: var(--ink); }
+.mark-lab--soft{fill:oklch(0.46 0.016 260);font-size:13px}
 .mark-sub { font-family: var(--mono); font-size: 11px; fill: var(--ink-2); }
 
 .legend { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; padding: 0.9rem 0 0; margin: 0; font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); }

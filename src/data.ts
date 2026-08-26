@@ -359,7 +359,38 @@ export const JAIL_SERIES: JailPoint[] = [
     source: 'https://bjs.ojp.gov/library/publications/jail-inmates-2023-statistical-tables',
     sourceName: 'BJS, Jail Inmates in 2023',
   },
+  {
+    year: 2024,
+    jail: 657500,
+    source:
+      'https://bjs.ojp.gov/library/publications/jails-report-series-2024-preliminary-data-release',
+    sourceName: 'BJS, Jails Report Series: 2024 Preliminary Data Release (midyear 2024)',
+  },
 ];
+
+/**
+ * The last year each series has a published national figure, checked against
+ * each agency's own publication list on 2026-08-26 rather than assumed.
+ *
+ * The chart's x-axis runs to the present year so the reader can see how current
+ * the evidence is. These three values are what stops that from implying data we
+ * do not have: the lines stop where the data stops, and the chart says so.
+ *
+ * Re-checked 2026-08-26:
+ *  - beds   : Treatment Advocacy Center's state-hospital census, 2023 edition.
+ *             NRI's "Use of State Psychiatric Hospitals, 2025" is newer but
+ *             reports shortage percentages, not a comparable national bed
+ *             count, so it cannot extend this series.
+ *  - prison : BJS "Prisons Preliminary Data Release" series list contains only
+ *             2023. There is no 2024 national prison figure to plot.
+ *  - jail   : BJS published a 2024 preliminary release; that point is above.
+ */
+export const DATA_THROUGH = {
+  beds: 2023,
+  prison: 2023,
+  jail: 2024,
+  checked: '2026-08-26',
+} as const;
 
 export const INCARCERATION_NOTE =
   'Two BJS measures are stitched here. Figures through 1980 count sentenced prisoners in state and federal institutions; from 1990 they count prisoners under the jurisdiction of state and federal authorities. Local jails are a separate line and are not added into the prison figure.';

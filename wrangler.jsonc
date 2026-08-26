@@ -33,6 +33,28 @@
     }
   ],
 
+  // Weekly. Agencies publish these annually, so anything tighter is pure noise
+  // against three upstream servers. Sunday 06:15 UTC — deliberately off the
+  // hour, since :00 is where every cron on the platform piles up.
+  //
+  // The weekday is 1, not 0. Cloudflare's cron parser numbers weekdays 1-7 with
+  // 1 = Sunday, unlike standard cron's 0-6 with 0 = Sunday. A "0" here is
+  // rejected outright at deploy time with "invalid cron string" — which is the
+  // good failure. The dangerous edit is changing this to a plain-cron weekday
+  // that happens to be in range: "* * 5" would silently mean Thursday here.
+  "triggers": {
+    "crons": ["15 6 * * 1"]
+  },
+
+  // Holds the freshness REPORT only. No figure on this site is ever written
+  // from a scrape — see src/freshness.ts for the reasoning.
+  "kv_namespaces": [
+    {
+      "binding": "FRESHNESS",
+      "id": "da59ddc80ab14615822b13bad2eaf30f"
+    }
+  ],
+
   "vars": {
     "SITE_ORIGIN": "https://16bedlimit.com"
   }

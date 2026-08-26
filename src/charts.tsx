@@ -8,6 +8,7 @@
 
 import {
   BED_SERIES,
+  DATA_THROUGH,
   HOSPITAL_SIZE,
   JAIL_SERIES,
   PRISON_SERIES,
@@ -77,8 +78,17 @@ export function HeroChart() {
   const line = (pts: { x: number; y: number }[]) =>
     pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
 
-  const gridYears = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+  // The axis runs to the present year so a reader can see how current the
+  // evidence is. NOW_YEAR is computed at render time rather than hardcoded, so
+  // the chart cannot quietly go stale on a January.
+  const NOW_YEAR = new Date().getUTCFullYear();
+  const gridYears = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020, NOW_YEAR];
   const markerX = sx(1965, W, padL, padR);
+
+  // Where the published data actually stops. Drawn as an explicit boundary so
+  // that extending the axis to today never implies figures nobody has released.
+  const lastDataYear = Math.max(DATA_THROUGH.beds, DATA_THROUGH.prison, DATA_THROUGH.jail);
+  const dataEndX = sx(lastDataYear, W, padL, padR);
 
   // End labels are anchored to real endpoints. If a series were ever emptied
   // (a source retracted, a filter tightened), the label is simply not drawn —
@@ -95,8 +105,11 @@ export function HeroChart() {
         <h3>Two capacities, one country</h3>
         <p>
           State psychiatric hospital beds against the number of people held in state and federal
-          prisons, 1955 to 2023. Points are census and survey years. The line between them is a
-          connector, not measured data.
+          prisons and in local jails, 1955 to the present. Points are census and survey years, and
+          the line between them is a connector, not measured data. The series stop where the
+          published figures stop: beds and prisons at {DATA_THROUGH.beds}, jails at{' '}
+          {DATA_THROUGH.jail}. Everything to the right of that line is time we have no national
+          count for yet, not a decline to zero.
         </p>
       </figcaption>
 
@@ -109,13 +122,16 @@ export function HeroChart() {
           preserveAspectRatio="xMidYMid meet"
         >
           <title id="hero-t">
-            Psychiatric hospital beds falling and prison population rising, 1955 to 2023
+            Psychiatric hospital beds falling and prison population rising, 1955 to the present
           </title>
           <desc id="hero-d">
             State psychiatric hospital beds fall from 558,922 in 1955 to 36,150 in 2023. Over the
             same period the state and federal prison population rises from 185,780 in 1955 to a peak
-            of 1,612,395 in 2010 and stands at 1,254,200 in 2023. Medicaid was enacted with the
-            institutions for mental diseases exclusion in 1965.
+            of 1,612,395 in 2010 and stands at 1,254,200 in 2023. Local jails held 657,500 people at
+            midyear 2024. Medicaid was enacted with the institutions for mental diseases exclusion
+            in 1965. The horizontal axis continues to the current year; no line is drawn past the
+            last year each agency has published, which is {DATA_THROUGH.beds} for beds and prisons
+            and {DATA_THROUGH.jail} for jails.
           </desc>
 
           {/* grid */}
@@ -134,6 +150,21 @@ export function HeroChart() {
             </g>
           ))}
           <line x1={padL} y1={H - padB} x2={W - padR} y2={H - padB} class="axis" />
+
+          {/* Where published data stops. The axis continues to the present year,
+              and this boundary is what keeps that from reading as a collapse to
+              zero: to its right, nobody has released a national count yet. */}
+          <line
+            x1={dataEndX}
+            y1={padT}
+            x2={dataEndX}
+            y2={H - padB}
+            class="data-end"
+            stroke-dasharray="3 4"
+          />
+          <text x={dataEndX - 8} y={padT - 14} class="data-end-label" text-anchor="end">
+            published data ends {lastDataYear}
+          </text>
 
           {/* 1965 marker — the fork */}
           <line x1={markerX} y1={padT - 12} x2={markerX} y2={H - padB} class="marker-line" />
@@ -197,8 +228,8 @@ export function HeroChart() {
           ) : null}
           {lastPrison ? (
             <text
-              x={lastPrison.x - 12}
-              y={lastPrison.y - 26}
+              x={lastPrison.x - 6}
+              y={lastPrison.y + 26}
               class="endlab endlab--prison"
               text-anchor="end"
             >
@@ -247,10 +278,15 @@ export function HeroChart() {
 
 export function SizeChart() {
   const W = 1000;
-  const H = 260;
+  // Taller than it needs to be for the number line alone. The height is here to
+  // give every label its own horizontal row: an earlier version packed the
+  // limit, mean and 95th-percentile labels into a 30px band and the long
+  // "fewer than 8%" sentence ran straight through "eligible", "108" and
+  // "average hospital". Rows, not cleverness, are what stop that.
+  const H = 300;
   const padL = 54;
   const padR = 54;
-  const baseY = 168;
+  const baseY = 196;
 
   const max = 340;
   const px = (beds: number) => padL + (beds / max) * (W - padL - padR);
@@ -258,6 +294,14 @@ export function SizeChart() {
   const limitX = px(HOSPITAL_SIZE.statutoryLimit);
   const meanX = px(HOSPITAL_SIZE.mean);
   const p95X = px(HOSPITAL_SIZE.p95);
+
+  // One row per label, top to bottom. Named so a future edit moves a row
+  // instead of nudging a magic number into someone else's row.
+  const ROW_NOTE = 30; // full-width sentence, above the plot entirely
+  const ROW_LIMIT = 92; // "16 — the statutory limit", by the red line
+  const ROW_ELIGIBLE = 120; // sits over the green band on the far left
+  const ROW_VALUE = 132; // "108" and the p95 tick value
+  const ROW_VALUE_SUB = 150; // "average hospital", "95th percentile"
 
   return (
     <figure class="chart" id="chart-size">
@@ -286,7 +330,13 @@ export function SizeChart() {
             8 percent have 16 beds or fewer.
           </desc>
 
-          {/* ineligible band */}
+          {/* The long sentence gets its own full-width row above the plot, where
+              nothing can collide with it. */}
+          <text x={padL} y={ROW_NOTE} class="limit-sub">
+            Fewer than 8% of psychiatric hospitals are at or below the 16-bed line.
+          </text>
+
+          {/* bands */}
           <rect x={limitX} y={baseY - 44} width={W - padR - limitX} height={88} class="band-bad" />
           <rect x={padL} y={baseY - 44} width={limitX - padL} height={88} class="band-ok" />
 
@@ -305,22 +355,25 @@ export function SizeChart() {
           </text>
 
           {/* the limit */}
-          <line x1={limitX} y1={baseY - 62} x2={limitX} y2={baseY + 8} class="limit-line" />
-          <text x={limitX + 8} y={baseY - 68} class="limit-lab">
+          <line x1={limitX} y1={ROW_LIMIT + 6} x2={limitX} y2={baseY + 8} class="limit-line" />
+          <text x={limitX + 8} y={ROW_LIMIT} class="limit-lab">
             16 — the statutory limit
           </text>
-          <text x={limitX + 8} y={baseY - 50} class="limit-sub">
-            fewer than 8% of psychiatric hospitals are at or below it
+
+          {/* "eligible" labels the green band it sits above. Left-anchored at the
+              chart edge, far from the mean cluster in the middle. */}
+          <text x={limitX - 8} y={ROW_ELIGIBLE} class="band-lab band-lab--ok" text-anchor="end">
+            eligible
           </text>
 
           {/* mean */}
           <g>
-            <line x1={meanX} y1={baseY - 44} x2={meanX} y2={baseY + 8} class="mark-line" />
+            <line x1={meanX} y1={ROW_VALUE_SUB + 8} x2={meanX} y2={baseY + 8} class="mark-line" />
             <circle cx={meanX} cy={baseY} r="7" class="mark-dot" />
-            <text x={meanX} y={baseY - 54} class="mark-lab" text-anchor="middle">
+            <text x={meanX} y={ROW_VALUE} class="mark-lab" text-anchor="middle">
               108
             </text>
-            <text x={meanX} y={baseY - 38} class="mark-sub" text-anchor="middle">
+            <text x={meanX} y={ROW_VALUE_SUB} class="mark-sub" text-anchor="middle">
               average hospital
             </text>
           </g>
@@ -329,21 +382,21 @@ export function SizeChart() {
           <g>
             <line
               x1={p95X}
-              y1={baseY - 30}
+              y1={ROW_VALUE_SUB + 6}
               x2={p95X}
               y2={baseY + 8}
               class="mark-line mark-line--soft"
             />
-            <text x={p95X} y={baseY - 38} class="mark-sub" text-anchor="middle">
-              305 · 95th percentile
+            <text x={p95X} y={ROW_VALUE} class="mark-lab mark-lab--soft" text-anchor="middle">
+              305
+            </text>
+            <text x={p95X} y={ROW_VALUE_SUB} class="mark-sub" text-anchor="middle">
+              95th percentile
             </text>
           </g>
 
           <text x={limitX + 10} y={baseY + 74} class="band-lab band-lab--bad">
             Medicaid will not pay for adults 21 to 64 in this range
-          </text>
-          <text x={padL + 2} y={baseY - 56} class="band-lab band-lab--ok">
-            eligible
           </text>
         </svg>
       </div>
