@@ -1,39 +1,39 @@
 import { Hono } from 'hono';
 import { secureHeaders } from 'hono/secure-headers';
-import { CSS } from './styles';
-import { CLIENT_JS } from './client-script';
 import { HeroChart, SizeChart, WaiverMap } from './charts';
+import { CLIENT_JS } from './client-script';
 import {
-  RETRIEVED,
-  STATUTE,
-  WHY_SIXTEEN,
-  TIMELINE,
+  ARGUMENTS,
   BED_HEADLINE,
-  HERO_CAVEAT,
-  INCARCERATION_NOTE,
   BED_SERIES,
-  PRISON_SERIES,
-  JAIL_SERIES,
+  BILLS,
+  CONSEQUENCES,
+  CONTACT_EMAIL,
+  CONTACT_INTENTS,
+  FUNDING_ROUTES,
+  HERO_CAVEAT,
   HOSPITAL_SIZE,
+  INCARCERATION_NOTE,
+  JAIL_SERIES,
+  PREVALENCE,
+  PRISON_SERIES,
+  RETRIEVED,
+  SMI_APPROVED,
+  SMI_PENDING,
+  SOURCES,
+  STATUTE,
+  SUD_APPROVED,
+  SUD_PENDING,
+  SUGGESTED_QUESTIONS,
+  systemPrompt,
+  TIMELINE,
   WAIVER_AS_OF,
   WAIVER_SOURCE,
   WAIVER_SOURCE_NAME,
   WAIVER_TRACKER,
-  SUD_APPROVED,
-  SUD_PENDING,
-  SMI_APPROVED,
-  SMI_PENDING,
-  CONSEQUENCES,
-  PREVALENCE,
-  BILLS,
-  ARGUMENTS,
-  CONTACT_EMAIL,
-  CONTACT_INTENTS,
-  FUNDING_ROUTES,
-  SOURCES,
-  SUGGESTED_QUESTIONS,
-  systemPrompt,
+  WHY_SIXTEEN,
 } from './data';
+import { CSS } from './styles';
 
 type Bindings = {
   AI: Ai;
@@ -334,9 +334,12 @@ app.post('/api/stt', async (c) => {
   const contentType = c.req.header('content-type') || 'audio/webm';
 
   try {
-    const r = (await c.env.AI.run('@cf/deepgram/nova-3' as keyof AiModels, {
-      audio: { body: buf, contentType },
-    } as never)) as { text?: string; results?: unknown };
+    const r = (await c.env.AI.run(
+      '@cf/deepgram/nova-3' as keyof AiModels,
+      {
+        audio: { body: buf, contentType },
+      } as never,
+    )) as { text?: string; results?: unknown };
     const text = extractTranscript(r);
     if (text) return c.json({ text }, 200, { 'x-stt-model': 'nova-3' });
     console.log(JSON.stringify({ event: 'stt_nova3_empty', bytes: buf.byteLength, contentType }));
@@ -357,9 +360,12 @@ app.post('/api/stt', async (c) => {
     for (let i = 0; i < bytes.length; i += 8192) {
       bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
     }
-    const r = (await c.env.AI.run('@cf/openai/whisper-large-v3-turbo' as keyof AiModels, {
-      audio: btoa(bin),
-    } as never)) as { text?: string };
+    const r = (await c.env.AI.run(
+      '@cf/openai/whisper-large-v3-turbo' as keyof AiModels,
+      {
+        audio: btoa(bin),
+      } as never,
+    )) as { text?: string };
     if (r?.text) return c.json({ text: r.text }, 200, { 'x-stt-model': 'whisper-large-v3-turbo' });
     return c.json({ error: 'No speech detected in that clip.' }, 200);
   } catch (err) {
@@ -392,11 +398,14 @@ app.post('/api/tts', async (c) => {
   if (!text) return c.json({ error: 'Nothing to speak.' }, 400);
 
   try {
-    const r = (await c.env.AI.run('@cf/deepgram/aura-1' as keyof AiModels, {
-      text,
-      speaker: 'athena',
-      encoding: 'mp3',
-    } as never)) as unknown;
+    const r = (await c.env.AI.run(
+      '@cf/deepgram/aura-1' as keyof AiModels,
+      {
+        text,
+        speaker: 'athena',
+        encoding: 'mp3',
+      } as never,
+    )) as unknown;
 
     if (r instanceof ReadableStream) {
       return new Response(r, {
@@ -451,11 +460,11 @@ app.get('/', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{title}</title>
         <meta name="description" content={desc} />
-        <link rel="canonical" href={origin + '/'} />
+        <link rel="canonical" href={`${origin}/`} />
         <meta property="og:title" content="The 16-Bed Limit" />
         <meta property="og:description" content={desc} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={origin + '/'} />
+        <meta property="og:url" content={`${origin}/`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="theme-color" content="#f6f4ef" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -510,9 +519,7 @@ app.get('/', (c) => {
         <main id="main">
           {/* ---------------- HERO ---------------- */}
           <div class="wrap hero">
-            <p class="hero__kicker">
-              Medicaid · 42 U.S.C. §1396d · in force since 1965
-            </p>
+            <p class="hero__kicker">Medicaid · 42 U.S.C. §1396d · in force since 1965</p>
             <h1>
               Medicaid stops paying at <b>16 beds</b>.
             </h1>
@@ -547,9 +554,7 @@ app.get('/', (c) => {
                 <div class="rrow">
                   <p class="rrow__k">State psychiatric beds</p>
                   <p class="rrow__v">36,150</p>
-                  <p class="rrow__n">
-                    Down from 558,922 in 1955. A record low, in 2023.
-                  </p>
+                  <p class="rrow__n">Down from 558,922 in 1955. A record low, in 2023.</p>
                 </div>
               </div>
             </div>
@@ -620,11 +625,15 @@ app.get('/', (c) => {
                 <div class="why__gap">
                   <b>And here is what is not</b>
                   <p>{WHY_SIXTEEN.notDocumented}</p>
-                  <p class="why__searched">Sources checked for a rationale: {WHY_SIXTEEN.searched}</p>
+                  <p class="why__searched">
+                    Sources checked for a rationale: {WHY_SIXTEEN.searched}
+                  </p>
                 </div>
                 <p class="why__ask">
                   If you find a published rationale for the figure, we want it. Send it to{' '}
-                  <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Origin of the 16-bed figure')}`}>
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Origin of the 16-bed figure')}`}
+                  >
                     {CONTACT_EMAIL}
                   </a>{' '}
                   and this section will be corrected with the citation.

@@ -105,7 +105,8 @@ export const TIMELINE: TimelineEntry[] = [
     law: '42 CFR managed care rule',
     title: 'The 15-day managed-care workaround',
     what: 'CMS regulation lets states pay managed care plans for enrollees aged 21-64 in an IMD as an "in lieu of" service, capped at 15 days in the payment month. The SUPPORT Act later writes this into statute.',
-    source: 'https://www.macpac.gov/subtopic/payment-for-services-in-institutions-for-mental-diseases-imds/',
+    source:
+      'https://www.macpac.gov/subtopic/payment-for-services-in-institutions-for-mental-diseases-imds/',
     sourceName: 'MACPAC',
   },
   {
@@ -168,8 +169,7 @@ export const WHY_SIXTEEN = {
       sourceName: 'CRS IF10222',
     },
     {
-      claim:
-        'The regulations governing the IMD exclusion have not been updated since 1988.',
+      claim: 'The regulations governing the IMD exclusion have not been updated since 1988.',
       source: 'https://www.lac.org/assets/files/IMD_exclusion_fact_sheet.pdf',
       sourceName: 'Legal Action Center',
     },
@@ -203,7 +203,8 @@ export const BED_SERIES: BedPoint[] = [
     year: 1955,
     beds: 558922,
     perCapita: 340,
-    source: 'https://www.psychiatry.org/getmedia/81f685f1-036e-4311-8dfc-e13ac425380f/APA-Psychiatric-Bed-Crisis-Report-Full.pdf',
+    source:
+      'https://www.psychiatry.org/getmedia/81f685f1-036e-4311-8dfc-e13ac425380f/APA-Psychiatric-Bed-Crisis-Report-Full.pdf',
     sourceName: 'APA Psychiatric Bed Crisis Report (citing Bockoven 1972)',
     note: 'Peak residents in state mental hospitals. Per-capita figure from Treatment Advocacy Center, "No Room at the Inn" (2011).',
   },
@@ -224,7 +225,8 @@ export const BED_SERIES: BedPoint[] = [
     year: 2016,
     beds: 37679,
     perCapita: 11.7,
-    source: 'https://www.tac.org/reports_publications/going-going-gone-trends-and-consequences-of-eliminating-state-psychiatric-beds/',
+    source:
+      'https://www.tac.org/reports_publications/going-going-gone-trends-and-consequences-of-eliminating-state-psychiatric-beds/',
     sourceName: 'Treatment Advocacy Center, "Going, Going, Gone" (2016)',
     note: 'Staffed beds remaining in state hospitals, first half of 2016.',
   },
@@ -245,7 +247,7 @@ export const BED_HEADLINE = {
   latestBeds: 36150,
   // computed, not asserted — shown with its own arithmetic
   get pctDecline() {
-    return ((1 - this.latestBeds / this.peakBeds) * 100);
+    return (1 - this.latestBeds / this.peakBeds) * 100;
   },
   publicBedDeclineClaim: 'over 97% since its peak, accounting for population change',
   publicBedDeclineSource:
@@ -273,27 +275,56 @@ export interface PrisonPoint {
 }
 
 export const PRISON_SERIES: PrisonPoint[] = [
-  { year: 1955, prisoners: 185780, basis: 'sentenced',
+  {
+    year: 1955,
+    prisoners: 185780,
+    basis: 'sentenced',
     source: 'https://bjs.ojp.gov/content/pub/pdf/p2581.pdf',
-    sourceName: 'BJS, Prisoners 1925-81, Table 1' },
-  { year: 1965, prisoners: 210895, basis: 'sentenced',
+    sourceName: 'BJS, Prisoners 1925-81, Table 1',
+  },
+  {
+    year: 1965,
+    prisoners: 210895,
+    basis: 'sentenced',
     source: 'https://bjs.ojp.gov/content/pub/pdf/p2581.pdf',
-    sourceName: 'BJS, Prisoners 1925-81, Table 1' },
-  { year: 1980, prisoners: 315974, basis: 'sentenced',
+    sourceName: 'BJS, Prisoners 1925-81, Table 1',
+  },
+  {
+    year: 1980,
+    prisoners: 315974,
+    basis: 'sentenced',
     source: 'https://bjs.ojp.gov/content/pub/pdf/p2581.pdf',
-    sourceName: 'BJS, Prisoners 1925-81, Table 1' },
-  { year: 1990, prisoners: 773919, basis: 'jurisdiction',
+    sourceName: 'BJS, Prisoners 1925-81, Table 1',
+  },
+  {
+    year: 1990,
+    prisoners: 773919,
+    basis: 'jurisdiction',
     source: 'https://bjs.ojp.gov/content/pub/ascii/p98.txt',
-    sourceName: 'BJS, Prisoners in 1998, Table 1' },
-  { year: 2000, prisoners: 1381892, basis: 'jurisdiction',
+    sourceName: 'BJS, Prisoners in 1998, Table 1',
+  },
+  {
+    year: 2000,
+    prisoners: 1381892,
+    basis: 'jurisdiction',
     source: 'https://bjs.ojp.gov/content/pub/ascii/p00.txt',
-    sourceName: 'BJS, Prisoners in 2000' },
-  { year: 2010, prisoners: 1612395, basis: 'jurisdiction',
+    sourceName: 'BJS, Prisoners in 2000',
+  },
+  {
+    year: 2010,
+    prisoners: 1612395,
+    basis: 'jurisdiction',
     source: 'https://bjs.ojp.gov/library/publications/prisoners-2010-revised',
-    sourceName: 'BJS, Prisoners in 2010 (Revised)' },
-  { year: 2023, prisoners: 1254200, basis: 'jurisdiction',
-    source: 'https://bjs.ojp.gov/library/publications/prisons-report-series-preliminary-data-release-2023',
-    sourceName: 'BJS, Prisons Report Series: Preliminary Data Release, 2023' },
+    sourceName: 'BJS, Prisoners in 2010 (Revised)',
+  },
+  {
+    year: 2023,
+    prisoners: 1254200,
+    basis: 'jurisdiction',
+    source:
+      'https://bjs.ojp.gov/library/publications/prisons-report-series-preliminary-data-release-2023',
+    sourceName: 'BJS, Prisons Report Series: Preliminary Data Release, 2023',
+  },
 ];
 
 export interface JailPoint {
@@ -304,18 +335,30 @@ export interface JailPoint {
 }
 
 export const JAIL_SERIES: JailPoint[] = [
-  { year: 1990, jail: 405320,
+  {
+    year: 1990,
+    jail: 405320,
     source: 'https://bjs.ojp.gov/content/pub/ascii/p98.txt',
-    sourceName: 'BJS, Prisoners in 1998, Table 1' },
-  { year: 1998, jail: 592462,
+    sourceName: 'BJS, Prisoners in 1998, Table 1',
+  },
+  {
+    year: 1998,
+    jail: 592462,
     source: 'https://bjs.ojp.gov/content/pub/ascii/p98.txt',
-    sourceName: 'BJS, Prisoners in 1998, Table 1' },
-  { year: 2013, jail: 731200,
+    sourceName: 'BJS, Prisoners in 1998, Table 1',
+  },
+  {
+    year: 2013,
+    jail: 731200,
     source: 'https://bjs.ojp.gov/library/publications/jail-inmates-2023-statistical-tables',
-    sourceName: 'BJS, Jail Inmates in 2023' },
-  { year: 2023, jail: 664200,
+    sourceName: 'BJS, Jail Inmates in 2023',
+  },
+  {
+    year: 2023,
+    jail: 664200,
     source: 'https://bjs.ojp.gov/library/publications/jail-inmates-2023-statistical-tables',
-    sourceName: 'BJS, Jail Inmates in 2023' },
+    sourceName: 'BJS, Jail Inmates in 2023',
+  },
 ];
 
 export const INCARCERATION_NOTE =
@@ -327,12 +370,6 @@ export const INCARCERATION_NOTE =
  */
 export const HERO_CAVEAT =
   'These two lines are not a causal claim. Incarceration in the United States rose for many reasons — sentencing law, drug policy, and policing changed enormously over the same period. What the chart shows is that the country reduced its psychiatric hospital capacity to almost nothing and expanded its correctional capacity enormously, and that a federal funding rule adopted in 1965 made the first of those two things cheaper for states to do.';
-
-export const HERO_MARKERS = [
-  { year: 1965, label: 'Medicaid enacted with the IMD exclusion', kind: 'law' as const },
-  { year: 1988, label: 'The 16-bed line written into statute', kind: 'law' as const },
-  { year: 2018, label: 'SUPPORT Act partial workarounds', kind: 'law' as const },
-];
 
 /* ------------------------------------------------------------------ *
  * 4. HOSPITAL SIZE vs THE 16-BED LINE
@@ -353,7 +390,8 @@ export const HOSPITAL_SIZE = {
   bedsUnlockedQualifier: 'more than',
   source:
     'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
-  sourceName: 'Manhattan Institute, "U.S. Psychiatric Hospitals Under Medicaid\'s IMD Exclusion" (Aug 2025)',
+  sourceName:
+    'Manhattan Institute, "U.S. Psychiatric Hospitals Under Medicaid\'s IMD Exclusion" (Aug 2025)',
   retrieved: RETRIEVED,
   findings: [
     'The average U.S. psychiatric hospital has 108 beds — smaller than the average general hospital.',
@@ -373,30 +411,124 @@ export const WAIVER_AS_OF = '2025-01-14';
 export const WAIVER_SOURCE = 'https://www.congress.gov/crs-product/IF10222';
 export const WAIVER_SOURCE_NAME =
   'CRS IF10222, Table 1 (source: KFF Medicaid Waiver Tracker, Jan 14 2025)';
-export const WAIVER_TRACKER = 'https://www.kff.org/medicaid/medicaid-waiver-tracker-approved-and-pending-section-1115-waivers-by-state/';
+export const WAIVER_TRACKER =
+  'https://www.kff.org/medicaid/medicaid-waiver-tracker-approved-and-pending-section-1115-waivers-by-state/';
 
 /** All 50 states plus DC. Used to emit an explicit per-state line in the
  *  assistant's corpus, because a comma-joined list of codes is something a
  *  language model reliably gets wrong on membership questions. */
 export const STATE_NAMES: Record<string, string> = {
-  AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
-  CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia',
-  FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois',
-  IN: 'Indiana', IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana',
-  ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan',
-  MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana',
-  NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey',
-  NM: 'New Mexico', NY: 'New York', NC: 'North Carolina', ND: 'North Dakota',
-  OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania',
-  RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee',
-  TX: 'Texas', UT: 'Utah', VT: 'Vermont', VA: 'Virginia', WA: 'Washington',
-  WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming',
+  AL: 'Alabama',
+  AK: 'Alaska',
+  AZ: 'Arizona',
+  AR: 'Arkansas',
+  CA: 'California',
+  CO: 'Colorado',
+  CT: 'Connecticut',
+  DE: 'Delaware',
+  DC: 'District of Columbia',
+  FL: 'Florida',
+  GA: 'Georgia',
+  HI: 'Hawaii',
+  ID: 'Idaho',
+  IL: 'Illinois',
+  IN: 'Indiana',
+  IA: 'Iowa',
+  KS: 'Kansas',
+  KY: 'Kentucky',
+  LA: 'Louisiana',
+  ME: 'Maine',
+  MD: 'Maryland',
+  MA: 'Massachusetts',
+  MI: 'Michigan',
+  MN: 'Minnesota',
+  MS: 'Mississippi',
+  MO: 'Missouri',
+  MT: 'Montana',
+  NE: 'Nebraska',
+  NV: 'Nevada',
+  NH: 'New Hampshire',
+  NJ: 'New Jersey',
+  NM: 'New Mexico',
+  NY: 'New York',
+  NC: 'North Carolina',
+  ND: 'North Dakota',
+  OH: 'Ohio',
+  OK: 'Oklahoma',
+  OR: 'Oregon',
+  PA: 'Pennsylvania',
+  RI: 'Rhode Island',
+  SC: 'South Carolina',
+  SD: 'South Dakota',
+  TN: 'Tennessee',
+  TX: 'Texas',
+  UT: 'Utah',
+  VT: 'Vermont',
+  VA: 'Virginia',
+  WA: 'Washington',
+  WV: 'West Virginia',
+  WI: 'Wisconsin',
+  WY: 'Wyoming',
 };
 
-export const SUD_APPROVED = ['AK','CA','CO','CT','DC','DE','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MT','NC','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','UT','VA','VT','WA','WI','WV'];
-export const SUD_PENDING  = ['AL','AZ','AR','MA','WA'];
-export const SMI_APPROVED = ['AL','CA','CO','DC','ID','IN','KY','MD','MO','NH','NM','OK','UT','VT','WA'];
-export const SMI_PENDING  = ['AR','MA','MT','NJ','NV','NY','OR','TN','WA','WI'];
+export const SUD_APPROVED = [
+  'AK',
+  'CA',
+  'CO',
+  'CT',
+  'DC',
+  'DE',
+  'ID',
+  'IL',
+  'IN',
+  'KS',
+  'KY',
+  'LA',
+  'MA',
+  'MD',
+  'ME',
+  'MI',
+  'MN',
+  'MO',
+  'MT',
+  'NC',
+  'NE',
+  'NH',
+  'NJ',
+  'NM',
+  'NV',
+  'NY',
+  'OH',
+  'OK',
+  'OR',
+  'PA',
+  'RI',
+  'UT',
+  'VA',
+  'VT',
+  'WA',
+  'WI',
+  'WV',
+];
+export const SUD_PENDING = ['AL', 'AZ', 'AR', 'MA', 'WA'];
+export const SMI_APPROVED = [
+  'AL',
+  'CA',
+  'CO',
+  'DC',
+  'ID',
+  'IN',
+  'KY',
+  'MD',
+  'MO',
+  'NH',
+  'NM',
+  'OK',
+  'UT',
+  'VT',
+  'WA',
+];
+export const SMI_PENDING = ['AR', 'MA', 'MT', 'NJ', 'NV', 'NY', 'OR', 'TN', 'WA', 'WI'];
 
 export type WaiverStatus = 'both' | 'sud' | 'smi' | 'pending' | 'none';
 
@@ -411,11 +543,26 @@ export function waiverStatus(code: string): WaiverStatus {
 }
 
 export const WAIVER_LEGEND: Record<WaiverStatus, { label: string; desc: string }> = {
-  both:    { label: 'Both approved',   desc: 'Approved waivers for BOTH substance use disorder and mental health treatment in IMDs.' },
-  sud:     { label: 'Addiction only',  desc: 'Approved waiver covers substance use disorder treatment only.' },
-  smi:     { label: 'Mental health only', desc: 'Approved waiver covers mental health treatment only.' },
-  pending: { label: 'Pending',         desc: 'An application is pending with CMS; no approved IMD waiver yet.' },
-  none:    { label: 'No waiver',       desc: 'No approved or pending §1115 IMD waiver as of the tracker date.' },
+  both: {
+    label: 'Both approved',
+    desc: 'Approved waivers for BOTH substance use disorder and mental health treatment in IMDs.',
+  },
+  sud: {
+    label: 'Addiction only',
+    desc: 'Approved waiver covers substance use disorder treatment only.',
+  },
+  smi: {
+    label: 'Mental health only',
+    desc: 'Approved waiver covers mental health treatment only.',
+  },
+  pending: {
+    label: 'Pending',
+    desc: 'An application is pending with CMS; no approved IMD waiver yet.',
+  },
+  none: {
+    label: 'No waiver',
+    desc: 'No approved or pending §1115 IMD waiver as of the tracker date.',
+  },
 };
 
 /* ------------------------------------------------------------------ *
@@ -436,7 +583,8 @@ export const CONSEQUENCES: Consequence[] = [
     stat: 'About half',
     detail:
       'Of the state hospital beds still in service in 2016, close to half — roughly 5.5 of the 11.7 beds per 100,000 people — were occupied by forensic patients, meaning people charged with or convicted of a crime. By 2023 a majority of state hospital beds were forensic.',
-    source: 'https://www.tac.org/reports_publications/going-going-gone-trends-and-consequences-of-eliminating-state-psychiatric-beds/',
+    source:
+      'https://www.tac.org/reports_publications/going-going-gone-trends-and-consequences-of-eliminating-state-psychiatric-beds/',
     sourceName: 'Treatment Advocacy Center',
   },
   {
@@ -444,7 +592,8 @@ export const CONSEQUENCES: Consequence[] = [
     stat: '+76%',
     detail:
       'Forensic patients in state hospitals rose 76% between 1999 and 2014, from about 13,394 on a given day to more than 23,574 across 37 reporting states — while the total number of psychiatric beds kept falling.',
-    source: 'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
+    source:
+      'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
     sourceName: 'Manhattan Institute (2025)',
   },
   {
@@ -452,7 +601,8 @@ export const CONSEQUENCES: Consequence[] = [
     stat: '60 days',
     detail:
       'Across 26 states, people in jail wait a median of 60 days for a bed to restore their competency to stand trial. At least 12 states have been sued for failing to provide that care in time.',
-    source: 'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
+    source:
+      'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
     sourceName: 'Manhattan Institute (2025), citing Treatment Advocacy Center',
   },
   {
@@ -460,7 +610,8 @@ export const CONSEQUENCES: Consequence[] = [
     stat: '14% / 8%',
     detail:
       'About 14% of people in state prison and 8% in federal prison met the threshold for serious psychological distress in the past 30 days — several times the rate in the general adult population.',
-    source: 'https://bjs.ojp.gov/library/publications/indicators-mental-health-problems-reported-prisoners-survey-prison-inmates',
+    source:
+      'https://bjs.ojp.gov/library/publications/indicators-mental-health-problems-reported-prisoners-survey-prison-inmates',
     sourceName: 'Bureau of Justice Statistics, Survey of Prison Inmates 2016',
   },
   {
@@ -476,7 +627,8 @@ export const CONSEQUENCES: Consequence[] = [
     stat: '770,000+',
     detail:
       'More than 770,000 people were experiencing homelessness on a single night in January 2024 — the highest count HUD has recorded. Serious mental illness is heavily overrepresented in this population.',
-    source: 'https://www.huduser.gov/portal/datasets/ahar/2024-ahar-part-1-pit-estimates-of-homelessness-in-the-us.html',
+    source:
+      'https://www.huduser.gov/portal/datasets/ahar/2024-ahar-part-1-pit-estimates-of-homelessness-in-the-us.html',
     sourceName: 'HUD 2024 Annual Homelessness Assessment Report (Point-in-Time count)',
   },
   {
@@ -484,7 +636,8 @@ export const CONSEQUENCES: Consequence[] = [
     stat: '3×',
     detail:
       'Patients in psychiatric crisis wait up to three times as long as other patients to move from an emergency department to an inpatient bed. In San Francisco, 87% of people with 18 or more ED visits a year had a mental illness or substance use disorder.',
-    source: 'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
+    source:
+      'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
     sourceName: 'Manhattan Institute (2025)',
   },
 ];
@@ -493,19 +646,23 @@ export const PREVALENCE = [
   {
     stat: '14.6 million',
     detail: 'U.S. adults live with a serious mental illness.',
-    source: 'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
+    source:
+      'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
     sourceName: 'Manhattan Institute (2025)',
   },
   {
     stat: '10%',
     detail: 'Of non-elderly adult Medicaid enrollees have a serious mental illness.',
-    source: 'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
+    source:
+      'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
     sourceName: 'Manhattan Institute (2025)',
   },
   {
     stat: '90% more likely',
-    detail: 'Medicaid enrollees are 90% more likely to have a serious mental illness than privately insured Americans.',
-    source: 'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
+    detail:
+      'Medicaid enrollees are 90% more likely to have a serious mental illness than privately insured Americans.',
+    source:
+      'https://manhattan.institute/article/us-psychiatric-hospitals-under-medicaids-institutions-for-mental-diseases-exclusion',
     sourceName: 'Manhattan Institute (2025)',
   },
 ];
@@ -578,7 +735,7 @@ export const ARGUMENTS = {
       'The exclusion discourages states from investing in inpatient care, so people who need a hospital end up boarded in emergency departments, on the street, or in jail.',
       'It singles out one category of illness for worse fiscal treatment than any other. In almost every other setting the federal government pays at least half the cost.',
       'The population of public psychiatric hospitals is already a small fraction of what it was before deinstitutionalization, so a return to mass institutionalization is not the realistic risk.',
-      'Legal protections that did not exist in 1965 now exist, most importantly the integration mandate of the Supreme Court\'s Olmstead decision, which requires community placement where appropriate.',
+      "Legal protections that did not exist in 1965 now exist, most importantly the integration mandate of the Supreme Court's Olmstead decision, which requires community placement where appropriate.",
     ],
     source: 'https://manhattan.institute/article/medicaids-imd-exclusion-the-case-for-repeal',
     sourceName: 'Manhattan Institute, "Medicaid\'s IMD Exclusion: The Case for Repeal" (2021)',
@@ -609,8 +766,7 @@ export const CONTACT_INTENTS = [
     blurb:
       'Denial letters, state waiver correspondence, hospital transfer records, competency-restoration wait letters. Redact what you need to.',
     subject: 'Records for the 16-bed limit project',
-    body:
-      'What the document is:\n\nWhat state or facility it concerns:\n\nApproximate date:\n\nMay we quote it publicly? (yes / anonymized / background only)\n\n',
+    body: 'What the document is:\n\nWhat state or facility it concerns:\n\nApproximate date:\n\nMay we quote it publicly? (yes / anonymized / background only)\n\n',
   },
   {
     id: 'who',
@@ -626,8 +782,7 @@ export const CONTACT_INTENTS = [
     blurb:
       'If you or someone you care about could not get a bed, that is the evidence this argument runs on.',
     subject: 'My experience with psychiatric bed access',
-    body:
-      'What happened:\n\nState:\n\nApproximate date:\n\nMay we share this? (yes / anonymized / background only)\n\n',
+    body: 'What happened:\n\nState:\n\nApproximate date:\n\nMay we share this? (yes / anonymized / background only)\n\n',
   },
   {
     id: 'fund',
@@ -657,7 +812,8 @@ export const FUNDING_ROUTES = [
     canDo:
       'Unlimited lobbying on the IMD exclusion as its primary activity, plus some political activity as a secondary purpose.',
     cannot: 'Donations are not tax-deductible. Political activity cannot be the primary activity.',
-    authority: 'https://www.irs.gov/charities-non-profits/other-non-profits/social-welfare-organizations',
+    authority:
+      'https://www.irs.gov/charities-non-profits/other-non-profits/social-welfare-organizations',
     authorityName: 'IRS — Social welfare organizations',
   },
   {
@@ -666,7 +822,8 @@ export const FUNDING_ROUTES = [
       'Raise and spend unlimited sums from individuals, corporations, and unions on independent expenditures supporting or opposing federal candidates.',
     cannot:
       'May not contribute to, or coordinate with, a candidate or party committee. Must register and report to the FEC.',
-    authority: 'https://www.fec.gov/help-candidates-and-committees/registering-pac/independent-expenditure-only-political-committees/',
+    authority:
+      'https://www.fec.gov/help-candidates-and-committees/registering-pac/independent-expenditure-only-political-committees/',
     authorityName: 'FEC — Independent expenditure-only committees',
   },
   {
@@ -809,7 +966,9 @@ export function buildKnowledgeBase(): string {
   lines.push(`Definition (${STATUTE.definitionCite}): "${STATUTE.definitionText}"`);
   lines.push(`Exclusion (${STATUTE.exclusionCite}): "${STATUTE.exclusionText}"`);
   lines.push(STATUTE.citationCaveat);
-  lines.push('Practical effect: Medicaid will not pay for care delivered to an adult aged 21 through 64 who is a patient in a psychiatric or substance-use facility with more than 16 beds. The bar covers services delivered outside the facility too, while the person is a patient there. People 65 and over, and people under 21, are covered by longstanding exceptions.');
+  lines.push(
+    'Practical effect: Medicaid will not pay for care delivered to an adult aged 21 through 64 who is a patient in a psychiatric or substance-use facility with more than 16 beds. The bar covers services delivered outside the facility too, while the person is a patient there. People 65 and over, and people under 21, are covered by longstanding exceptions.',
+  );
   lines.push('');
 
   lines.push('## Why the number is 16 (most asked question)');
@@ -835,7 +994,9 @@ export function buildKnowledgeBase(): string {
     if (p.note) bits.push(`Note: ${p.note}`);
     lines.push(bits.join(' '));
   }
-  lines.push(`Headline: from ${BED_HEADLINE.peakBeds.toLocaleString()} in ${BED_HEADLINE.peakYear} to ${BED_HEADLINE.latestBeds.toLocaleString()} in ${BED_HEADLINE.latestYear}, a decline of ${BED_HEADLINE.pctDecline.toFixed(1)}% in absolute terms. Public psychiatric beds are down ${BED_HEADLINE.publicBedDeclineClaim} (${BED_HEADLINE.publicBedDeclineSourceName}).`);
+  lines.push(
+    `Headline: from ${BED_HEADLINE.peakBeds.toLocaleString()} in ${BED_HEADLINE.peakYear} to ${BED_HEADLINE.latestBeds.toLocaleString()} in ${BED_HEADLINE.latestYear}, a decline of ${BED_HEADLINE.pctDecline.toFixed(1)}% in absolute terms. Public psychiatric beds are down ${BED_HEADLINE.publicBedDeclineClaim} (${BED_HEADLINE.publicBedDeclineSourceName}).`,
+  );
   lines.push('');
 
   lines.push('## Hospital size versus the 16-bed line');
@@ -846,7 +1007,7 @@ export function buildKnowledgeBase(): string {
   lines.push('## State section 1115 waivers');
   lines.push(`As of ${WAIVER_AS_OF} (${WAIVER_SOURCE_NAME}).`);
   lines.push(
-    'STATE LOOKUP TABLE — this is the complete and authoritative list. Every state and DC appears exactly once below. To answer a question about any state, read that state\'s own line verbatim. Do NOT infer a state\'s status from any other list, and do NOT assume a large or populous state has a waiver. If a state\'s line says it has none, it has none.',
+    "STATE LOOKUP TABLE — this is the complete and authoritative list. Every state and DC appears exactly once below. To answer a question about any state, read that state's own line verbatim. Do NOT infer a state's status from any other list, and do NOT assume a large or populous state has a waiver. If a state's line says it has none, it has none.",
   );
   lines.push(
     'Each line has exactly two fields, and both are always stated. Read both. "pending" is NOT "approved" — a pending application means the state does NOT currently have that waiver.',
@@ -878,13 +1039,16 @@ export function buildKnowledgeBase(): string {
   lines.push('');
 
   lines.push('## Consequences');
-  for (const c of CONSEQUENCES) lines.push(`- [${c.kind}] ${c.stat}: ${c.detail} (${c.sourceName})`);
+  for (const c of CONSEQUENCES)
+    lines.push(`- [${c.kind}] ${c.stat}: ${c.detail} (${c.sourceName})`);
   for (const p of PREVALENCE) lines.push(`- [prevalence] ${p.stat}: ${p.detail} (${p.sourceName})`);
   lines.push('');
 
   lines.push('## Bills in the 119th Congress');
   for (const b of BILLS) {
-    lines.push(`${b.number} — ${b.title}. Sponsor ${b.sponsor} (${b.party}-${b.district}), introduced ${b.introduced}. ${b.approach}. ${b.effect} Status: ${b.status}.${b.cosponsors ? ` Cosponsors: ${b.cosponsors}.` : ''}${b.priorVersion ? ` Earlier version: ${b.priorVersion}.` : ''}`);
+    lines.push(
+      `${b.number} — ${b.title}. Sponsor ${b.sponsor} (${b.party}-${b.district}), introduced ${b.introduced}. ${b.approach}. ${b.effect} Status: ${b.status}.${b.cosponsors ? ` Cosponsors: ${b.cosponsors}.` : ''}${b.priorVersion ? ` Earlier version: ${b.priorVersion}.` : ''}`,
+    );
   }
   lines.push('');
 
@@ -897,7 +1061,9 @@ export function buildKnowledgeBase(): string {
 
   lines.push('## Funding vehicles');
   for (const f of FUNDING_ROUTES) {
-    lines.push(`${f.vehicle}: CAN — ${f.canDo} CANNOT — ${f.cannot} Authority: ${f.authorityName} (${f.authority})`);
+    lines.push(
+      `${f.vehicle}: CAN — ${f.canDo} CANNOT — ${f.cannot} Authority: ${f.authorityName} (${f.authority})`,
+    );
   }
 
   return lines.join('\n');

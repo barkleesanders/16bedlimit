@@ -8,12 +8,11 @@
 
 import {
   BED_SERIES,
-  PRISON_SERIES,
-  JAIL_SERIES,
-  HERO_MARKERS,
   HOSPITAL_SIZE,
-  waiverStatus,
+  JAIL_SERIES,
+  PRISON_SERIES,
   type WaiverStatus,
+  waiverStatus,
 } from './data';
 
 /* ---------------- shared scale helpers ---------------- */
@@ -80,6 +79,14 @@ export function HeroChart() {
 
   const gridYears = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
   const markerX = sx(1965, W, padL, padR);
+
+  // End labels are anchored to real endpoints. If a series were ever emptied
+  // (a source retracted, a filter tightened), the label is simply not drawn —
+  // better than asserting a point exists and rendering NaN coordinates.
+  const firstBed = bedPts[0];
+  const lastBed = bedPts.at(-1);
+  const lastPrison = prisonPts.at(-1);
+  const lastJail = jailPts.at(-1);
 
   return (
     <figure class="chart chart--hero" id="chart-hero">
@@ -173,33 +180,41 @@ export function HeroChart() {
           ))}
 
           {/* end labels */}
-          <text x={bedPts[0]!.x + 10} y={bedPts[0]!.y - 12} class="endlab endlab--beds">
-            558,922 beds
-          </text>
-          <text
-            x={bedPts[bedPts.length - 1]!.x - 6}
-            y={bedPts[bedPts.length - 1]!.y + 26}
-            class="endlab endlab--beds"
-            text-anchor="end"
-          >
-            36,150
-          </text>
-          <text
-            x={prisonPts[prisonPts.length - 1]!.x - 12}
-            y={prisonPts[prisonPts.length - 1]!.y - 26}
-            class="endlab endlab--prison"
-            text-anchor="end"
-          >
-            1,254,200 in prison
-          </text>
-          <text
-            x={jailPts[jailPts.length - 1]!.x - 4}
-            y={jailPts[jailPts.length - 1]!.y + 22}
-            class="endlab endlab--jail"
-            text-anchor="end"
-          >
-            664,200 in jail
-          </text>
+          {firstBed ? (
+            <text x={firstBed.x + 10} y={firstBed.y - 12} class="endlab endlab--beds">
+              {fmt(firstBed.v)} beds
+            </text>
+          ) : null}
+          {lastBed ? (
+            <text
+              x={lastBed.x - 6}
+              y={lastBed.y + 26}
+              class="endlab endlab--beds"
+              text-anchor="end"
+            >
+              {fmt(lastBed.v)}
+            </text>
+          ) : null}
+          {lastPrison ? (
+            <text
+              x={lastPrison.x - 12}
+              y={lastPrison.y - 26}
+              class="endlab endlab--prison"
+              text-anchor="end"
+            >
+              {fmt(lastPrison.v)} in prison
+            </text>
+          ) : null}
+          {lastJail ? (
+            <text
+              x={lastJail.x - 4}
+              y={lastJail.y + 22}
+              class="endlab endlab--jail"
+              text-anchor="end"
+            >
+              {fmt(lastJail.v)} in jail
+            </text>
+          ) : null}
         </svg>
       </div>
 
@@ -219,8 +234,8 @@ export function HeroChart() {
       </ul>
 
       <p class="chart__scalenote">
-        Both axes use a square-root scale so a collapse from 559,000 and a rise past 1.6 million stay
-        readable in one frame. Point values are shown on hover and tap.
+        Both axes use a square-root scale so a collapse from 559,000 and a rise past 1.6 million
+        stay readable in one frame. Point values are shown on hover and tap.
       </p>
     </figure>
   );
@@ -312,7 +327,13 @@ export function SizeChart() {
 
           {/* p95 */}
           <g>
-            <line x1={p95X} y1={baseY - 30} x2={p95X} y2={baseY + 8} class="mark-line mark-line--soft" />
+            <line
+              x1={p95X}
+              y1={baseY - 30}
+              x2={p95X}
+              y2={baseY + 8}
+              class="mark-line mark-line--soft"
+            />
             <text x={p95X} y={baseY - 38} class="mark-sub" text-anchor="middle">
               305 · 95th percentile
             </text>
@@ -396,17 +417,25 @@ export function WaiverMap() {
           preserveAspectRatio="xMidYMid meet"
         >
           <title id="wv-t">Section 1115 IMD waiver status by state</title>
+          {/* The counts are stated here, not just drawn, so a screen-reader
+              user gets the finding rather than 51 unlabelled squares. */}
           <desc id="wv-d">
-            A grid of all fifty states and the District of Columbia showing whether each has an
-            approved section 1115 waiver covering substance use disorder treatment, mental health
-            treatment, both, an application still pending, or none.
+            A grid of all fifty states and the District of Columbia. {counts.both} have approved
+            section 1115 waivers for both substance use disorder and mental health treatment,{' '}
+            {counts.sud} for addiction treatment only, {counts.smi} for mental health only,{' '}
+            {counts.pending} have an application pending with CMS, and {counts.none} have neither an
+            approved waiver nor a pending application.
           </desc>
           {GRID.map((row, r) =>
             row.map((code, c) => {
               if (!code) return null;
               const st = waiverStatus(code);
               return (
-                <g class={`st st--${st}`} tabindex="0" role="listitem">
+                // No tabindex/role here on purpose. The parent <svg> carries
+                // role="img" with a <desc> that states the counts, so 51
+                // focusable groups would add 51 tab stops that announce
+                // nothing useful. The <title> still gives a pointer tooltip.
+                <g class={`st st--${st}`}>
                   <rect
                     x={gap + c * (cell + gap)}
                     y={gap + r * (cell + gap)}
@@ -423,7 +452,8 @@ export function WaiverMap() {
                     {code}
                   </text>
                   <title>
-                    {code}: {st === 'both'
+                    {code}:{' '}
+                    {st === 'both'
                       ? 'approved waivers for both substance use disorder and mental health treatment'
                       : st === 'sud'
                         ? 'approved waiver for substance use disorder treatment only'
