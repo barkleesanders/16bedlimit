@@ -1259,8 +1259,8 @@ app.get('/', (c) => {
               <h2>Sources</h2>
               <p class="lede">
                 Nothing on this page is estimated or recalled. Each figure was fetched from the
-                source below on {RETRIEVED}. The same data is available as JSON at{' '}
-                <a href="/api">/api</a>.
+                source below on {RETRIEVED}, and the legislative-record sources on{' '}
+                {REPORT.retrieved}. The same data is available as JSON at <a href="/api">/api</a>.
               </p>
               <div class="plain">
                 <b>This list is also the assistant's entire memory</b>
