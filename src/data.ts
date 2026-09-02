@@ -1092,6 +1092,193 @@ export const FUNDING_ROUTES = [
 ];
 
 /* ------------------------------------------------------------------ *
+ * 9b. THE LEGISLATIVE RECORD
+ *
+ * Sourced entirely from roll-call journals, the Statutes at Large, the
+ * Federal Register and CBO. Every claim below is something the record
+ * SAYS. Where the record is silent, RECORD_UNKNOWNS says so instead of
+ * filling the gap — the same rule WHY_SIXTEEN follows.
+ * ------------------------------------------------------------------ */
+
+export const REPORT = {
+  title: 'Who Built the 16-Bed Limit',
+  href: '/reports/who-built-the-16-bed-limit.pdf',
+  pages: 15,
+  bytes: 825593,
+  retrieved: '2026-09-01',
+} as const;
+
+export interface RecordFinding {
+  id: string;
+  claim: string;
+  detail: string;
+  source: string;
+  sourceName: string;
+}
+
+export const RECORD_FINDINGS: RecordFinding[] = [
+  {
+    id: 'no-vote',
+    claim: 'Nobody ever voted on it.',
+    detail:
+      'All 394 House and 497 Senate roll calls of the 89th Congress were enumerated. Exactly 16 touched H.R. 6675, and the House took only three recorded votes on the bill — none of them on an amendment. Every Title XIX provision dealing with institutions for mental diseases (Senate amendments 255, 262-263, 275, 276 and 279) was a committee amendment. Not one reached the floor.',
+    source: 'https://voteview.com/data',
+    sourceName: 'Voteview roll-call data',
+  },
+  {
+    id: 'inherited',
+    claim: 'Medicaid inherited the rule. It did not create it.',
+    detail:
+      'The exclusion dates to 1950, not 1965. P.L. 81-734 §303(a), 64 Stat. 549, created federal vendor payments and carved tuberculosis and mental-disease institutions back out of them in the same sentence. The 1935 Social Security Act rule was about an "inmate of a public institution" — an almshouse rule. The words "insane" and "asylum" appear zero times in the 1935 Ways and Means report or in the Committee on Economic Security report. In 1965 Congress actually narrowed the exclusion, by adding coverage for people 65 and over.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-64/pdf/STATUTE-64-Pg477.pdf',
+    sourceName: 'P.L. 81-734, 64 Stat. 477',
+  },
+  {
+    id: 'long-1960',
+    claim: 'The Senate voted to abolish it in 1960. A conference committee killed it overnight.',
+    detail:
+      'On 23 August 1960 the Senate adopted an amendment by Sen. Russell Long (D-LA) permitting federal matching of vendor payments to public mental and tuberculosis hospitals. On 24 August the conference committee agreed to the Senate’s medical-care provisions "except for Senator Long’s amendment." That is the one moment in the record where the rule was genuinely contested, and it lasted a day.',
+    source: 'https://www.ssa.gov/history/1960.html',
+    sourceName: 'SSA legislative chronology, 1960',
+  },
+  {
+    id: 'technical-correction',
+    claim: 'The number 16 was enacted as a technical correction.',
+    detail:
+      'It entered the statute at P.L. 100-360 §411(k)(14)(A), 102 Stat. 798-799, under the heading "SEC. 411. TECHNICAL CORRECTIONS TO CERTAIN HEALTH CARE PROVISIONS", subheading "(k) CORRECTIONS TO SUBTITLE B OF TITLE IV (RELATING TO MEDICAID)", paragraph "(14) CLARIFICATION OF TERM ‘INSTITUTION FOR MENTAL DISEASES’". It sits between a provision on educationally related services and a technical correction about eligibility verification.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-102/pdf/STATUTE-102-Pg683.pdf',
+    sourceName: 'P.L. 100-360, 102 Stat. 683',
+  },
+  {
+    id: 'statute-first',
+    claim: 'The statute came first. The regulation copied it.',
+    detail:
+      'The intuitive story — that regulators invented the number and Congress ratified it — is the wrong way round. The 1978 rule at 43 FR 45204 defined an institution for mental diseases by its "overall character" and set no bed count at all. HCFA put Congress’s number into the Code of Federal Regulations at 56 FR 8854 on 1 March 1991, in a rule titled "OBRA ’87 Conforming Amendments" — two years and eight months after the statute.',
+    source: 'https://www.govinfo.gov/content/pkg/FR-1978-09-29/pdf/FR-1978-09-29.pdf',
+    sourceName: '43 FR 45204 (29 Sept 1978)',
+  },
+  {
+    id: 'tuberculosis',
+    claim: 'Congress fixed this for tuberculosis and not for mental illness.',
+    detail:
+      'Both conditions were excluded in the same 1965 clause. §2335(f) of the Deficit Reduction Act of 1984 (P.L. 98-369) struck the words "tuberculosis or" and left the psychiatric half of the sentence standing. Forty-two years later it has not been revisited.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-79/pdf/STATUTE-79-Pg286.pdf',
+    sourceName: 'P.L. 89-97, 79 Stat. 286',
+  },
+  {
+    id: 'hr4531',
+    claim: 'In 2023 the House voted 386-37 to lift part of it. The Senate never took it up.',
+    detail:
+      'Section 304 of H.R. 4531 in the 118th Congress was titled "LIFTING THE IMD EXCLUSION FOR SUBSTANCE USE DISORDER". It cleared subcommittee 49-0 and full committee 29-3, then passed the House 386-37 on 12 December 2023 — Republicans 190-26, Democrats 196-11. It went to the Senate HELP Committee the next day and has not moved since: no hearing, no vote, and no member on record against it.',
+    source: 'https://voteview.com/data',
+    sourceName: 'Voteview roll-call data',
+  },
+  {
+    id: 'price',
+    claim: 'What keeps it alive is the price tag.',
+    detail:
+      'CBO scored the options in April 2023. Over 2024-2033 the narrow state-plan option for substance use disorder costs $155-560 million in net federal Medicaid spending — and that is the one Congress enacted. Repeal for substance use disorder costs $7.7 billion, repeal for mental illness $33.5 billion, and full repeal $38.4 billion. Everything ever enacted sits on the cheap side of that line. Every repeal bill sits on the expensive side, and none has left committee.',
+    source: 'https://www.cbo.gov/publication/59071',
+    sourceName: 'CBO Publication 59071 (April 2023)',
+  },
+];
+
+export interface RollCall {
+  year: number;
+  chamber: string;
+  measure: string;
+  tally: string;
+  split: string;
+}
+
+/**
+ * Official tallies. Party splits are computed from Voteview member cast
+ * codes, not taken from a summary, which is why some rows carry one and
+ * some do not.
+ */
+export const ROLL_CALLS: RollCall[] = [
+  {
+    year: 1950,
+    chamber: 'House',
+    measure: 'Conference report, P.L. 81-734',
+    tally: '373-1',
+    split: 'House Republicans 137-1 in favour',
+  },
+  {
+    year: 1965,
+    chamber: 'House',
+    measure: 'Passage, H.R. 6675',
+    tally: '313-115',
+    split: 'D 248-42 · R 65-73',
+  },
+  {
+    year: 1965,
+    chamber: 'Senate',
+    measure: 'Passage, H.R. 6675',
+    tally: '68-21',
+    split: 'D 55-7 · R 13-14',
+  },
+  {
+    year: 1984,
+    chamber: 'House',
+    measure: 'Conference report, P.L. 98-369',
+    tally: '268-155',
+    split: 'Struck "tuberculosis or"',
+  },
+  {
+    year: 1988,
+    chamber: 'House',
+    measure: 'Conference report, P.L. 100-360',
+    tally: '328-72',
+    split: 'D 230-9 · R 98-63',
+  },
+  {
+    year: 1988,
+    chamber: 'Senate',
+    measure: 'Conference report, P.L. 100-360',
+    tally: '86-11',
+    split: 'The vote that carried the number 16',
+  },
+  {
+    year: 2023,
+    chamber: 'House',
+    measure: 'Passage, H.R. 4531',
+    tally: '386-37',
+    split: 'R 190-26 · D 196-11',
+  },
+];
+
+/**
+ * Named because the record names them. Every entry states what the
+ * document shows that person did — nothing is inferred from proximity.
+ */
+export const RECORD_NAMED = [
+  {
+    who: 'Rep. Wilbur D. Mills (D-AR)',
+    what: 'Sponsored H.R. 6675 and chaired Ways and Means, where the Medicaid title was written.',
+  },
+  {
+    who: 'Sen. Harry F. Byrd Sr. (D-VA)',
+    what: 'Chaired Senate Finance and reported the bill out 12-5, while joining four Republicans in voting against it.',
+  },
+  {
+    who: 'Sen. Russell Long (D-LA)',
+    what: 'The only member on record who tried to end the rule. His 1960 amendment passed the Senate and died in conference.',
+  },
+  {
+    who: 'Rep. Fortney "Pete" Stark (D-CA)',
+    what: 'Sponsored the 1988 bill that carried the 16-bed paragraph. There is no evidence he wrote that paragraph.',
+  },
+  {
+    who: 'Rep. Brett Guthrie (R-KY)',
+    what: 'Sponsored H.R. 4531, the 2023 bill the House passed 386-37.',
+  },
+];
+
+export const RECORD_UNKNOWNS =
+  'Who drafted the 16-bed paragraph in 1988 is not recoverable from the published record, and neither is any rationale for that particular figure. The conferees who struck Senator Long’s amendment in 1960 are not named in the chronology either. These are gaps in the record, not gaps in the research, and they are stated here rather than filled in.';
+
+/* ------------------------------------------------------------------ *
  * 10. SOURCE INDEX (rendered as the page's bibliography)
  * ------------------------------------------------------------------ */
 
@@ -1104,6 +1291,79 @@ export interface SourceEntry {
 }
 
 export const SOURCES: SourceEntry[] = [
+  /* --- The legislative record. Added 2026-09-01 with the accountability
+     report; each was fetched and read that day. Statutes at Large and the
+     Federal Register are served as PDFs, which is why some are large. --- */
+  {
+    name: 'P.L. 89-97, 79 Stat. 286 — Social Security Amendments of 1965',
+    org: 'U.S. Government Publishing Office (Statutes at Large)',
+    url: 'https://www.govinfo.gov/content/pkg/STATUTE-79/pdf/STATUTE-79-Pg286.pdf',
+    kind: 'primary',
+    used: 'The enacted text creating Medicaid, and the clause excluding both tuberculosis and mental-disease institutions.',
+  },
+  {
+    name: 'P.L. 81-734, 64 Stat. 477 — Social Security Act Amendments of 1950',
+    org: 'U.S. Government Publishing Office (Statutes at Large)',
+    url: 'https://www.govinfo.gov/content/pkg/STATUTE-64/pdf/STATUTE-64-Pg477.pdf',
+    kind: 'primary',
+    used: 'Section 303(a), 64 Stat. 549 — where the exclusion actually begins, fifteen years before Medicaid.',
+  },
+  {
+    name: 'P.L. 74-271, 49 Stat. 620 — Social Security Act of 1935',
+    org: 'U.S. Government Publishing Office (Statutes at Large)',
+    url: 'https://www.govinfo.gov/content/pkg/STATUTE-49/pdf/STATUTE-49-Pg620.pdf',
+    kind: 'primary',
+    used: 'The original "inmate of a public institution" rule, which names no psychiatric facility.',
+  },
+  {
+    name: 'P.L. 100-360, 102 Stat. 683 — Medicare Catastrophic Coverage Act of 1988',
+    org: 'U.S. Government Publishing Office (Statutes at Large)',
+    url: 'https://www.govinfo.gov/content/pkg/STATUTE-102/pdf/STATUTE-102-Pg683.pdf',
+    kind: 'primary',
+    used: 'Section 411(k)(14)(A), 102 Stat. 798-799 — the technical correction that put "16" in the statute.',
+  },
+  {
+    name: '43 FR 45204 (29 September 1978) — the first IMD definition',
+    org: 'Office of the Federal Register',
+    url: 'https://www.govinfo.gov/content/pkg/FR-1978-09-29/pdf/FR-1978-09-29.pdf',
+    kind: 'primary',
+    used: 'The rule that defined an IMD by "overall character" and set no bed count. Warning: this is the whole day\'s Federal Register, about 126 MB — not a mobile download.',
+  },
+  {
+    name: 'Legislative history, 1960',
+    org: 'Social Security Administration',
+    url: 'https://www.ssa.gov/history/1960.html',
+    kind: 'primary',
+    used: 'The Long amendment of 23 August 1960 and its removal in conference the next day.',
+  },
+  {
+    name: 'Vote tallies for passage of Medicare in 1965',
+    org: 'Social Security Administration',
+    url: 'https://www.ssa.gov/history/tally65.html',
+    kind: 'primary',
+    used: 'Official House and Senate tallies on H.R. 6675.',
+  },
+  {
+    name: '42 U.S.C. §1382 — SSI and public institutions',
+    org: 'Legal Information Institute, Cornell Law School',
+    url: 'https://www.law.cornell.edu/uscode/text/42/1382',
+    kind: 'primary',
+    used: 'The parallel benefit rule for a person residing in a public institution.',
+  },
+  {
+    name: "Budgetary Effects of Policies to Modify or Eliminate Medicaid's IMD Exclusion",
+    org: 'Congressional Budget Office (April 2023)',
+    url: 'https://www.cbo.gov/publication/59071',
+    kind: 'government',
+    used: 'Ten-year federal cost of each repeal option, including the $38.4 billion full-repeal estimate.',
+  },
+  {
+    name: 'Congressional roll-call database',
+    org: 'Voteview (UCLA)',
+    url: 'https://voteview.com/data',
+    kind: 'research',
+    used: 'Roll-call tallies and the party splits computed from member cast codes.',
+  },
   {
     name: 'Social Security Act §1905 (compiled)',
     org: 'Social Security Administration',
@@ -1311,6 +1571,22 @@ export function buildKnowledgeBase(): string {
   for (const p of ARGUMENTS.repeal.points) lines.push(`- ${p}`);
   lines.push(`FOR KEEPING IT (${ARGUMENTS.keep.sourceName}):`);
   for (const p of ARGUMENTS.keep.points) lines.push(`- ${p}`);
+  lines.push('');
+
+  // The accountability record. Without this block the assistant would be
+  // blind to a whole section of the page it is supposed to answer from,
+  // and would tell a reader the site does not cover something it does.
+  lines.push('## The legislative record — who actually built the rule');
+  for (const f of RECORD_FINDINGS) lines.push(`- ${f.claim} ${f.detail} (${f.sourceName})`);
+  lines.push('Recorded votes on the measures that carried this rule:');
+  for (const r of ROLL_CALLS) {
+    lines.push(`${r.year} ${r.chamber} — ${r.measure}: ${r.tally}. ${r.split}.`);
+  }
+  for (const n of RECORD_NAMED) lines.push(`- ${n.who}: ${n.what}`);
+  lines.push(`WHAT THE RECORD DOES NOT SHOW: ${RECORD_UNKNOWNS}`);
+  lines.push(
+    `The full 15-page report, with every citation, is published on this site at ${REPORT.href}. If someone asks who wrote the 16-bed paragraph, or why the number is 16, say plainly that the record does not name a drafter and gives no rationale. Do not guess at a person or a reason.`,
+  );
   lines.push('');
 
   lines.push('## Funding vehicles');

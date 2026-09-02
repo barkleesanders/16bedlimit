@@ -12,6 +12,11 @@ import {
   JAIL_SERIES,
   PREVALENCE,
   PRISON_SERIES,
+  RECORD_FINDINGS,
+  RECORD_NAMED,
+  RECORD_UNKNOWNS,
+  REPORT,
+  ROLL_CALLS,
   SMI_APPROVED,
   SMI_PENDING,
   SOURCES,
@@ -74,6 +79,88 @@ describe('provenance', () => {
   it('no duplicate source entries', () => {
     const urls = SOURCES.map((s) => s.url);
     expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  // Plain http would be downgraded or blocked by the page's own security
+  // headers, and a citation the reader cannot open is not a citation. The
+  // regex above deliberately tolerates http so it can describe older data;
+  // the bibliography does not get that latitude.
+  it('every source url is https, not plain http', () => {
+    for (const s of SOURCES) expect(s.url, s.name).toMatch(/^https:\/\//);
+  });
+
+  it('carries the legislative-record sources the report is built on', () => {
+    const urls = new Set(SOURCES.map((s) => s.url));
+    const missing: string[] = [];
+    for (const u of [
+      'https://www.govinfo.gov/content/pkg/STATUTE-79/pdf/STATUTE-79-Pg286.pdf',
+      'https://www.govinfo.gov/content/pkg/STATUTE-64/pdf/STATUTE-64-Pg477.pdf',
+      'https://www.govinfo.gov/content/pkg/STATUTE-49/pdf/STATUTE-49-Pg620.pdf',
+      'https://www.govinfo.gov/content/pkg/STATUTE-102/pdf/STATUTE-102-Pg683.pdf',
+      'https://www.govinfo.gov/content/pkg/FR-1978-09-29/pdf/FR-1978-09-29.pdf',
+      'https://www.ssa.gov/history/1960.html',
+      'https://www.ssa.gov/history/tally65.html',
+      'https://www.law.cornell.edu/uscode/text/42/1382',
+      'https://www.cbo.gov/publication/59071',
+      'https://voteview.com/data',
+    ].filter((u) => !urls.has(u))) {
+      missing.push(u);
+    }
+    // Collected, not asserted in the loop: a bare expect() inside a for-loop
+    // throws on the first failure and hides every offender after it, so a
+    // bibliography missing three URLs would report one and look nearly green.
+    expect(missing).toEqual([]);
+  });
+
+  it('every record finding cites a source that is in the bibliography', () => {
+    const urls = new Set(SOURCES.map((s) => s.url));
+    for (const f of RECORD_FINDINGS) {
+      expect(f.source, f.id).toMatch(httpsUrl);
+      expect(urls.has(f.source), `${f.id} cites a source not in SOURCES`).toBe(true);
+    }
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * THE LEGISLATIVE RECORD — the section is an accountability claim, so
+ * the shapes that make it checkable are themselves load-bearing.
+ * ------------------------------------------------------------------ */
+
+describe('legislative record', () => {
+  it('states what is not known instead of leaving the gap silent', () => {
+    // The site's honesty convention. If this text ever stops saying the
+    // drafter is unrecoverable, someone has quietly filled in a name.
+    expect(RECORD_UNKNOWNS).toMatch(/not recoverable|does not name|no rationale/i);
+  });
+
+  it('does not claim Stark wrote the 16-bed paragraph', () => {
+    const stark = must(
+      RECORD_NAMED.find((n) => n.who.includes('Stark')),
+      'the Stark entry',
+    );
+    expect(stark.what).toMatch(/no evidence/i);
+  });
+
+  it('every named person says what the document shows they did', () => {
+    for (const n of RECORD_NAMED) {
+      expect(n.who.length, n.who).toBeGreaterThan(3);
+      expect(n.what.length, n.who).toBeGreaterThan(30);
+    }
+  });
+
+  it('every roll call carries a real tally', () => {
+    for (const r of ROLL_CALLS) {
+      expect(r.tally, `${r.year} ${r.chamber}`).toMatch(/^\d+-\d+$/);
+      expect(r.year).toBeGreaterThan(1900);
+      expect(r.year).toBeLessThanOrEqual(new Date().getFullYear());
+    }
+  });
+
+  it('the published report is served from this site at a stable path', () => {
+    expect(REPORT.href).toBe('/reports/who-built-the-16-bed-limit.pdf');
+    expect(REPORT.href.endsWith('.pdf')).toBe(true);
+    expect(REPORT.pages).toBeGreaterThan(0);
+    expect(REPORT.bytes).toBeGreaterThan(0);
   });
 });
 

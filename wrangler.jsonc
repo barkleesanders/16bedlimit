@@ -7,6 +7,25 @@
   "observability": { "enabled": true },
   "ai": { "binding": "AI" },
 
+  // Serves public/ as static assets — currently the one accountability report
+  // PDF. Assets are matched BEFORE the Worker, so anything added under public/
+  // silently shadows a Worker route of the same path. Both handling modes are
+  // pinned rather than left to their defaults, because the defaults are what
+  // would break the site:
+  //   html_handling "none"      — no index.html / trailing-slash rewriting, so
+  //                               a future public/index.html cannot take over
+  //                               GET / from the SSR handler.
+  //   not_found_handling "none" — a request that matches no asset falls
+  //                               through to the Worker instead of being
+  //                               answered by the asset router.
+  // No `binding` is declared: the Worker never fetches assets itself, and an
+  // unused binding would just be one more thing to keep true.
+  "assets": {
+    "directory": "./public",
+    "html_handling": "none",
+    "not_found_handling": "none"
+  },
+
   // Custom domain is canonical. workers_dev is turned off here AND via the
   // CF API — a deploy does not disengage an already-enabled subdomain from
   // config alone, and it silently re-opens the preview hostname each time.

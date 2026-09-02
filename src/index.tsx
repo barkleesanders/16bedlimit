@@ -20,7 +20,12 @@ import {
   JAIL_SERIES,
   PREVALENCE,
   PRISON_SERIES,
+  RECORD_FINDINGS,
+  RECORD_NAMED,
+  RECORD_UNKNOWNS,
+  REPORT,
   RETRIEVED,
+  ROLL_CALLS,
   SITE_QUESTIONS,
   SMI_APPROVED,
   SMI_PENDING,
@@ -161,7 +166,7 @@ app.get('/robots.txt', (c) =>
 app.get('/sitemap.xml', (c) => {
   const o = c.env.SITE_ORIGIN || new URL(c.req.url).origin;
   return c.body(
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${o}/</loc><lastmod>${RETRIEVED}</lastmod><priority>1.0</priority></url>\n</urlset>\n`,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${o}/</loc><lastmod>${RETRIEVED}</lastmod><priority>1.0</priority></url>\n<url><loc>${o}${REPORT.href}</loc><lastmod>${REPORT.retrieved}</lastmod><priority>0.8</priority></url>\n</urlset>\n`,
     200,
     { 'content-type': 'application/xml; charset=utf-8' },
   );
@@ -633,6 +638,7 @@ app.get('/', (c) => {
               <a href="#scale">Scale</a>
               <a href="#waivers">Waivers</a>
               <a href="#history">History</a>
+              <a href="#record">The record</a>
               <a href="#instead">Consequences</a>
               <a href="#bills">Bills</a>
               <a href="#levers">Who decides</a>
@@ -873,6 +879,89 @@ app.get('/', (c) => {
                   </li>
                 ))}
               </ol>
+            </div>
+          </section>
+
+          {/* ---------------- THE RECORD ---------------- */}
+          <section id="record">
+            <div class="wrap">
+              <span class="sec__idx">04b — What the record shows</span>
+              <h2>Nobody ever voted on the 16-bed limit</h2>
+              <p class="lede">
+                Every roll call of the 89th Congress was read, along with the Statutes at Large, the
+                Federal Register and CBO's cost estimates. The rule was never debated on a floor,
+                never amended on a floor, and never voted on by itself. Here is what the record does
+                say.
+              </p>
+
+              <div class="plain">
+                <b>The full report</b>
+                <p>
+                  {REPORT.pages} pages, every claim carried back to the document it came from.{' '}
+                  <a href={REPORT.href} type="application/pdf">
+                    Download the PDF
+                  </a>{' '}
+                  ({Math.round(REPORT.bytes / 1024)} KB).
+                </p>
+              </div>
+
+              <ol class="tl">
+                {RECORD_FINDINGS.map((f, i) => (
+                  <li>
+                    <div>
+                      <div class="tl__yr">{i + 1}</div>
+                    </div>
+                    <div class="tl__b">
+                      <h3>{f.claim}</h3>
+                      <p>{f.detail}</p>
+                      <a class="tl__src" href={f.source} rel="noopener">
+                        {f.sourceName} →
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <h3 style="margin-top:2.4rem">The votes that did happen</h3>
+              <div class="fund__wrap">
+                <table class="fund">
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Chamber</th>
+                      <th>Measure</th>
+                      <th>Tally</th>
+                      <th>Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ROLL_CALLS.map((r) => (
+                      <tr>
+                        <td>{r.year}</td>
+                        <td>{r.chamber}</td>
+                        <td>{r.measure}</td>
+                        <td>{r.tally}</td>
+                        <td>{r.split}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="why" id="record-people">
+                <h3>Who the record names</h3>
+                <ul class="why__list">
+                  {RECORD_NAMED.map((n) => (
+                    <li>
+                      <strong>{n.who}</strong> — {n.what}
+                    </li>
+                  ))}
+                </ul>
+                <div class="why__gap">
+                  <b>And who it does not</b>
+                  <p>{RECORD_UNKNOWNS}</p>
+                </div>
+              </div>
             </div>
           </section>
 
