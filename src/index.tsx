@@ -115,20 +115,31 @@ async function rateLimited(
 const app = new Hono<{ Bindings: Bindings }>();
 
 /* ---------------- security headers ----------------
- * Strict CSP. The only external origin is Google Fonts. No inline script —
- * the client island is served from /app.js. 'unsafe-inline' is needed for
- * style only because the stylesheet itself is inlined in <head>.
+ * Strict CSP. No inline script — the client island is served from /app.js.
+ * 'unsafe-inline' is needed for style only because the stylesheet itself is
+ * inlined in <head>.
+ *
+ * External origins, and why each is here:
+ *   fonts.googleapis.com / fonts.gstatic.com — the webfonts.
+ *   static.cloudflareinsights.com — Cloudflare injects its Web Analytics
+ *     beacon into the HTML AT THE EDGE, after this Worker has already
+ *     returned. It appears in no served byte this repo produces, so
+ *     `curl | grep` finds nothing and no test can see it; the only symptom
+ *     of blocking it is a console violation in a real browser. It was in
+ *     fact blocked from the day this CSP was written until 2026-09-01,
+ *     which means Web Analytics silently collected nothing. Verified with
+ *     `fcdp console`, which is the only instrument that can observe it.
  */
 app.use(
   '*',
   secureHeaders({
     contentSecurityPolicy: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: ["'self'", 'https://static.cloudflareinsights.com'],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:'],
-      connectSrc: ["'self'"],
+      connectSrc: ["'self'", 'https://cloudflareinsights.com'],
       mediaSrc: ["'self'", 'blob:'],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
