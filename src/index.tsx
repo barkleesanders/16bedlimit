@@ -178,6 +178,10 @@ app.get('/.well-known/security.txt', (c) =>
   ),
 );
 
+// RFC 9116 documents both locations. A researcher who tries the short path
+// first should be redirected, not told the file does not exist.
+app.get('/security.txt', (c) => c.redirect('/.well-known/security.txt', 301));
+
 /* ================================================================
  * DATA API — the research layer, public and citable
  * ================================================================ */
