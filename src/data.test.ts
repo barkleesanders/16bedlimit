@@ -5,15 +5,20 @@ import {
   BED_SERIES,
   BILL_COMMITTEE,
   BILLS,
+  BILLS_COMPOSITION,
   buildKnowledgeBase,
   CBO_OPTIONS,
   CONSEQUENCES,
+  EXECUTIVE_ORDER,
+  FIX,
   FUNDING_ROUTES,
   HOSPITAL_SIZE,
   JAIL_SERIES,
   LINEAGE,
   MEASURED_ABSENCES,
   NUMBER_CHAIN,
+  OBJECTION,
+  OBJECTION_ANSWER,
   PARTY_VERDICT,
   PREVALENCE,
   PRISON_SERIES,
@@ -572,5 +577,211 @@ describe('why sixteen — the nearest rationale', () => {
 
   it('the nearest-rationale source is in the bibliography', () => {
     expect(new Set(SOURCES.map((s) => s.url)).has(WHY_SIXTEEN.nearest.source)).toBe(true);
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * THE 2026-09-02 ADDITIONS.
+ *
+ * Each block locks a fact that was measured against a primary source on
+ * that date. These are not style checks: if a later edit changes a term
+ * count, drops a bill, or softens the inference label on the §1396n
+ * reading, the site would be asserting something nobody re-measured.
+ * ------------------------------------------------------------------ */
+
+describe('executive order 14321', () => {
+  /**
+   * Counted in the order's OPERATIVE text on 2026-09-02 — from "By the
+   * authority vested" to the signature. Counting the whole page instead
+   * reports "residential" ten times, nine of which are the substring
+   * inside "Presidential" in the site navigation, and "Medicaid" once,
+   * which is a nav headline rather than a word in the order.
+   */
+  it('carries the counts that were actually measured', () => {
+    const present = new Map(EXECUTIVE_ORDER.present.map((t) => [t.term, t.count]));
+    expect(present.get('civil commitment')).toBe(7);
+    expect(present.get('institutional treatment')).toBe(1);
+    expect(present.get('forensic bed capacity')).toBe(1);
+
+    const absent = new Map(EXECUTIVE_ORDER.absent.map((t) => [t.term, t.count]));
+    expect(absent.get('institution for mental diseases')).toBe(0);
+    expect(absent.get('IMD')).toBe(0);
+    expect(absent.get('16 bed')).toBe(0);
+    expect(absent.get('Medicaid')).toBe(0);
+  });
+
+  it('keeps a positive control, so the zeros mean something', () => {
+    // A term list where nothing was found would be a fact about the search,
+    // not about the order. At least one non-zero count has to be shown.
+    expect(EXECUTIVE_ORDER.present.length).toBeGreaterThan(0);
+    for (const t of EXECUTIVE_ORDER.present) expect(t.count).toBeGreaterThan(0);
+    for (const t of EXECUTIVE_ORDER.absent) expect(t.count).toBe(0);
+  });
+
+  it('cites both the order and its Federal Register publication', () => {
+    expect(EXECUTIVE_ORDER.source).toMatch(/^https:\/\/www\.whitehouse\.gov\//);
+    expect(EXECUTIVE_ORDER.registerSource).toMatch(/^https:\/\/www\.federalregister\.gov\//);
+    expect(EXECUTIVE_ORDER.retrieved).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(EXECUTIVE_ORDER.citation).toBe('90 FR 35817');
+    expect(EXECUTIVE_ORDER.signed).toBe('2025-07-24');
+    const urls = new Set(SOURCES.map((x) => x.url));
+    expect(urls.has(EXECUTIVE_ORDER.source)).toBe(true);
+    expect(urls.has(EXECUTIVE_ORDER.registerSource)).toBe(true);
+  });
+
+  it('does not claim the order is unlawful or that repeal is anyone’s policy', () => {
+    // Only the ASSERTIVE prose is checked for these words. The limit block
+    // has to be allowed to contain them, because its whole job is to say
+    // "this is not a claim that the order is unlawful" — a bare
+    // word-presence check over both would fail the disclaimer for
+    // disclaiming, which is how a naive gate ends up deleting the caveat.
+    expect(EXECUTIVE_ORDER.reading.toLowerCase()).not.toMatch(/\billegal\b|\bunlawful\b|\bhypocri/);
+    expect(EXECUTIVE_ORDER.limit.toLowerCase()).toContain('not a claim that the order is unlawful');
+    expect(EXECUTIVE_ORDER.limit.length).toBeGreaterThan(60);
+  });
+});
+
+describe('the bills table', () => {
+  it('carries all five bills, each identified uniquely', () => {
+    expect(BILLS).toHaveLength(5);
+    expect(new Set(BILLS.map((b) => b.number)).size).toBe(5);
+    expect(new Set(BILLS.map((b) => b.slug)).size).toBe(5);
+    for (const b of BILLS) {
+      expect(b.number, b.slug).toMatch(/^H\.R\. \d+$/);
+      expect(b.slug).toMatch(/^hr\d+$/);
+      // The slug and the number must agree, or a link points at another bill.
+      expect(`hr${b.number.replace('H.R. ', '')}`).toBe(b.slug);
+    }
+  });
+
+  it('names a party and a district for every sponsor', () => {
+    for (const b of BILLS) {
+      expect(b.party, b.number).toMatch(/^[DRI]$/);
+      expect(b.district, b.number).toMatch(/^[A-Z]{2}-\d{1,2}$/);
+      expect(b.sponsor.length, b.number).toBeGreaterThan(3);
+    }
+  });
+
+  it('is ordered by introduction date, oldest first', () => {
+    const dates = BILLS.map((b) => b.introduced);
+    for (const d of dates) expect(d).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect([...dates].sort()).toEqual(dates);
+  });
+
+  it('links each bill to its own congress.gov record', () => {
+    for (const b of BILLS) {
+      const n = b.number.replace('H.R. ', '');
+      expect(b.congressUrl).toBe(`https://www.congress.gov/bill/119th-congress/house-bill/${n}`);
+    }
+    expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(5);
+  });
+
+  it('records the bipartisan sponsor the set actually has', () => {
+    // A Republican sponsor is the single most load-bearing fact in the
+    // composition note. If the row is ever dropped, the note becomes false.
+    const rep = BILLS.filter((b) => b.party === 'R');
+    expect(rep).toHaveLength(1);
+    expect(must(rep[0], 'republican-sponsored bill').number).toBe('H.R. 5944');
+    expect(BILLS_COMPOSITION).toContain('Energy and Commerce');
+    // Referred to the COMMITTEE — no subcommittee referral is recorded for
+    // any of the five, checked against BILLSTATUS with a positive control.
+    expect(BILLS_COMPOSITION.toLowerCase()).not.toContain('subcommittee');
+  });
+});
+
+describe('which sentence has to change', () => {
+  it('points at the age bar and reuses the statute the page already quotes', () => {
+    expect(FIX.points.join(' ')).toContain('§1905(i)');
+    expect(FIX.points.join(' ')).toContain('has not attained 65 years of age');
+    expect(FIX.points.join(' ')).toContain('21 through 64');
+  });
+
+  it('derives its arithmetic from HOSPITAL_SIZE rather than a typed-in number', () => {
+    expect(FIX.arithmetic).toContain(String(HOSPITAL_SIZE.mean));
+    expect(FIX.arithmetic).toContain('36');
+  });
+
+  it('labels the §1396n reading as an inference and cites it', () => {
+    expect(FIX.inference.label.toLowerCase()).toContain('inference');
+    expect(FIX.inference.caution.toLowerCase()).toContain('legislative counsel');
+    expect(FIX.inference.body).toContain('home or community setting');
+    expect(new Set(SOURCES.map((x) => x.url)).has(FIX.inference.source)).toBe(true);
+  });
+});
+
+describe('the objection, quoted', () => {
+  it('carries the sentence verbatim, with the context it sits in', () => {
+    expect(OBJECTION.quote).toBe(
+      'The IMD exclusion is essential to ensuring that states are incentivized to invest in community-based services rather than services in IMD settings, where FFP is not permitted.',
+    );
+    // Without the first half of the footnote the quote reads as a campaign
+    // to preserve the exclusion. It was written while conceding a point.
+    expect(OBJECTION.quoteContext).toContain('not seeking to undermine');
+    expect(OBJECTION.attribution).toContain('Bazelon');
+    expect(OBJECTION.attribution).toContain('30 August 2024');
+  });
+
+  it('marks the outcome figures as the objector’s, not the site’s', () => {
+    const numbers = must(
+      OBJECTION.supporting.find((x) => x.claim.includes('Nathaniel')),
+      'Nathaniel/Thresholds row',
+    );
+    expect(numbers.note.toLowerCase()).toContain('without a citation');
+    expect(numbers.claim).toContain('70%');
+    expect(numbers.claim).toContain('89%');
+  });
+
+  it('cites a source that is in the bibliography', () => {
+    expect(OBJECTION.source).toMatch(/^https:\/\//);
+    expect(OBJECTION.retrieved).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(new Set(SOURCES.map((x) => x.url)).has(OBJECTION.source)).toBe(true);
+  });
+
+  it('answers the objection with drafting, and says what repeal does not reach', () => {
+    expect(OBJECTION_ANSWER.points).toHaveLength(4);
+    expect(OBJECTION_ANSWER.points.join(' ')).toContain('§1915(l)(3)');
+    expect(OBJECTION_ANSWER.points.join(' ')).toContain('H.R. 4022');
+    expect(OBJECTION_ANSWER.scope.toLowerCase()).toContain('civil commitment is state law');
+  });
+});
+
+describe('sources added on 2026-09-02', () => {
+  const ADDED = [
+    EXECUTIVE_ORDER.source,
+    EXECUTIVE_ORDER.registerSource,
+    OBJECTION.source,
+    FIX.inference.source,
+  ];
+
+  it('every one is in SOURCES with an https url and a described use', () => {
+    for (const url of ADDED) {
+      const entry = must(
+        SOURCES.find((x) => x.url === url),
+        `SOURCES entry for ${url}`,
+      );
+      expect(entry.url).toMatch(/^https:\/\//);
+      expect(entry.name.length).toBeGreaterThan(10);
+      expect(entry.org.length).toBeGreaterThan(3);
+      expect(entry.used.length).toBeGreaterThan(20);
+    }
+  });
+
+  it('every claim block carries the date it was fetched', () => {
+    // SourceEntry has no date field of its own; the retrieval date lives on
+    // the block that makes the claim, which is what a reader needs.
+    for (const d of [EXECUTIVE_ORDER.retrieved, OBJECTION.retrieved, FIX.retrieved]) {
+      expect(d).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(d).toBe('2026-09-02');
+    }
+  });
+
+  it('reaches the assistant, so it can answer from the new material', () => {
+    const kb = buildKnowledgeBase();
+    expect(kb).toContain('Executive Order 14321');
+    expect(kb).toContain('forensic bed capacity');
+    expect(kb).toContain('H.R. 5944');
+    expect(kb).toContain('H.R. 4022');
+    expect(kb).toContain(OBJECTION.quote);
+    expect(kb).toContain('Energy and Commerce');
   });
 });

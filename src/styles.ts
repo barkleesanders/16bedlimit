@@ -171,6 +171,15 @@ p { max-width: 68ch; }
 .why__searched { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); margin: 0 !important; line-height: 1.6; }
 .why__ask { font-size: 14.5px; color: var(--ink-2); margin: 1.1rem 0 0; }
 
+/* term counts in the executive-order block. A zero is the point of the
+   grid, so it gets the muted treatment and the non-zero counts carry the
+   signal colour — the reverse of the usual "highlight the big number". */
+.terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 0 0 1rem; }
+.term { background: var(--panel); padding: 0.8rem 0.9rem; }
+.term__n { display: block; font-family: var(--mono); font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--signal); }
+.term__t { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-2); margin-top: 0.4rem; }
+.term--zero .term__n { color: var(--ink-3); }
+
 .caveat {
   font-size: 14.5px; color: var(--ink-2); border-top: 1px solid var(--rule);
   padding-top: 0.9rem; margin-top: 1.4rem; max-width: 76ch;

@@ -22,7 +22,7 @@ export const RETRIEVED = '2026-08-26';
  * page's visible content changes; leave RETRIEVED alone unless the data
  * itself was re-fetched.
  */
-export const PAGE_UPDATED = '2026-09-01';
+export const PAGE_UPDATED = '2026-09-02';
 
 export interface Sourced<T> {
   value: T;
@@ -57,6 +57,88 @@ export const STATUTE = {
   citationCaveat:
     'The exclusion sits in the flush language after the §1905(a) service list. That list now runs to paragraph (32), so older citations such as §1905(a)(30)(B) reflect earlier numbering.',
   retrieved: RETRIEVED,
+} as const;
+
+/* ------------------------------------------------------------------ *
+ * 1b. THE ORDER AND THE STATUTE
+ *
+ * Added 2026-09-02. The order's operative text was pulled from the White
+ * House page that day — everything between "By the authority vested" and
+ * the signature, so the site's own menus are excluded — and each term
+ * counted inside it.
+ *
+ * Counting only the operative text is not fussiness. A count over the
+ * whole page reports "residential" ten times, and nine of those are the
+ * substring sitting inside "Presidential" in the navigation. The one
+ * "Medicaid" on the page is a headline in the same navigation, not a word
+ * in the order. The non-zero counts below are the control: a search that
+ * returned nothing and nothing else would be a fact about the instrument
+ * rather than about the document.
+ * ------------------------------------------------------------------ */
+
+export interface OrderProvision {
+  cite: string;
+  what: string;
+}
+
+export interface TermCount {
+  term: string;
+  count: number;
+}
+
+export const EXECUTIVE_ORDER = {
+  number: 'Executive Order 14321',
+  title: 'Ending Crime and Disorder on America’s Streets',
+  signed: '2025-07-24',
+  published: '2025-07-29',
+  citation: '90 FR 35817',
+
+  purposeQuote:
+    'Shifting homeless individuals into long-term institutional settings for humane treatment through the appropriate use of civil commitment will restore public order.',
+  purposeCite: 'Section 1, Purpose and Policy',
+
+  provisions: [
+    {
+      cite: 'Sec. 2 — Restoring Civil Commitment',
+      what: 'Directs the Attorney General, with HHS, to seek reversal of precedents and consent decrees that impede civil commitment, and at 2(a)(ii) to help states adopt “maximally flexible civil commitment, institutional treatment, and ‘step-down’ treatment standards”.',
+    },
+    {
+      cite: 'Sec. 3(b)(iii) — Fighting Vagrancy on America’s Streets',
+      what: 'Directs the Attorney General to assess federal resources to determine whether they may be directed toward ensuring that detainees with serious mental illness “are not released into the public because of a lack of forensic bed capacity at appropriate local, State, and Federal jails or hospitals”.',
+    },
+    {
+      cite: 'Sec. 4(a) — Redirecting Federal Resources',
+      what: 'Assigns HHS the mental-health work, and routes it through three things: discretionary grants issued by the Substance Abuse and Mental Health Services Administration, technical assistance to assisted-outpatient-treatment programs, and funds for Federally Qualified Health Centers and Certified Community Behavioral Health Clinics. Medicaid is not among them.',
+    },
+  ] as OrderProvision[],
+
+  /** Counts in the operative text. The first three are the positive control. */
+  present: [
+    { term: 'civil commitment', count: 7 },
+    { term: 'institutional treatment', count: 1 },
+    { term: 'forensic bed capacity', count: 1 },
+  ] as TermCount[],
+
+  absent: [
+    { term: 'institution for mental diseases', count: 0 },
+    { term: 'IMD', count: 0 },
+    { term: '16 bed', count: 0 },
+    { term: 'Medicaid', count: 0 },
+  ] as TermCount[],
+
+  reading:
+    'The order points states and federal agencies toward institutional treatment. Medicaid is the largest payer for that treatment, and for an adult aged 21 to 64 the statute above forbids it in any facility with more than 16 beds. The order does not mention that bar, and an executive order could not lift it in any case: the bar is in the statute, and only Congress can change a statute. So the two documents describe the same population and answer different questions — one names a destination, the other decides who pays once a person arrives.',
+
+  limit:
+    'This is a comparison of two texts, and nothing more. It is not a claim that the order is unlawful, that its drafters overlooked the exclusion, or that repeal is anyone’s stated policy. Read both documents and draw your own conclusion; both are linked.',
+
+  source:
+    'https://www.whitehouse.gov/presidential-actions/2025/07/ending-crime-and-disorder-on-americas-streets/',
+  sourceName: 'The White House',
+  registerSource:
+    'https://www.federalregister.gov/documents/2025/07/29/2025-14391/ending-crime-and-disorder-on-americas-streets',
+  registerSourceName: 'Federal Register, 90 FR 35817',
+  retrieved: '2026-09-02',
 } as const;
 
 /* ------------------------------------------------------------------ *
@@ -787,7 +869,31 @@ export interface Bill {
   priorVersion?: string;
 }
 
+/**
+ * All five were read against GovInfo BILLSTATUS and against the introduced
+ * bill text on 2026-09-02, and are listed in the order they were introduced.
+ * Every one has exactly three recorded actions — introduced, introduced,
+ * referred — and none has moved since. congress.gov refuses automated
+ * requests, so the status here comes from GovInfo, which is the same Library
+ * of Congress feed; the congress.gov link is authoritative and is the one to
+ * check for anything newer.
+ */
 export const BILLS: Bill[] = [
+  {
+    number: 'H.R. 4022',
+    slug: 'hr4022',
+    title: 'Increasing Behavioral Health Treatment Act',
+    sponsor: 'Salud Carbajal',
+    party: 'D',
+    district: 'CA-24',
+    introduced: '2025-06-17',
+    cosponsors: '7 (5 D, 2 R)',
+    approach: 'Repeal, with a duty attached',
+    effect:
+      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the five that pairs the repeal with a community-capacity obligation.',
+    status: 'Introduced; referred to committee',
+    congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/4022',
+  },
   {
     number: 'H.R. 5462',
     slug: 'hr5462',
@@ -805,6 +911,35 @@ export const BILLS: Bill[] = [
     priorVersion: 'H.R. 8575 (118th Congress)',
   },
   {
+    number: 'H.R. 5662',
+    slug: 'hr5662',
+    title: 'Improving Access to Institutional Mental Health Care Act',
+    sponsor: 'Shri Thanedar',
+    party: 'D',
+    district: 'MI-13',
+    introduced: '2025-09-30',
+    approach: 'Clean repeal',
+    effect:
+      'Strikes the age-bar clause from the concluding language of §1905(a), and strikes “65 years of age or older” and “65 years of age or over” wherever they appear in §1902(a)(20) and (21), §1905(a)(14) and §1919(e)(7)(B)(i)(I). Nothing else.',
+    status: 'Introduced; referred to committee',
+    congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/5662',
+  },
+  {
+    number: 'H.R. 5944',
+    slug: 'hr5944',
+    title: 'Restoring Inpatient Mental Health Access Act of 2025',
+    sponsor: 'Brad Finstad',
+    party: 'R',
+    district: 'MN-1',
+    introduced: '2025-11-07',
+    cosponsors: '3 (2 R, 1 D)',
+    approach: 'Let the bar expire',
+    effect:
+      'The most surgical drafting of the five. It removes the “other than services in an institution for mental diseases” parentheticals from §1905(a)(1), (a)(4)(A) and (a)(15), repeals (a)(14) as spent, and — instead of deleting the age-bar clause — inserts “furnished before January 1, 2027” into it, so the bar expires rather than being struck. The state-plan option for addiction treatment at §1915(l) is given the same end date.',
+    status: 'Introduced; referred to committee',
+    congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/5944',
+  },
+  {
     number: 'H.R. 6727',
     slug: 'hr6727',
     title: 'Repealing the IMD Exclusion Act',
@@ -820,6 +955,50 @@ export const BILLS: Bill[] = [
     priorVersion: 'H.R. 10266 (118th Congress)',
   },
 ];
+
+/**
+ * What the set shows, stated flatly. Each half of this was read off the
+ * BILLSTATUS records, not inferred: the referral line is identical in all
+ * five, and the party letters come from the sponsor and cosponsor fields.
+ */
+export const BILLS_COMPOSITION =
+  'All five went to the same place — the House Committee on Energy and Commerce — and none has left it. Not one has had a hearing, a markup, a vote or a CBO score. The sponsorship is bipartisan across the set rather than within each bill: one of the five is sponsored by a Republican, and three of the five carry Republican cosponsors. They also disagree with each other about the remedy, which is four different answers competing for the same committee slot.';
+
+/* ------------------------------------------------------------------ *
+ * 7b. WHICH SENTENCE ACTUALLY HAS TO CHANGE
+ *
+ * Read against the current United States Code text of 42 U.S.C. §1396d and
+ * §1396n on 2026-09-02. This is a reading of the statute, not a summary of
+ * anyone's published analysis, which is why the last item below is labelled
+ * as an inference rather than a finding.
+ * ------------------------------------------------------------------ */
+
+export const FIX = {
+  heading: 'The sentence that has to change is the age bar, not the bed count',
+  lede: 'The site is named for the number, because the number is what people hear about. But the number is in the definition. It is a different sentence that does the denying.',
+
+  points: [
+    'The “more than 16 beds” figure lives in the definition of an institution for mental diseases at §1905(i). On its own it denies nobody anything; it only decides which buildings the label attaches to.',
+    'The denial is the clause quoted at the top of this page — the flush subdivision (B) following the last numbered paragraph of §1905(a), which bars payment for a patient “who has not attained 65 years of age”.',
+    'People 65 and over are affirmatively covered by §1905(a)(14). People under 21 are affirmatively covered by §1905(a)(16)(A), effective January 1973. Subtract those two and the excluded class is adults aged 21 through 64, and nobody else.',
+    'So raising the bed threshold moves the line and striking the age bar removes it. The two are not smaller and larger versions of the same reform; they are different reforms.',
+  ],
+
+  /** Uses HOSPITAL_SIZE.mean so the two numbers can never drift apart. */
+  arithmetic: `A threshold of 36 beds would still exclude the average psychiatric hospital, which has ${HOSPITAL_SIZE.mean} beds. Raising the number helps whichever facilities happen to fall under the new line; removing the age bar does not depend on facility size at all.`,
+
+  inference: {
+    label: 'An inference from the text, not a published finding',
+    body: 'There may also be a reason to leave §1905(i) alone. The definition is used elsewhere in Medicaid, including in Community First Choice at 42 U.S.C. §1396n(k), where attendant services must be furnished “in a home or community setting, which does not include a nursing facility, institution for mental diseases, or an intermediate care facility for the mentally retarded.” Widening the definition so that facilities of 36 beds or fewer are no longer institutions for mental diseases would, on the face of that sentence, also widen what counts as a home or community setting there. Repealing the age bar and leaving the definition untouched would not.',
+    caution:
+      'This is our own reading of the statutory text on 2026-09-02, not a claim about what any sponsor intended and not something we found stated in a CRS, MACPAC or CBO document. Anyone drafting from it should confirm it with legislative counsel.',
+    source:
+      'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim',
+    sourceName: '42 U.S.C. §1396n(k)',
+  },
+
+  retrieved: '2026-09-02',
+} as const;
 
 /* ------------------------------------------------------------------ *
  * 8. THE ARGUMENT, BOTH WAYS
@@ -849,6 +1028,76 @@ export const ARGUMENTS = {
     sourceName: 'CRS IF10222 (legislative history and stated congressional intent)',
   },
 };
+
+/* ------------------------------------------------------------------ *
+ * 8b. THE OBJECTION IN ITS OWN WORDS, AND AN ANSWER TO IT
+ *
+ * The four bullets above are our paraphrase. The block below is the actual
+ * sentence, from a comment letter that was fetched and read end to end
+ * (six pages) on 2026-09-02. The sentence sits in a footnote, and the
+ * footnote's own first half is quoted too, because it changes how the
+ * second half reads: the Bazelon Center was defending the exclusion in the
+ * course of objecting to something else, not campaigning to preserve it.
+ * ------------------------------------------------------------------ */
+
+export const OBJECTION = {
+  heading: 'The strongest objection, in the objector’s own words',
+
+  quoteContext:
+    'We appreciate that California has decided to limit its FFP proposal to facilities under 17 beds and are not seeking to undermine Medicaid’s “institutions for mental diseases” exclusion (IMD exclusion).',
+  quote:
+    'The IMD exclusion is essential to ensuring that states are incentivized to invest in community-based services rather than services in IMD settings, where FFP is not permitted.',
+  attribution:
+    'Judge David L. Bazelon Center for Mental Health Law, comments to HHS on California’s BH-CONNECT demonstration addendum, 30 August 2024, footnote 14.',
+
+  supporting: [
+    {
+      claim:
+        'The Americans with Disabilities Act and Olmstead v. L.C., 527 U.S. 581 (1999), require that people be served in the most integrated setting appropriate and not unnecessarily given institutional care.',
+      note: 'Cited in the comment alongside 45 C.F.R. §84.76(b).',
+    },
+    {
+      claim:
+        'Meeting Medicaid’s rules is not the same as meeting civil-rights obligations. HHS has said so directly: “the civil rights obligations created by section 504 are separate and distinct from the requirements of Medicaid and the Social Security Act. Compliance with Medicaid requirements does not necessarily mean a recipient has met the obligations of section 504.”',
+      note: '89 Fed. Reg. 40066, 40119.',
+    },
+    {
+      claim:
+        'The “linear continuum of care” — moving people through successively less restrictive congregate placements before independent housing — was called “archaic” by one court expert and “outdated” by another in DAI v. Paterson, 653 F. Supp. 2d 184 (E.D.N.Y. 2009).',
+      note: 'Both experts are quoted at length in the comment.',
+    },
+    {
+      claim:
+        'The comment reports outcome figures for two community programs: New York’s Nathaniel Project, a 70% reduction in arrests within two years of admission; and Chicago’s Thresholds, an 89% reduction in arrests, an 86% decrease in jail time, and a 76% reduction in hospitalizations.',
+      note: 'Stated in the comment without a citation of its own, so these are reported as the Bazelon Center’s figures rather than confirmed here.',
+    },
+  ],
+
+  source:
+    'https://www.bazelon.org/wp-content/uploads/2024/09/Bazelon-comment-CA-1115-BH-Connect-FINAL.pdf',
+  sourceName: 'Bazelon Center comment on CA BH-CONNECT (PDF, 6 pages)',
+  retrieved: '2026-09-02',
+} as const;
+
+/**
+ * The answer, written as a drafting problem rather than a rebuttal. The
+ * objection is about what a bill does, so the response has to be about what
+ * a bill says.
+ */
+export const OBJECTION_ANSWER = {
+  heading: 'What a bill would have to say to answer it',
+  lede: 'The objection lands against long-term custodial placement used as a substitute for housing. It does not land against every version of the reform, and the versions it does not land against are ones that can be written down.',
+
+  points: [
+    'Repeal the age bar and leave the §1905(i) definition intact, so the definition keeps doing its integration-protective work in the other places Medicaid uses it.',
+    'Attach a maintenance-of-effort requirement on non-federal community spending, so federal money for inpatient care cannot quietly replace state money for community care. §1915(l)(3) is the existing model.',
+    'Attach a community-capacity requirement. H.R. 4022 already does this: it makes each state plan for, and report annually on, outpatient and crisis capacity.',
+    'Make compliance with the most-integrated-setting obligations of ADA Title II and section 504 an explicit condition, rather than assuming Medicaid compliance carries it — which is the exact point HHS made in the passage quoted above.',
+  ],
+
+  scope:
+    'One thing the reform does not reach in either direction: repealing the exclusion changes who pays for care, not who can be committed. Civil commitment is state law, and Title XIX does not touch it.',
+} as const;
 
 /* ------------------------------------------------------------------ *
  * 9. CONTACT
@@ -944,6 +1193,33 @@ export const ACTION_TARGETS: ActionTarget[] = [
     url: 'https://ritchietorres.house.gov/contact',
     method: 'Web form.',
     verified: '2026-08-26',
+  },
+  {
+    id: 'carbajal',
+    who: 'Rep. Salud Carbajal',
+    role: 'Sponsor, H.R. 4022 — California’s 24th district',
+    why: 'His is the only one of the five bills that pairs repeal with a duty on states to build outpatient and crisis capacity, which is the drafting that answers the main objection to repeal.',
+    url: 'https://carbajal.house.gov/contact/',
+    method: 'Web form.',
+    verified: '2026-09-02',
+  },
+  {
+    id: 'thanedar',
+    who: 'Rep. Shri Thanedar',
+    role: 'Sponsor, H.R. 5662 — Michigan’s 13th district',
+    why: 'He introduced the shortest of the repeal bills, and it has no cosponsors at all. A bill with no cosponsors is the one where a message costs an office the least to notice.',
+    url: 'https://thanedar.house.gov/contact',
+    method: 'Web form.',
+    verified: '2026-09-02',
+  },
+  {
+    id: 'finstad',
+    who: 'Rep. Brad Finstad',
+    role: 'Sponsor, H.R. 5944 — Minnesota’s 1st district',
+    why: 'The only Republican sponsor among the five. Anything that moves in this committee needs support on both sides of it, so this office is where a bipartisan hearing request would have to start.',
+    url: 'https://finstad.house.gov/contact/',
+    method: 'Web form.',
+    verified: '2026-09-02',
   },
   {
     id: 'yours',
@@ -1605,7 +1881,7 @@ export const CLOSEST_CALL = {
 };
 
 export const LIVE_BILLS_NOTE =
-  'The Michelle Alyssa Go Act has been introduced in three consecutive Congresses and has never had a Senate companion. Its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of these — a bill has to leave committee to get one.';
+  'Five bills in the 119th Congress would change this rule, and all five are sitting in the same committee. The Michelle Alyssa Go Act has been introduced in three consecutive Congresses and has never had a Senate companion. Its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of the five — a bill has to leave committee to get one.';
 
 /** The answer to “which party did this”, which is that the question has no answer. */
 export const PARTY_VERDICT = {
@@ -1714,6 +1990,38 @@ export interface SourceEntry {
 }
 
 export const SOURCES: SourceEntry[] = [
+  /* --- Added 2026-09-02. Each was fetched and read in full that day: the
+     executive order's operative text was term-counted, the Bazelon comment
+     was read across all six of its pages, and the §1396n text was read at
+     the Community First Choice subsection. --- */
+  {
+    name: 'Executive Order 14321 — Ending Crime and Disorder on America’s Streets',
+    org: 'The White House (signed 24 July 2025)',
+    url: 'https://www.whitehouse.gov/presidential-actions/2025/07/ending-crime-and-disorder-on-americas-streets/',
+    kind: 'primary',
+    used: 'The order’s operative text, source of the section 1 quotation and of every term count on this page.',
+  },
+  {
+    name: 'Executive Order 14321, 90 FR 35817 (29 July 2025)',
+    org: 'Office of the Federal Register',
+    url: 'https://www.federalregister.gov/documents/2025/07/29/2025-14391/ending-crime-and-disorder-on-americas-streets',
+    kind: 'primary',
+    used: 'The published citation for the same order, and where its executive-order number is assigned.',
+  },
+  {
+    name: 'Comments on the California BH-CONNECT demonstration addendum',
+    org: 'Judge David L. Bazelon Center for Mental Health Law (30 August 2024)',
+    url: 'https://www.bazelon.org/wp-content/uploads/2024/09/Bazelon-comment-CA-1115-BH-Connect-FINAL.pdf',
+    kind: 'advocacy',
+    used: 'The verbatim defence of the exclusion quoted in the debate section, and the Olmstead, section 504 and linear-continuum arguments behind it.',
+  },
+  {
+    name: '42 U.S.C. §1396n — Community First Choice and section 1915 authorities',
+    org: 'Office of the Law Revision Counsel, U.S. House of Representatives',
+    url: 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim',
+    kind: 'primary',
+    used: 'Subsection (k), where an institution for mental diseases is excluded from what counts as a home or community setting — the reason the definition and the age bar are different sentences to amend.',
+  },
   /* --- The legislative record. Added 2026-09-01 with the accountability
      report; each was fetched and read that day. Statutes at Large and the
      Federal Register are served as PDFs, which is why some are large. --- */
@@ -1922,6 +2230,19 @@ export function buildKnowledgeBase(): string {
   );
   lines.push('');
 
+  lines.push('## Executive Order 14321 and the statute (added 2026-09-02)');
+  lines.push(
+    `${EXECUTIVE_ORDER.number}, "${EXECUTIVE_ORDER.title}", signed ${EXECUTIVE_ORDER.signed}, published ${EXECUTIVE_ORDER.published} at ${EXECUTIVE_ORDER.citation}.`,
+  );
+  lines.push(`${EXECUTIVE_ORDER.purposeCite}, verbatim: "${EXECUTIVE_ORDER.purposeQuote}"`);
+  for (const pr of EXECUTIVE_ORDER.provisions) lines.push(`- ${pr.cite}: ${pr.what}`);
+  lines.push(
+    `Term counts in the order's OPERATIVE text, measured ${EXECUTIVE_ORDER.retrieved}. Present: ${EXECUTIVE_ORDER.present.map((t) => `"${t.term}" ${t.count}`).join(', ')}. Absent: ${EXECUTIVE_ORDER.absent.map((t) => `"${t.term}" ${t.count}`).join(', ')}. The present counts are the control that proves the search worked. The single "Medicaid" string anywhere on that web page is a headline in the site's own navigation menu, not a word in the order.`,
+  );
+  lines.push(EXECUTIVE_ORDER.reading);
+  lines.push(`IMPORTANT LIMIT ON THIS COMPARISON: ${EXECUTIVE_ORDER.limit}`);
+  lines.push('');
+
   lines.push('## Why the number is 16 (most asked question)');
   for (const d of WHY_SIXTEEN.documented) lines.push(`- ${d.claim} (${d.sourceName})`);
   lines.push(`- WHAT IS NOT DOCUMENTED: ${WHY_SIXTEEN.notDocumented}`);
@@ -2004,6 +2325,16 @@ export function buildKnowledgeBase(): string {
       `${b.number} — ${b.title}. Sponsor ${b.sponsor} (${b.party}-${b.district}), introduced ${b.introduced}. ${b.approach}. ${b.effect} Status: ${b.status}.${b.cosponsors ? ` Cosponsors: ${b.cosponsors}.` : ''}${b.priorVersion ? ` Earlier version: ${b.priorVersion}.` : ''}`,
     );
   }
+  lines.push(BILLS_COMPOSITION);
+  lines.push('');
+
+  lines.push('## Which sentence actually has to change');
+  lines.push(FIX.lede);
+  for (const pt of FIX.points) lines.push(`- ${pt}`);
+  lines.push(FIX.arithmetic);
+  lines.push(
+    `${FIX.inference.label}: ${FIX.inference.body} ${FIX.inference.caution} Present this as an inference and never as an established finding.`,
+  );
   lines.push('');
 
   lines.push('## The argument both ways');
@@ -2011,6 +2342,13 @@ export function buildKnowledgeBase(): string {
   for (const p of ARGUMENTS.repeal.points) lines.push(`- ${p}`);
   lines.push(`FOR KEEPING IT (${ARGUMENTS.keep.sourceName}):`);
   for (const p of ARGUMENTS.keep.points) lines.push(`- ${p}`);
+  lines.push(
+    `THE OBJECTION IN ITS OWN WORDS (${OBJECTION.attribution}). Context sentence: "${OBJECTION.quoteContext}" Then, verbatim: "${OBJECTION.quote}"`,
+  );
+  for (const sup of OBJECTION.supporting) lines.push(`- ${sup.claim} (${sup.note})`);
+  lines.push(`${OBJECTION_ANSWER.heading}: ${OBJECTION_ANSWER.lede}`);
+  for (const pt of OBJECTION_ANSWER.points) lines.push(`- ${pt}`);
+  lines.push(OBJECTION_ANSWER.scope);
   lines.push('');
 
   // The accountability record. Without this block the assistant would be

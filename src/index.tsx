@@ -9,12 +9,15 @@ import {
   BED_SERIES,
   BILL_COMMITTEE,
   BILLS,
+  BILLS_COMPOSITION,
   CBO_OPTIONS,
   CLOSEST_CALL,
   CONSEQUENCES,
   CONTACT_EMAIL,
   CONTACT_INTENTS,
+  EXECUTIVE_ORDER,
   FEDERAL_LEVERS,
+  FIX,
   FUNDING_ROUTES,
   HERO_CAVEAT,
   HOSPITAL_SIZE,
@@ -26,6 +29,8 @@ import {
   NEGATIVE_METHOD,
   NUMBER_CHAIN,
   NUMBER_VERDICT,
+  OBJECTION,
+  OBJECTION_ANSWER,
   PAGE_UPDATED,
   PARTY_VERDICT,
   PIERCE_CORRECTION,
@@ -684,6 +689,7 @@ app.get('/', (c) => {
             </span>
             <nav class="mast__nav" aria-label="Sections">
               <a href="#rule">The rule</a>
+              <a href="#order">The order</a>
               <a href="#scale">Scale</a>
               <a href="#waivers">Waivers</a>
               <a href="#history">History</a>
@@ -869,6 +875,80 @@ app.get('/', (c) => {
                   and this section will be corrected with the citation.
                 </p>
               </div>
+            </div>
+          </section>
+
+          {/* ---------------- EXECUTIVE ORDER ---------------- */}
+          <section id="order">
+            <div class="wrap">
+              <span class="sec__idx">01b — The order and the statute</span>
+              <h2>A 2025 executive order points at the beds. It does not mention the rule.</h2>
+              <p class="lede">
+                {EXECUTIVE_ORDER.number}, {EXECUTIVE_ORDER.title}, was signed{' '}
+                {EXECUTIVE_ORDER.signed} and published at {EXECUTIVE_ORDER.citation}. Its stated
+                policy is to move people into institutional treatment. Read it next to the sentence
+                above.
+              </p>
+
+              <div class="statute">
+                <q>{EXECUTIVE_ORDER.purposeQuote}</q>
+                <cite>
+                  {EXECUTIVE_ORDER.number}, {EXECUTIVE_ORDER.purposeCite}
+                </cite>
+              </div>
+
+              <ul class="why__list">
+                {EXECUTIVE_ORDER.provisions.map((pr) => (
+                  <li>
+                    <b>{pr.cite}.</b> {pr.what}
+                  </li>
+                ))}
+              </ul>
+
+              <div class="why">
+                <h3>What the order says, counted</h3>
+                <p>
+                  Counted in the order's operative text on {EXECUTIVE_ORDER.retrieved} — everything
+                  from “By the authority vested” to the signature, so the White House site's own
+                  menus are left out.
+                </p>
+                <div class="terms">
+                  {EXECUTIVE_ORDER.present.map((t) => (
+                    <div class="term">
+                      <span class="term__n">{t.count}</span>
+                      <span class="term__t">{t.term}</span>
+                    </div>
+                  ))}
+                  {EXECUTIVE_ORDER.absent.map((t) => (
+                    <div class="term term--zero">
+                      <span class="term__n">{t.count}</span>
+                      <span class="term__t">{t.term}</span>
+                    </div>
+                  ))}
+                </div>
+                <p class="why__searched">
+                  The three non-zero counts are the control: they prove the search could find what
+                  is there, so the zeros are about the document and not about the method. The one
+                  “Medicaid” string anywhere on that page is a headline in the site's navigation
+                  menu, not a word in the order.
+                </p>
+                <div class="why__gap" style="margin-top:1.2rem">
+                  <b>Reading them together</b>
+                  <p>{EXECUTIVE_ORDER.reading}</p>
+                </div>
+              </div>
+
+              <p class="caveat">
+                {EXECUTIVE_ORDER.limit} Read the order at{' '}
+                <a href={EXECUTIVE_ORDER.source} rel="noopener">
+                  {EXECUTIVE_ORDER.sourceName}
+                </a>{' '}
+                or as published in the{' '}
+                <a href={EXECUTIVE_ORDER.registerSource} rel="noopener">
+                  {EXECUTIVE_ORDER.registerSourceName}
+                </a>
+                .
+              </p>
             </div>
           </section>
 
@@ -1263,10 +1343,11 @@ app.get('/', (c) => {
           <section id="bills">
             <div class="wrap">
               <span class="sec__idx">06 — What is moving in Congress</span>
-              <h2>Two bills, two different answers</h2>
+              <h2>Five bills, four different answers</h2>
               <p class="lede">
-                Both are in the 119th Congress. Both are in committee. They disagree about whether
-                to move the line or erase it.
+                All five are in the 119th Congress. All five are in committee. They disagree about
+                whether to move the line, erase it, let it expire, or erase it and require something
+                in its place.
               </p>
               <div class="bills">
                 {BILLS.map((b) => (
@@ -1305,10 +1386,41 @@ app.get('/', (c) => {
                   </article>
                 ))}
               </div>
+              <div class="plain">
+                <b>What the set shows</b>
+                <p>{BILLS_COMPOSITION}</p>
+              </div>
+
               <p class="caveat">
-                Bill status is as retrieved on {RETRIEVED}. Follow the Congress.gov links for the
-                current record, which is authoritative.
+                Sponsor, party, district, introduction date, cosponsor counts and status were read
+                from GovInfo BILLSTATUS on {FIX.retrieved}, and each bill's described effect was
+                read from its introduced text. Follow the Congress.gov links for the current record,
+                which is authoritative.
               </p>
+
+              <div class="why" id="fix">
+                <h3>{FIX.heading}</h3>
+                <p>{FIX.lede}</p>
+                <ul class="why__list">
+                  {FIX.points.map((pt) => (
+                    <li>{pt}</li>
+                  ))}
+                </ul>
+                <p style="font-size:15.5px">{FIX.arithmetic}</p>
+                <div class="why__gap">
+                  <b>{FIX.inference.label}</b>
+                  <p>{FIX.inference.body}</p>
+                  <p>{FIX.inference.caution}</p>
+                  <a
+                    class="why__src"
+                    style="display:inline-block"
+                    href={FIX.inference.source}
+                    rel="noopener"
+                  >
+                    {FIX.inference.sourceName} →
+                  </a>
+                </div>
+              </div>
 
               <div class="act" id="say-so">
                 <h3>Say you support them</h3>
@@ -1413,6 +1525,46 @@ app.get('/', (c) => {
                   <a class="arg__src" href={ARGUMENTS.keep.source} rel="noopener">
                     {ARGUMENTS.keep.sourceName} →
                   </a>
+                </div>
+              </div>
+
+              <h3 style="margin-top:2.8rem">{OBJECTION.heading}</h3>
+              <p>
+                The four points above are our paraphrase. This is the sentence itself, from a
+                comment letter to HHS that was read in full on {OBJECTION.retrieved}. The first half
+                of the footnote is quoted too, because it changes how the second half reads: the
+                exclusion is being defended in passing, while objecting to something else.
+              </p>
+
+              <div class="statute">
+                <q>
+                  {OBJECTION.quoteContext} {OBJECTION.quote}
+                </q>
+                <cite>{OBJECTION.attribution}</cite>
+              </div>
+
+              <ul class="why__list">
+                {OBJECTION.supporting.map((sup) => (
+                  <li>
+                    {sup.claim} <span class="why__src">{sup.note}</span>
+                  </li>
+                ))}
+              </ul>
+              <a class="arg__src" href={OBJECTION.source} rel="noopener">
+                {OBJECTION.sourceName} →
+              </a>
+
+              <div class="why" style="margin-top:2rem">
+                <h3>{OBJECTION_ANSWER.heading}</h3>
+                <p>{OBJECTION_ANSWER.lede}</p>
+                <ul class="why__list">
+                  {OBJECTION_ANSWER.points.map((pt) => (
+                    <li>{pt}</li>
+                  ))}
+                </ul>
+                <div class="why__gap">
+                  <b>What repeal does not change</b>
+                  <p>{OBJECTION_ANSWER.scope}</p>
                 </div>
               </div>
             </div>
