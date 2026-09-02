@@ -26,6 +26,7 @@ import {
   NEGATIVE_METHOD,
   NUMBER_CHAIN,
   NUMBER_VERDICT,
+  PAGE_UPDATED,
   PARTY_VERDICT,
   PIERCE_CORRECTION,
   PREVALENCE,
@@ -181,7 +182,7 @@ app.get('/robots.txt', (c) =>
 app.get('/sitemap.xml', (c) => {
   const o = c.env.SITE_ORIGIN || new URL(c.req.url).origin;
   return c.body(
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${o}/</loc><lastmod>${RETRIEVED}</lastmod><priority>1.0</priority></url>\n<url><loc>${o}${REPORT.href}</loc><lastmod>${REPORT.retrieved}</lastmod><priority>0.8</priority></url>\n</urlset>\n`,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${o}/</loc><lastmod>${PAGE_UPDATED}</lastmod><priority>1.0</priority></url>\n<url><loc>${o}${REPORT.href}</loc><lastmod>${REPORT.retrieved}</lastmod><priority>0.8</priority></url>\n</urlset>\n`,
     200,
     { 'content-type': 'application/xml; charset=utf-8' },
   );

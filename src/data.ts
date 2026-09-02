@@ -11,6 +11,19 @@
 
 export const RETRIEVED = '2026-08-26';
 
+/**
+ * The day this page's rendered CONTENT last changed — a different fact from
+ * RETRIEVED, which is when the underlying figures were fetched.
+ *
+ * They were the same constant until 2026-09-01, and that was a bug: the
+ * sitemap's <lastmod> for "/" was RETRIEVED, so publishing the whole
+ * accountability record onto the page would have told crawlers nothing had
+ * changed on exactly the page that had changed most. Bump this whenever the
+ * page's visible content changes; leave RETRIEVED alone unless the data
+ * itself was re-fetched.
+ */
+export const PAGE_UPDATED = '2026-09-01';
+
 export interface Sourced<T> {
   value: T;
   label: string;
