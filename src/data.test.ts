@@ -554,3 +554,23 @@ describe('publisher identity', () => {
     expect(new Set(PUBLISHER.sameAs).size).toBe(PUBLISHER.sameAs.length);
   });
 });
+
+describe('why sixteen — the nearest rationale', () => {
+  it('presents the 1976 SSI figure as a purpose, never as the derivation of the Medicaid number', () => {
+    // The whole value of this block is that it does NOT overclaim. If the
+    // caution ever stops saying the link is unproven, a hypothesis has been
+    // promoted to a finding — which is the exact failure the page argues against.
+    expect(WHY_SIXTEEN.nearest.caution).toMatch(/no document connects/i);
+    expect(WHY_SIXTEEN.nearest.caution).toMatch(/not evidence|open question/i);
+    expect(WHY_SIXTEEN.nearest.finding).toMatch(/outer limit/i);
+  });
+
+  it('still states plainly that no cost model, bed-supply study or clinical standard exists', () => {
+    expect(WHY_SIXTEEN.notDocumented).toMatch(/cost model/i);
+    expect(WHY_SIXTEEN.notDocumented).toMatch(/clinical standard/i);
+  });
+
+  it('the nearest-rationale source is in the bibliography', () => {
+    expect(new Set(SOURCES.map((s) => s.url)).has(WHY_SIXTEEN.nearest.source)).toBe(true);
+  });
+});

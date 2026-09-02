@@ -838,6 +838,14 @@ app.get('/', (c) => {
                 <div class="why__gap">
                   <b>And here is what is not</b>
                   <p>{WHY_SIXTEEN.notDocumented}</p>
+
+                  <b style="margin-top:1.2rem">The closest anyone comes</b>
+                  <p>{WHY_SIXTEEN.nearest.finding}</p>
+                  <p>{WHY_SIXTEEN.nearest.caution}</p>
+                  <a class="why__src" href={WHY_SIXTEEN.nearest.source} rel="noopener">
+                    {WHY_SIXTEEN.nearest.sourceName} →
+                  </a>
+
                   <p class="why__searched">
                     Sources checked for a rationale: {WHY_SIXTEEN.searched}
                   </p>

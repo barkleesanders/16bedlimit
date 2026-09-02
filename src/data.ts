@@ -221,9 +221,32 @@ export const WHY_SIXTEEN = {
     },
   ],
   notDocumented:
-    'None of the standard references explains why the number is 16 rather than 20, 30, or 50. There is no published cost model, bed-supply study, or clinical standard behind the figure in the sources checked here. It has not moved in the 38 years since, while the average psychiatric hospital has settled at 108 beds.',
+    'None of the standard references explains why the number is 16 rather than 20, 30, or 50. There is no published cost model, bed-supply study, or clinical standard behind the figure in any source checked here. It has not moved in the 38 years since, while the average psychiatric hospital has settled at 108 beds.',
+
+  /**
+   * The closest thing to an official statement anywhere — found 2026-09-01 by
+   * going after the sources the earlier pass had left unmeasured rather than
+   * re-checking the ones already excluded.
+   *
+   * It is a statement of PURPOSE, not a derivation, and it comes from the SSI
+   * line rather than the Medicaid one. That distinction is the point: even the
+   * agency writing the rule treats 16 as handed to it by Congress. Asked by a
+   * commenter to count the threshold differently, HEW refused because the
+   * change would not be "consistent with section 1611(e)(1)(C) of the Social
+   * Security Act and its legislative history." Nobody in the chain defends the
+   * number; each one points upward.
+   */
+  nearest: {
+    finding:
+      'The closest thing to an official rationale is not about Medicaid at all. It is in the 1976 SSI rule that let people keep their benefits in small group homes, and it explains a purpose rather than a number: Congress, the agency wrote, "envisions a 16 resident capacity as an outer limit applicable to community residences" — a "small, free-standing, community-based living unit" meant as an alternative to a large institution. When a commenter asked the agency to count the threshold a different way, it refused, because that would not be consistent with the statute "and its legislative history." The agency treats 16 as given to it. It never says where the figure came from.',
+    caution:
+      'No document connects that 1976 SSI figure to the 1988 Medicaid one. They are the same number doing similar work twelve years apart, which is suggestive and is not evidence. Treat the link as an open question, not a finding.',
+    source: 'https://www.govinfo.gov/content/pkg/FR-1978-11-28/pdf/FR-1978-11-28.pdf',
+    sourceName: '43 FR 55379 (28 Nov 1978)',
+  },
+
   searched:
-    'CRS IF10222; MACPAC; Manhattan Institute (2021 and 2025); Legal Action Center; American Psychiatric Association; National Association of Medicaid Directors; Mental Health America.',
+    'CRS IF10222 (read in full 2026-09-01 via a mirror, after congress.gov itself refused automated access); MACPAC; Manhattan Institute (2021 and 2025); Legal Action Center; American Psychiatric Association; National Association of Medicaid Directors; Mental Health America; Treatment Advocacy Center; Orchid Advocacy; SSA Ruling SSR 79-8; and the 1978 rulemaking at 43 FR 55379.',
   retrieved: RETRIEVED,
 };
 
@@ -1730,6 +1753,20 @@ export const SOURCES: SourceEntry[] = [
     used: 'The rule that defined an IMD by "overall character" and set no bed count. Warning: this is the whole day\'s Federal Register, about 126 MB — not a mobile download.',
   },
   {
+    name: '43 FR 55379 (28 November 1978) — the SSI community-residence rule',
+    org: 'Office of the Federal Register',
+    url: 'https://www.govinfo.gov/content/pkg/FR-1978-11-28/pdf/FR-1978-11-28.pdf',
+    kind: 'primary',
+    used: 'The nearest thing to an official statement about the figure: Congress "envisions a 16 resident capacity as an outer limit". Published two months after the IMD rule that had no bed count at all — same agency, same year. Warning: the whole day\'s Federal Register, about 96 MB.',
+  },
+  {
+    name: 'SSR 79-8 — publicly operated community residences serving no more than 16 residents',
+    org: 'Social Security Administration',
+    url: 'https://www.ssa.gov/OP_Home/rulings/ssi/01/SSR79-08-ssi-01.html',
+    kind: 'primary',
+    used: "SSA's own ruling on the 16-resident threshold. Gives the deinstitutionalization purpose behind small residences and never justifies the number. Rescinded 1986.",
+  },
+  {
     name: 'Legislative history, 1960',
     org: 'Social Security Administration',
     url: 'https://www.ssa.gov/history/1960.html',
@@ -1888,6 +1925,9 @@ export function buildKnowledgeBase(): string {
   lines.push('## Why the number is 16 (most asked question)');
   for (const d of WHY_SIXTEEN.documented) lines.push(`- ${d.claim} (${d.sourceName})`);
   lines.push(`- WHAT IS NOT DOCUMENTED: ${WHY_SIXTEEN.notDocumented}`);
+  lines.push(
+    `NEAREST THING TO A RATIONALE (and it is a purpose, not a derivation): ${WHY_SIXTEEN.nearest.finding} ${WHY_SIXTEEN.nearest.caution} Source: ${WHY_SIXTEEN.nearest.sourceName}.`,
+  );
   lines.push(
     `When asked why the number is 16, say plainly that the exception was added in 1988 and that no published rationale for that particular figure appears in the standard references, which were checked: ${WHY_SIXTEEN.searched} Do not speculate about a reason. The absence is the answer, and it is a fair thing to say out loud.`,
   );
