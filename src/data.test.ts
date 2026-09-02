@@ -17,6 +17,7 @@ import {
   PARTY_VERDICT,
   PREVALENCE,
   PRISON_SERIES,
+  PUBLISHER,
   RECORD_FINDINGS,
   RECORD_NAMED,
   RECORD_UNIDENTIFIED,
@@ -518,5 +519,38 @@ describe('the full record', () => {
     expect(missing).toEqual([]);
     // And it must not tell a reader the PDF is required to get the answer.
     expect(kb).toMatch(/never tell a reader they must download the PDF/i);
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * PUBLISHER IDENTITY — this node asserts, publicly, that a specific
+ * 501(c)(3) publishes this site. Getting the entity wrong is a
+ * misrepresentation, not an SEO defect, so the shape is pinned here.
+ * ------------------------------------------------------------------ */
+
+describe('publisher identity', () => {
+  it('names the nonprofit, not the separate for-profit ESBE LLC', () => {
+    expect(PUBLISHER.legalName).toBe('ESBE Incorporated');
+    // ESBE LLC is a DIFFERENT legal entity (EIN 85-0590511). Its identifiers
+    // must never appear here — that would assert tax-exempt status for a
+    // for-profit, which is the entity-confusion failure this guards.
+    const blob = JSON.stringify(PUBLISHER);
+    expect(blob).not.toMatch(/85-?0590511/);
+    expect(blob).not.toMatch(/ESBE LLC/i);
+  });
+
+  it('carries the nonprofit EIN and every anchor is keyed to it', () => {
+    expect(PUBLISHER.taxID).toBe('87-1218291');
+    expect(PUBLISHER.sameAs.length).toBeGreaterThan(0);
+    // Each anchor was looked up BY the EIN against a registry, so each URL
+    // must contain that EIN in one of its two written forms. A URL that does
+    // not is a guessed slug, which is the thing that must never ship here.
+    const notKeyed = PUBLISHER.sameAs.filter((u) => !/87-?1218291/.test(u));
+    expect(notKeyed).toEqual([]);
+  });
+
+  it('every anchor is https and unique', () => {
+    for (const u of PUBLISHER.sameAs) expect(u, u).toMatch(/^https:\/\//);
+    expect(new Set(PUBLISHER.sameAs).size).toBe(PUBLISHER.sameAs.length);
   });
 });

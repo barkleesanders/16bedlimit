@@ -833,6 +833,37 @@ export const ARGUMENTS = {
 
 export const CONTACT_EMAIL = 'hello@16bedlimit.com';
 
+/**
+ * Who publishes this site. Added 2026-09-01 on the owner's explicit
+ * confirmation — until then the site named no owning entity, and guessing
+ * one would have asserted tax-exempt status on no evidence.
+ *
+ * Every sameAs URL was looked up by the real EIN (87-1218291) against an
+ * authoritative registry, then fetched and checked to confirm the page
+ * actually names ESBE INCORPORATED and carries that EIN — never assembled
+ * from a plausible slug. Each returned 200 with the entity's own name in
+ * its <title> and zero traces of ESBE LLC (the separate for-profit,
+ * EIN 85-0590511), which is the confusion this list must not create.
+ *
+ * every.org/esbe-incorporated is deliberately ABSENT: it answered 429
+ * behind a Vercel checkpoint, which is unverified rather than confirmed,
+ * and an unverified URL does not belong in an identity claim.
+ */
+export const PUBLISHER = {
+  '@type': 'NGO',
+  name: 'The 16-Bed Limit',
+  legalName: 'ESBE Incorporated',
+  url: 'https://16bedlimit.com',
+  email: `mailto:${CONTACT_EMAIL}`,
+  nonprofitStatus: 'Nonprofit501c3',
+  taxID: '87-1218291',
+  sameAs: [
+    'https://projects.propublica.org/nonprofits/organizations/871218291',
+    'https://www.guidestar.org/profile/87-1218291',
+    'https://www.charitynavigator.org/ein/871218291',
+  ],
+} as const;
+
 /* ------------------------------------------------------------------ *
  * TELLING CONGRESS YOU SUPPORT THESE BILLS
  *

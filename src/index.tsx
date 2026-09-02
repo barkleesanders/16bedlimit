@@ -32,6 +32,7 @@ import {
   PREVALENCE,
   PRICE_VERDICT,
   PRISON_SERIES,
+  PUBLISHER,
   RECORD_CAVEATS,
   RECORD_FINDINGS,
   RECORD_NAMED,
@@ -644,12 +645,29 @@ app.get('/', (c) => {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'Article',
-              headline: 'The 16-Bed Limit',
-              description: desc,
-              dateModified: RETRIEVED,
-              isAccessibleForFree: true,
-              citation: SOURCES.map((s) => ({ '@type': 'CreativeWork', name: s.name, url: s.url })),
+              // A @graph so the publisher is a TOP-LEVEL node rather than only
+              // nested inside the Article — an entity-reconciliation crawler
+              // (and /ship's own Phase 4.05f check) looks for the Organization
+              // as a node in its own right.
+              '@graph': [
+                {
+                  '@type': 'Article',
+                  headline: 'The 16-Bed Limit',
+                  description: desc,
+                  // The date the CONTENT changed, not the date the figures
+                  // were fetched. Those are different facts; conflating them
+                  // is what made the sitemap claim nothing had changed.
+                  dateModified: PAGE_UPDATED,
+                  isAccessibleForFree: true,
+                  publisher: { '@type': 'NGO', name: PUBLISHER.legalName },
+                  citation: SOURCES.map((s) => ({
+                    '@type': 'CreativeWork',
+                    name: s.name,
+                    url: s.url,
+                  })),
+                },
+                PUBLISHER,
+              ],
             }),
           }}
         />
