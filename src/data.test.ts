@@ -642,10 +642,10 @@ describe('executive order 14321', () => {
 });
 
 describe('the bills table', () => {
-  it('carries all five bills, each identified uniquely', () => {
-    expect(BILLS).toHaveLength(5);
-    expect(new Set(BILLS.map((b) => b.number)).size).toBe(5);
-    expect(new Set(BILLS.map((b) => b.slug)).size).toBe(5);
+  it('carries all six bills, each identified uniquely', () => {
+    expect(BILLS).toHaveLength(6);
+    expect(new Set(BILLS.map((b) => b.number)).size).toBe(6);
+    expect(new Set(BILLS.map((b) => b.slug)).size).toBe(6);
     for (const b of BILLS) {
       expect(b.number, b.slug).toMatch(/^H\.R\. \d+$/);
       expect(b.slug).toMatch(/^hr\d+$/);
@@ -673,18 +673,18 @@ describe('the bills table', () => {
       const n = b.number.replace('H.R. ', '');
       expect(b.congressUrl).toBe(`https://www.congress.gov/bill/119th-congress/house-bill/${n}`);
     }
-    expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(5);
+    expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(6);
   });
 
-  it('records the bipartisan sponsor the set actually has', () => {
-    // A Republican sponsor is the single most load-bearing fact in the
-    // composition note. If the row is ever dropped, the note becomes false.
+  it('records the bipartisan sponsors the set actually has', () => {
+    // Republican sponsorship is the single most load-bearing fact in the
+    // composition note. If a row is ever dropped, the note becomes false.
     const rep = BILLS.filter((b) => b.party === 'R');
-    expect(rep).toHaveLength(1);
-    expect(must(rep[0], 'republican-sponsored bill').number).toBe('H.R. 5944');
+    expect(rep).toHaveLength(2);
+    expect(rep.map((b) => b.number).sort()).toEqual(['H.R. 5944', 'H.R. 8095']);
     expect(BILLS_COMPOSITION).toContain('Energy and Commerce');
     // Referred to the COMMITTEE — no subcommittee referral is recorded for
-    // any of the five, checked against BILLSTATUS with a positive control.
+    // any of the six, checked against BILLSTATUS with a positive control.
     expect(BILLS_COMPOSITION.toLowerCase()).not.toContain('subcommittee');
   });
 });

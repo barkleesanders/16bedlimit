@@ -870,13 +870,24 @@ export interface Bill {
 }
 
 /**
- * All five were read against GovInfo BILLSTATUS and against the introduced
+ * All six were read against GovInfo BILLSTATUS and against the introduced
  * bill text on 2026-09-02, and are listed in the order they were introduced.
  * Every one has exactly three recorded actions — introduced, introduced,
  * referred — and none has moved since. congress.gov refuses automated
  * requests, so the status here comes from GovInfo, which is the same Library
  * of Congress feed; the congress.gov link is authoritative and is the one to
  * check for anything newer.
+ *
+ * How the set was enumerated, because it decides whether this list is complete:
+ * a congress.gov full-text search for the phrase “institution for mental
+ * diseases” in the 119th Congress returns 16 results, of which five amend the
+ * exclusion. That search cannot find H.R. 8095, which amends the same sentence
+ * but calls it only “the Medicaid IMD exclusion” — the long phrase appears
+ * nowhere in its text. A second search on the acronym found it. So both the
+ * phrase and the acronym have to be searched, and the acronym’s results then
+ * have to be filtered: five of its nine hits are defence bills where IMD means
+ * something else, separable by policy area (“Armed Forces and National
+ * Security” rather than “Health”).
  */
 export const BILLS: Bill[] = [
   {
@@ -890,7 +901,7 @@ export const BILLS: Bill[] = [
     cosponsors: '7 (5 D, 2 R)',
     approach: 'Repeal, with a duty attached',
     effect:
-      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the five that pairs the repeal with a community-capacity obligation.',
+      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the six that pairs the repeal with a community-capacity obligation.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/4022',
   },
@@ -935,7 +946,7 @@ export const BILLS: Bill[] = [
     cosponsors: '3 (2 R, 1 D)',
     approach: 'Let the bar expire',
     effect:
-      'The most surgical drafting of the five. It removes the “other than services in an institution for mental diseases” parentheticals from §1905(a)(1), (a)(4)(A) and (a)(15), repeals (a)(14) as spent, and — instead of deleting the age-bar clause — inserts “furnished before January 1, 2027” into it, so the bar expires rather than being struck. The state-plan option for addiction treatment at §1915(l) is given the same end date.',
+      'The most surgical drafting of the six. It removes the “other than services in an institution for mental diseases” parentheticals from §1905(a)(1), (a)(4)(A) and (a)(15), repeals (a)(14) as spent, and — instead of deleting the age-bar clause — inserts “furnished before January 1, 2027” into it, so the bar expires rather than being struck. The state-plan option for addiction treatment at §1915(l) is given the same end date.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/5944',
   },
@@ -954,15 +965,30 @@ export const BILLS: Bill[] = [
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/6727',
     priorVersion: 'H.R. 10266 (118th Congress)',
   },
+  {
+    number: 'H.R. 8095',
+    slug: 'hr8095',
+    title: 'Ensuring Medicaid Continuity for Children in Foster Care Act of 2026',
+    sponsor: 'Gus Bilirakis',
+    party: 'R',
+    district: 'FL-12',
+    introduced: '2026-03-26',
+    cosponsors: '1 (1 D)',
+    approach: 'Carve out one group',
+    effect:
+      'The narrowest of the six, and the only one written for a named group. It leaves the age bar standing and adds an exception to it: a child in foster care placed in a qualified residential treatment program, as that term is defined at §472(k)(4), stays covered. Everyone else the bar reaches is unaffected. Like H.R. 5944 it edits the clause by position rather than by paragraph number — “the matter designated as subdivision (B) following the last numbered paragraph” — which is the drafting that survives the next renumbering of §1905(a).',
+    status: 'Introduced; referred to committee',
+    congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/8095',
+  },
 ];
 
 /**
  * What the set shows, stated flatly. Each half of this was read off the
  * BILLSTATUS records, not inferred: the referral line is identical in all
- * five, and the party letters come from the sponsor and cosponsor fields.
+ * six, and the party letters come from the sponsor and cosponsor fields.
  */
 export const BILLS_COMPOSITION =
-  'All five went to the same place — the House Committee on Energy and Commerce — and none has left it. Not one has had a hearing, a markup, a vote or a CBO score. The sponsorship is bipartisan across the set rather than within each bill: one of the five is sponsored by a Republican, and three of the five carry Republican cosponsors. They also disagree with each other about the remedy, which is four different answers competing for the same committee slot.';
+  'All six went to the same place — the House Committee on Energy and Commerce — and none has left it. Not one has had a hearing, a markup, a vote or a CBO score. None of the six has a Senate companion; the Senate has no vehicle for this at all. The sponsorship is bipartisan across the set rather than within each bill: two of the six are sponsored by Republicans, and three of the six carry Republican cosponsors. Between them they hold 25 cosponsors. They also disagree with each other about the remedy, which is five different answers competing for the same committee slot.';
 
 /* ------------------------------------------------------------------ *
  * 7b. WHICH SENTENCE ACTUALLY HAS TO CHANGE
@@ -1198,7 +1224,7 @@ export const ACTION_TARGETS: ActionTarget[] = [
     id: 'carbajal',
     who: 'Rep. Salud Carbajal',
     role: 'Sponsor, H.R. 4022 — California’s 24th district',
-    why: 'His is the only one of the five bills that pairs repeal with a duty on states to build outpatient and crisis capacity, which is the drafting that answers the main objection to repeal.',
+    why: 'His is the only one of the six bills that pairs repeal with a duty on states to build outpatient and crisis capacity, which is the drafting that answers the main objection to repeal.',
     url: 'https://carbajal.house.gov/contact/',
     method: 'Web form.',
     verified: '2026-09-02',
@@ -1216,8 +1242,17 @@ export const ACTION_TARGETS: ActionTarget[] = [
     id: 'finstad',
     who: 'Rep. Brad Finstad',
     role: 'Sponsor, H.R. 5944 — Minnesota’s 1st district',
-    why: 'The only Republican sponsor among the five. Anything that moves in this committee needs support on both sides of it, so this office is where a bipartisan hearing request would have to start.',
+    why: 'One of the two Republican sponsors in the set. Anything that moves in this committee needs support on both sides of it, so this office is where a bipartisan hearing request would have to start.',
     url: 'https://finstad.house.gov/contact/',
+    method: 'Web form.',
+    verified: '2026-09-02',
+  },
+  {
+    id: 'bilirakis',
+    who: 'Rep. Gus Bilirakis',
+    role: 'Sponsor, H.R. 8095 — Florida’s 12th district',
+    why: 'The other Republican sponsor, and the one already on Energy and Commerce. His bill is the narrow version — it protects foster children in residential treatment and leaves the bar standing for everyone else — so his office is the one to ask why the same sentence should not be fixed for the rest of the people it reaches.',
+    url: 'https://bilirakis.house.gov/contact/',
     method: 'Web form.',
     verified: '2026-09-02',
   },
@@ -1881,7 +1916,7 @@ export const CLOSEST_CALL = {
 };
 
 export const LIVE_BILLS_NOTE =
-  'Five bills in the 119th Congress would change this rule, and all five are sitting in the same committee. The Michelle Alyssa Go Act has been introduced in three consecutive Congresses and has never had a Senate companion. Its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of the five — a bill has to leave committee to get one.';
+  'Six bills in the 119th Congress would change this rule, and all six are sitting in the same committee. Not one of them has a Senate companion — the Michelle Alyssa Go Act has now been introduced in three consecutive Congresses without ever getting one, and its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of the six; a bill has to leave committee to get one.';
 
 /** The answer to “which party did this”, which is that the question has no answer. */
 export const PARTY_VERDICT = {

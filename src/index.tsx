@@ -1343,9 +1343,9 @@ app.get('/', (c) => {
           <section id="bills">
             <div class="wrap">
               <span class="sec__idx">06 — What is moving in Congress</span>
-              <h2>Five bills, four different answers</h2>
+              <h2>Six bills, five different answers</h2>
               <p class="lede">
-                All five are in the 119th Congress. All five are in committee. They disagree about
+                All six are in the 119th Congress. All six are in committee. They disagree about
                 whether to move the line, erase it, let it expire, or erase it and require something
                 in its place.
               </p>
