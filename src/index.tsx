@@ -842,7 +842,16 @@ app.get('/', (c) => {
                   <b style="margin-top:1.2rem">The closest anyone comes</b>
                   <p>{WHY_SIXTEEN.nearest.finding}</p>
                   <p>{WHY_SIXTEEN.nearest.caution}</p>
-                  <a class="why__src" href={WHY_SIXTEEN.nearest.source} rel="noopener">
+                  {/* inline-block + margin: the anchor is display:inline with no
+                      box of its own, so without this it sits 2px above the mono
+                      "Sources checked" paragraph in the same typeface and the two
+                      read as one block. Measured on the live page, not guessed. */}
+                  <a
+                    class="why__src"
+                    style="display:inline-block;margin-bottom:1.1rem"
+                    href={WHY_SIXTEEN.nearest.source}
+                    rel="noopener"
+                  >
                     {WHY_SIXTEEN.nearest.sourceName} →
                   </a>
 
