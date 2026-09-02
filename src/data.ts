@@ -947,9 +947,9 @@ export const FEDERAL_LEVERS: FederalLever[] = [
     power:
       'Cannot repeal the exclusion; it is written into the statute. CMS does approve the section 1115 waivers that let a state get around it, which is why 37 states have an addiction-treatment waiver and only 15 have one for mental health.',
     ask: 'A waiver question, not a repeal question — whether your state has applied, where an application stands, or what a state would need to submit. Asking CMS to repeal the rule is asking the wrong agency.',
-    url: 'https://www.medicaid.gov/about-us/contact-us/index.html',
+    url: 'https://www.medicaid.gov/about-us/contact-us',
     urlLabel: 'Medicaid.gov contact',
-    verified: '2026-08-26',
+    verified: '2026-09-01',
   },
   {
     id: 'hhs',
