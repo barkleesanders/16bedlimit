@@ -6,14 +6,20 @@ import {
   BILL_COMMITTEE,
   BILLS,
   buildKnowledgeBase,
+  CBO_OPTIONS,
   CONSEQUENCES,
   FUNDING_ROUTES,
   HOSPITAL_SIZE,
   JAIL_SERIES,
+  LINEAGE,
+  MEASURED_ABSENCES,
+  NUMBER_CHAIN,
+  PARTY_VERDICT,
   PREVALENCE,
   PRISON_SERIES,
   RECORD_FINDINGS,
   RECORD_NAMED,
+  RECORD_UNIDENTIFIED,
   RECORD_UNKNOWNS,
   REPORT,
   ROLL_CALLS,
@@ -406,5 +412,111 @@ describe('advocacy targets', () => {
       const hit = ACTION_TARGETS.some((t) => t.who.includes(last));
       expect(hit).toBe(true);
     }
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * THE FULL RECORD — the page now carries the whole report, so the
+ * claims that were CORRECTED against primary sources get locked here.
+ * A future edit that quietly restores the old story fails these.
+ * ------------------------------------------------------------------ */
+
+describe('the full record', () => {
+  it('the lineage starts in 1950, not 1965 — Medicaid inherited this rule', () => {
+    const years = LINEAGE.map((s) => s.year);
+    expect(years).toEqual([...years].sort((a, b) => a - b));
+    // 1950 is the finding. If the earliest step ever becomes 1965 again,
+    // the site is back to saying Medicaid created the exclusion.
+    const origin = must(
+      LINEAGE.find((s) => /origin point/i.test(s.title)),
+      'the 1950 origin step',
+    );
+    expect(origin.year).toBe(1950);
+  });
+
+  it('every lineage step cites a source that is in the bibliography', () => {
+    const urls = new Set(SOURCES.map((s) => s.url));
+    const missing = LINEAGE.filter((s) => !urls.has(s.source)).map((s) => s.sourceName);
+    expect(missing).toEqual([]);
+  });
+
+  it('the statute came first and the regulation followed — not the reverse', () => {
+    const reg1978 = must(
+      NUMBER_CHAIN.find((s) => s.year === 1978),
+      'the 1978 step',
+    );
+    const statute = must(
+      NUMBER_CHAIN.find((s) => s.year === 1988),
+      'the 1988 step',
+    );
+    const reg1991 = must(
+      NUMBER_CHAIN.find((s) => s.year === 1991),
+      'the 1991 step',
+    );
+    // The load-bearing order: reg with no number -> statute -> reg conforms.
+    expect(reg1978.year).toBeLessThan(statute.year);
+    expect(statute.year).toBeLessThan(reg1991.year);
+    expect(reg1978.what).toMatch(/no bed count/i);
+  });
+
+  it('WHY_SIXTEEN no longer says the 1988 statute followed the regulation on the number', () => {
+    // The corrected claim must state that the pre-1988 regulation carried NO
+    // bed count. Without this the site contradicts its own record section.
+    const joined = WHY_SIXTEEN.documented.map((d) => d.claim).join(' ');
+    expect(joined).toMatch(/without any bed count/i);
+    expect(joined).not.toMatch(/statute followed the regulatory definition/i);
+  });
+
+  it('the site does not assert Pierce as the documented cause', () => {
+    const pierce = must(
+      TIMELINE.find((t) => t.year === 1854),
+      'the 1854 entry',
+    );
+    // It may report the scholarly reading; it may not assert it as fact.
+    expect(pierce.what).toMatch(/no primary document|later scholarship/i);
+  });
+
+  it('every measured absence carries a control, because a zero without one proves nothing', () => {
+    const uncontrolled = MEASURED_ABSENCES.filter(
+      (a) => !a.control.trim() || (a.control === '—' && !/not searched|unmeasured/i.test(a.result)),
+    ).map((a) => a.searched);
+    // A dash is only allowed where the result itself says it was never measured.
+    expect(uncontrolled).toEqual([]);
+  });
+
+  it('exactly one CBO option is marked as enacted', () => {
+    expect(CBO_OPTIONS.filter((o) => o.enacted)).toHaveLength(1);
+    for (const o of CBO_OPTIONS) expect(o.cost, o.option).toMatch(/^\$[\d.]+(–[\d.]+)?B$/);
+  });
+
+  it('roll-call party splits are well formed wherever they are given', () => {
+    for (const r of ROLL_CALLS) {
+      if (r.dem !== undefined) expect(r.dem, `${r.year} ${r.chamber} dem`).toMatch(/^\d+-\d+$/);
+      if (r.rep !== undefined) expect(r.rep, `${r.year} ${r.chamber} rep`).toMatch(/^\d+-\d+$/);
+    }
+  });
+
+  it('names the unidentified as unidentified rather than omitting them', () => {
+    expect(RECORD_UNIDENTIFIED.length).toBeGreaterThan(0);
+    for (const n of RECORD_UNIDENTIFIED)
+      expect(n.what).toMatch(/not identifiable|not individually/i);
+  });
+
+  it('the party answer refuses to name a party', () => {
+    expect(PARTY_VERDICT.points.length).toBeGreaterThanOrEqual(4);
+    expect(PARTY_VERDICT.conclusion).toMatch(/refuses to give you one/i);
+  });
+
+  it('the knowledge base carries the record, so the assistant is not blind to it', () => {
+    const kb = buildKnowledgeBase();
+    const missing = [
+      'Lineage, verified against the enacted statute',
+      'Where the number 16 came from',
+      'Measured absences',
+      'WHICH PARTY DID THIS',
+    ].filter((needle) => !kb.includes(needle));
+    expect(missing).toEqual([]);
+    // And it must not tell a reader the PDF is required to get the answer.
+    expect(kb).toMatch(/never tell a reader they must download the PDF/i);
   });
 });

@@ -9,6 +9,8 @@ import {
   BED_SERIES,
   BILL_COMMITTEE,
   BILLS,
+  CBO_OPTIONS,
+  CLOSEST_CALL,
   CONSEQUENCES,
   CONTACT_EMAIL,
   CONTACT_INTENTS,
@@ -18,10 +20,22 @@ import {
   HOSPITAL_SIZE,
   INCARCERATION_NOTE,
   JAIL_SERIES,
+  LINEAGE,
+  LIVE_BILLS_NOTE,
+  MEASURED_ABSENCES,
+  NEGATIVE_METHOD,
+  NUMBER_CHAIN,
+  NUMBER_VERDICT,
+  PARTY_VERDICT,
+  PIERCE_CORRECTION,
   PREVALENCE,
+  PRICE_VERDICT,
   PRISON_SERIES,
+  RECORD_CAVEATS,
   RECORD_FINDINGS,
   RECORD_NAMED,
+  RECORD_SCOPE,
+  RECORD_UNIDENTIFIED,
   RECORD_UNKNOWNS,
   REPORT,
   RETRIEVED,
@@ -37,6 +51,7 @@ import {
   SUPPORT_DRAFTS,
   systemPrompt,
   TIMELINE,
+  VOTE_CAVEAT,
   WAIVER_AS_OF,
   WAIVER_SOURCE,
   WAIVER_SOURCE_NAME,
@@ -899,14 +914,8 @@ app.get('/', (c) => {
               </p>
 
               <div class="plain">
-                <b>The full report</b>
-                <p>
-                  {REPORT.pages} pages, every claim carried back to the document it came from.{' '}
-                  <a href={REPORT.href} type="application/pdf">
-                    Download the PDF
-                  </a>{' '}
-                  ({Math.round(REPORT.bytes / 1024)} KB).
-                </p>
+                <b>First, precisely what the rule does</b>
+                <p>{RECORD_SCOPE}</p>
               </div>
 
               <ol class="tl">
@@ -926,7 +935,82 @@ app.get('/', (c) => {
                 ))}
               </ol>
 
-              <h3 style="margin-top:2.4rem">The votes that did happen</h3>
+              {/* ---- the lineage, with the statute quoted rather than summarised ---- */}
+              <h3 id="record-lineage" style="margin-top:2.8rem">
+                The real lineage
+              </h3>
+              <p>
+                The chain runs thirty years before Medicaid. Each step was verified against the
+                enacted statute, not against a summary of it.
+              </p>
+              <ol class="tl">
+                {LINEAGE.map((s) => (
+                  <li>
+                    <div>
+                      <div class="tl__yr">{s.year}</div>
+                    </div>
+                    <div class="tl__b">
+                      <h3>{s.title}</h3>
+                      <p>{s.body}</p>
+                      {s.quote ? (
+                        <div class="statute">
+                          <q>{s.quote}</q>
+                          {s.quoteCite ? <cite>{s.quoteCite}</cite> : null}
+                        </div>
+                      ) : null}
+                      {s.after ? <p>{s.after}</p> : null}
+                      <a class="tl__src" href={s.source} rel="noopener">
+                        {s.sourceName} →
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              {/* ---- where the number came from ---- */}
+              <h3 id="record-number" style="margin-top:2.8rem">
+                Where the number 16 came from
+              </h3>
+              <ol class="tl">
+                {NUMBER_CHAIN.map((s) => (
+                  <li>
+                    <div>
+                      <div class="tl__yr">{s.year}</div>
+                    </div>
+                    <div class="tl__b">
+                      <h3>{s.title}</h3>
+                      <p>{s.what}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <div class="why">
+                <h3>{NUMBER_VERDICT.heading}</h3>
+                <p>{NUMBER_VERDICT.body}</p>
+                <div class="why__gap">
+                  <b>Where it sits in the 1988 law</b>
+                  <ul class="why__list">
+                    {NUMBER_VERDICT.placement.map((line) => (
+                      <li>{line}</li>
+                    ))}
+                  </ul>
+                  <p>{NUMBER_VERDICT.placementNote}</p>
+                </div>
+                <a class="why__src" href={NUMBER_VERDICT.source} rel="noopener">
+                  {NUMBER_VERDICT.sourceName} →
+                </a>
+              </div>
+
+              {/* ---- the votes ---- */}
+              <h3 id="record-votes" style="margin-top:2.8rem">
+                The votes that did happen
+              </h3>
+              <p>
+                Reconstructed from the Voteview congressional-votes database and SSA's own tallies.
+                The House Clerk publishes no roll calls before 1990, so these are the authoritative
+                machine-readable record.
+              </p>
               <div class="fund__wrap">
                 <table class="fund">
                   <thead>
@@ -935,7 +1019,8 @@ app.get('/', (c) => {
                       <th>Chamber</th>
                       <th>Measure</th>
                       <th>Tally</th>
-                      <th>Detail</th>
+                      <th>Dem</th>
+                      <th>Rep</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -945,13 +1030,27 @@ app.get('/', (c) => {
                         <td>{r.chamber}</td>
                         <td>{r.measure}</td>
                         <td>{r.tally}</td>
-                        <td>{r.split}</td>
+                        <td>{r.dem ?? '—'}</td>
+                        <td>{r.rep ?? '—'}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
 
+              <div class="plain">
+                <b>Why none of these is "a vote for the 16-bed limit"</b>
+                <p>{VOTE_CAVEAT}</p>
+              </div>
+
+              <div class="why">
+                <h3>{NEGATIVE_METHOD.heading}</h3>
+                <p>{NEGATIVE_METHOD.body}</p>
+                <p class="why__searched">{NEGATIVE_METHOD.control}</p>
+                <p class="why__searched">{NEGATIVE_METHOD.gate}</p>
+              </div>
+
+              {/* ---- the people ---- */}
               <div class="why" id="record-people">
                 <h3>Who the record names</h3>
                 <ul class="why__list">
@@ -963,8 +1062,113 @@ app.get('/', (c) => {
                 </ul>
                 <div class="why__gap">
                   <b>And who it does not</b>
+                  <ul class="why__list">
+                    {RECORD_UNIDENTIFIED.map((n) => (
+                      <li>
+                        <strong>{n.who}</strong> ({n.role}) — {n.what}
+                      </li>
+                    ))}
+                  </ul>
                   <p>{RECORD_UNKNOWNS}</p>
                 </div>
+              </div>
+
+              {/* ---- the money, which is the actual answer ---- */}
+              <h3 id="record-price" style="margin-top:2.8rem">
+                Why it is still here
+              </h3>
+              <p class="lede">
+                This is the part that actually answers the question. Congressional Budget Office,
+                April 2023, Publication 59071 — net increase in federal Medicaid spending, 2024
+                through 2033.
+              </p>
+              <div class="cons">
+                {CBO_OPTIONS.map((o) => (
+                  <div>
+                    <div class="cons__stat">{o.cost}</div>
+                    <p class="cons__kind">{o.option}</p>
+                    <p>
+                      {o.enacted ? '✓ ' : ''}
+                      {o.status}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <p>{PRICE_VERDICT}</p>
+
+              <div class="plain">
+                <b>{CLOSEST_CALL.heading}</b>
+                <p>{CLOSEST_CALL.body}</p>
+              </div>
+
+              <p>{LIVE_BILLS_NOTE}</p>
+
+              {/* ---- the party question ---- */}
+              <div class="why" id="record-party">
+                <h3>So which party did this?</h3>
+                <p>{PARTY_VERDICT.lede}</p>
+                <ul class="why__list">
+                  {PARTY_VERDICT.points.map((p) => (
+                    <li>{p}</li>
+                  ))}
+                </ul>
+                <div class="why__gap">
+                  <p>{PARTY_VERDICT.conclusion}</p>
+                </div>
+              </div>
+
+              {/* ---- measured absences ---- */}
+              <h3 id="record-absences" style="margin-top:2.8rem">
+                What the record does not contain
+              </h3>
+              <p>
+                Measured absences, not assumptions. Every row was searched with a method proven to
+                find comparable material first — the control column is what makes the zero mean
+                something.
+              </p>
+              <div class="fund__wrap">
+                <table class="fund">
+                  <thead>
+                    <tr>
+                      <th>Searched</th>
+                      <th>For</th>
+                      <th>Result</th>
+                      <th>Control</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {MEASURED_ABSENCES.map((a) => (
+                      <tr>
+                        <td>{a.searched}</td>
+                        <td>{a.lookedFor}</td>
+                        <td>{a.result}</td>
+                        <td>{a.control}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="plain">
+                <b>One correction worth stating plainly</b>
+                <p>{PIERCE_CORRECTION}</p>
+              </div>
+
+              <p class="caveat">
+                <b>Caveats.</b> {RECORD_CAVEATS}
+              </p>
+
+              <div class="plain">
+                <b>The same research as a document</b>
+                <p>
+                  Everything above is also published as a {REPORT.pages}-page report with the
+                  statutory text set as it appears in the Statutes at Large.{' '}
+                  <a href={REPORT.href} type="application/pdf">
+                    Download the PDF
+                  </a>{' '}
+                  ({Math.round(REPORT.bytes / 1024)} KB). The page you are reading is the whole of
+                  it — the PDF is for citing and printing, not for the parts the page left out.
+                </p>
               </div>
             </div>
           </section>

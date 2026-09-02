@@ -64,17 +64,42 @@ export const TIMELINE: TimelineEntry[] = [
     year: 1854,
     law: 'Presidential veto',
     title: 'Pierce vetoes the Bill for the Benefit of the Indigent Insane',
-    what: 'President Franklin Pierce vetoes federal land-grant funding for public mental institutions, reaffirming that paying for psychiatric care is a state responsibility. That premise is the ancestor of the IMD exclusion.',
+    // Softened 2026-09-01. The causal claim — Pierce's veto as the ancestor of
+    // the exclusion — is a reconstruction by later scholars, not something any
+    // 1935/1950/1965 primary document reached here actually says. The 1935
+    // record cuts against it: those drafters were legislating about almshouses
+    // and never mentioned insanity at all. See PIERCE_CORRECTION.
+    what: 'President Franklin Pierce vetoes federal land-grant funding for public mental institutions, reaffirming that paying for psychiatric care is a state responsibility. Later scholarship treats this as the ancestor of the IMD exclusion — but no primary document from 1935, 1950 or 1965 makes that connection, and the 1935 record cuts against it.',
     source: 'https://manhattan.institute/article/medicaids-imd-exclusion-the-case-for-repeal',
     sourceName: 'Manhattan Institute',
   },
   {
+    year: 1950,
+    law: 'P.L. 81-734',
+    title: 'The actual origin — fifteen years before Medicaid exists',
+    what: 'Section 303(a), 64 Stat. 549, creates federal “vendor payments” to medical providers and, in the same sentence, carves two categories back out: patients in institutions for tuberculosis or mental diseases. This is where mental institutions first enter federal law — as an exception to a liberalisation. The House adopted the conference report 373-1, with Republicans voting 137-1 in favour. Truman signed it.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-64/pdf/STATUTE-64-Pg477.pdf',
+    sourceName: 'P.L. 81-734, 64 Stat. 477',
+  },
+  {
+    year: 1960,
+    law: 'P.L. 86-778',
+    title: 'The Senate votes to abolish it. A conference committee reverses that overnight.',
+    what: 'On 23 August the Senate adopts Sen. Russell Long’s amendment permitting federal matching of vendor payments to public mental and tuberculosis hospitals. On 24 August the conference committee accepts the Senate’s medical-care provisions “except for Senator Long’s amendment.” Reading the enacted statute confirms it: no such authority survives. This is the only moment in the whole history where the rule was genuinely contested, and it lasted a day.',
+    source: 'https://www.ssa.gov/history/1960.html',
+    sourceName: 'SSA legislative chronology, 1960',
+  },
+  {
     year: 1965,
     law: 'P.L. 89-97',
-    title: 'Medicaid is created — with the exclusion built in',
-    what: 'The Social Security Amendments of 1965 establish Medicaid and, from day one, bar federal matching funds for adults in institutions for mental diseases. The stated intent was to stop states shifting the cost of their asylums onto the federal government. An exception for people 65 and older is included from the start.',
-    source: 'https://www.congress.gov/crs-product/IF10222',
-    sourceName: 'CRS IF10222',
+    title: 'Medicaid inherits the exclusion — and narrows it',
+    // Corrected 2026-09-01. This entry previously said Medicaid barred the
+    // funding "from day one", which is true of Medicaid but implies 1965 is
+    // the origin. It is not: the sentence is carried over verbatim from 1950,
+    // and 1965 is the one year Congress made the rule SMALLER.
+    what: 'Section 121(a), 79 Stat. 351-352, carries the 1950 sentence into the new Title XIX — so Medicaid does not invent this rule, it inherits it. 1965 is also the one year Congress narrowed it: §1905(a)(14) affirmatively covers people 65 and over in an IMD, which SSA’s own contemporaneous account describes as removing the exclusion for aged individuals. There was no under-21 carve-out yet; the exclusion hit everyone under 65, and the 21-64 band arrives in 1972.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-79/pdf/STATUTE-79-Pg286.pdf',
+    sourceName: 'P.L. 89-97, 79 Stat. 286',
   },
   {
     year: 1972,
@@ -88,9 +113,9 @@ export const TIMELINE: TimelineEntry[] = [
     year: 1988,
     law: 'P.L. 100-360',
     title: 'The number 16 enters the statute',
-    what: 'The Medicare Catastrophic Coverage Act writes the IMD definition into law and adds the piece that had not been there before: facilities of 16 beds or fewer are exempt. Congress meant to favor small settings over large institutions. The number has not moved since.',
-    source: 'https://www.congress.gov/crs-product/IF10222',
-    sourceName: 'CRS IF10222',
+    what: 'The Medicare Catastrophic Coverage Act writes the IMD definition into law and adds the piece that had not been there before: facilities of 16 beds or fewer are exempt. It arrives at §411(k)(14)(A), under a heading reading TECHNICAL CORRECTIONS TO CERTAIN HEALTH CARE PROVISIONS, sitting between a schools provision and an eligibility-paperwork fix. CRS records the intent as favouring small settings over large institutions; the enacted text itself gives no rationale, and there was no bed count in the regulation for it to be correcting. The number has not moved since.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-102/pdf/STATUTE-102-Pg683.pdf',
+    sourceName: 'P.L. 100-360, 102 Stat. 683',
   },
   {
     year: 2015,
@@ -157,10 +182,18 @@ export const WHY_SIXTEEN = {
       sourceName: 'CRS IF10222',
     },
     {
+      // Corrected 2026-09-01 against the Federal Register itself. This entry
+      // used to say the 1988 statute "followed the regulatory definition",
+      // which invites the reading that the REGULATION carried 16 first. It
+      // did not: 43 FR 45204 (1978) defines an IMD by "overall character"
+      // with no bed count anywhere, and 56 FR 8854 (1991) is where the number
+      // enters the CFR — by conforming to the statute, two years and eight
+      // months later. The definition pre-existed in regulation; the number
+      // did not. See NUMBER_CHAIN and NUMBER_VERDICT.
       claim:
-        'It was layered onto a definition that already existed in regulation. The 1988 statute followed the regulatory definition, adding the small-facility exception to it.',
-      source: 'https://www.congress.gov/crs-product/IF10222',
-      sourceName: 'CRS IF10222',
+        'A definition of “institution for mental diseases” already existed in regulation — but without any bed count. The 1978 rule turned on a facility’s “overall character.” The number 16 was added by the 1988 statute, and the regulation was edited to match it in 1991.',
+      source: 'https://www.govinfo.gov/content/pkg/FR-1978-09-29/pdf/FR-1978-09-29.pdf',
+      sourceName: '43 FR 45204 (1978)',
     },
     {
       claim:
@@ -1188,21 +1221,41 @@ export interface RollCall {
   chamber: string;
   measure: string;
   tally: string;
+  /** Human note for the summary table — what this vote meant. */
   split: string;
+  /** Party splits, computed from Voteview member cast codes. */
+  dem?: string;
+  rep?: string;
 }
 
 /**
- * Official tallies. Party splits are computed from Voteview member cast
- * codes, not taken from a summary, which is why some rows carry one and
- * some do not.
+ * Official tallies throughout. Party splits are computed from individual
+ * Voteview member cast codes rather than read off a summary field — the
+ * two disagree by one vote on several 1965 and 1972 roll calls, and the
+ * official tally is the one shown.
+ *
+ * None of these is a vote on the exclusion. See VOTE_CAVEAT: every row is
+ * an omnibus, and in sixty-one years the rule has never had a standalone
+ * recorded vote.
  */
 export const ROLL_CALLS: RollCall[] = [
   {
     year: 1950,
     chamber: 'House',
-    measure: 'Conference report, P.L. 81-734',
+    measure: 'Conference report, P.L. 81-734 — origin of the carve-out',
     tally: '373-1',
     split: 'House Republicans 137-1 in favour',
+    dem: '233-0',
+    rep: '137-1',
+  },
+  {
+    year: 1960,
+    chamber: 'Senate',
+    measure: 'Passage, Kerr-Mills (P.L. 86-778)',
+    tally: '74-11',
+    split: 'The Long amendment died in conference',
+    dem: '43-10',
+    rep: '31-1',
   },
   {
     year: 1965,
@@ -1210,6 +1263,8 @@ export const ROLL_CALLS: RollCall[] = [
     measure: 'Passage, H.R. 6675',
     tally: '313-115',
     split: 'D 248-42 · R 65-73',
+    dem: '248-42',
+    rep: '65-73',
   },
   {
     year: 1965,
@@ -1217,6 +1272,17 @@ export const ROLL_CALLS: RollCall[] = [
     measure: 'Passage, H.R. 6675',
     tally: '68-21',
     split: 'D 55-7 · R 13-14',
+    dem: '55-7',
+    rep: '13-14',
+  },
+  {
+    year: 1972,
+    chamber: 'House',
+    measure: 'Conference report, P.L. 92-603 — psych under 21',
+    tally: '305-1',
+    split: 'Created the 21-64 band',
+    dem: '176-0',
+    rep: '129-1',
   },
   {
     year: 1984,
@@ -1224,6 +1290,8 @@ export const ROLL_CALLS: RollCall[] = [
     measure: 'Conference report, P.L. 98-369',
     tally: '268-155',
     split: 'Struck "tuberculosis or"',
+    dem: '192-69',
+    rep: '76-86',
   },
   {
     year: 1988,
@@ -1231,6 +1299,8 @@ export const ROLL_CALLS: RollCall[] = [
     measure: 'Conference report, P.L. 100-360',
     tally: '328-72',
     split: 'D 230-9 · R 98-63',
+    dem: '230-9',
+    rep: '98-63',
   },
   {
     year: 1988,
@@ -1238,6 +1308,8 @@ export const ROLL_CALLS: RollCall[] = [
     measure: 'Conference report, P.L. 100-360',
     tally: '86-11',
     split: 'The vote that carried the number 16',
+    dem: '52-0',
+    rep: '34-11',
   },
   {
     year: 2023,
@@ -1245,6 +1317,8 @@ export const ROLL_CALLS: RollCall[] = [
     measure: 'Passage, H.R. 4531',
     tally: '386-37',
     split: 'R 190-26 · D 196-11',
+    dem: '196-11',
+    rep: '190-26',
   },
 ];
 
@@ -1277,6 +1351,288 @@ export const RECORD_NAMED = [
 
 export const RECORD_UNKNOWNS =
   'Who drafted the 16-bed paragraph in 1988 is not recoverable from the published record, and neither is any rationale for that particular figure. The conferees who struck Senator Long’s amendment in 1960 are not named in the chronology either. These are gaps in the record, not gaps in the research, and they are stated here rather than filled in.';
+
+/**
+ * People the record does NOT name. Kept separate from RECORD_NAMED so the
+ * page can show an absence as an absence — a row reading "not identifiable"
+ * is a finding, not a missing value someone forgot to fill in.
+ */
+export const RECORD_UNIDENTIFIED = [
+  {
+    who: 'The 1988 drafter',
+    role: 'Author of the 16-bed paragraph',
+    what: 'Not identifiable in the published record.',
+  },
+  {
+    who: 'The 1960 conferees',
+    role: 'Killed the Long amendment',
+    what: 'Not individually recorded in the chronology.',
+  },
+];
+
+/* ------------------------------------------------------------------ *
+ * 9c. THE FULL RECORD  (/record)
+ *
+ * The accountability report, as site content rather than a PDF. Every
+ * statutory quotation here was transcribed from the Statutes at Large,
+ * not from a summary of it. Where the record is silent, that silence is
+ * stated as a measured result — see MEASURED_ABSENCES, each row of which
+ * carries the positive control that proves the search could have found
+ * the thing it did not find.
+ * ------------------------------------------------------------------ */
+
+export const RECORD_SCOPE =
+  'Medicaid does fund mental health care — outpatient treatment, and psychiatric units inside general hospitals. What the exclusion bars is federal Medicaid payment for an adult aged 21 to 64 who is a patient in a facility primarily engaged in treating mental disease with more than 16 beds. That is narrower than “Medicaid won’t pay for psychiatric care” — and devastating exactly where inpatient beds live, because almost no psychiatric hospital has 16 beds or fewer.';
+
+export interface LineageStep {
+  year: number;
+  title: string;
+  body: string;
+  quote?: string;
+  quoteCite?: string;
+  after?: string;
+  source: string;
+  sourceName: string;
+}
+
+/** The chain that runs thirty years before Medicaid existed. */
+export const LINEAGE: LineageStep[] = [
+  {
+    year: 1935,
+    title: 'The Social Security Act — and it is not about mental illness',
+    body: 'Title I bars aid to anyone who “is not an inmate of a public institution.” That is a poorhouse rule, aimed at almshouses. The words insane and asylum appear zero times in the House Ways and Means report or in the Committee on Economic Security’s report to the President. Aid to Dependent Children carried no such clause, which makes the exclusion an adult-category rule from birth.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-49/pdf/STATUTE-49-Pg620.pdf',
+    sourceName: 'P.L. 74-271, 49 Stat. 620',
+  },
+  {
+    year: 1950,
+    title: 'The actual origin point',
+    body: 'P.L. 81-734 §303(a), 64 Stat. 549, creates federal “vendor payments” to medical providers — and then carves two categories back out of them. Mental institutions enter federal law here, as an exception to a liberalisation.',
+    quote:
+      '…but does not include any such payments to or care in behalf of any individual who is an inmate of a public institution (except as a patient in a medical institution) or any individual (a) who is a patient in an institution for tuberculosis or mental diseases…',
+    quoteCite: 'P.L. 81-734 §303(a), 64 Stat. 549',
+    after:
+      'House conference report 373–1, with Republicans 137–1 in favour. Senate 82–2. Signed by Truman.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-64/pdf/STATUTE-64-Pg477.pdf',
+    sourceName: 'P.L. 81-734, 64 Stat. 477',
+  },
+  {
+    year: 1960,
+    title: 'The one time it was nearly killed',
+    body: 'From the Social Security Administration’s own legislative chronology, two consecutive days:',
+    quote:
+      'August 23, 1960 — “An amendment introduced by Senator Long to permit Federal matching of vendor payments… to public mental and tuberculosis hospitals was adopted.”  ·  August 24, 1960 — “The Conference Committee agreed to the medical care provisions added by the Senate, except for Senator Long’s amendment.”',
+    quoteCite: 'SSA legislative chronology, 1960',
+    after:
+      'The Senate voted to end this rule, and a conference committee reversed it in a single day. Corroborated by reading the enacted statute: no provision authorising such matching survives in P.L. 86-778, only a 42-day allowance for general-hospital care. If you want one identifiable decision point in the whole history, this is it.',
+    source: 'https://www.ssa.gov/history/1960.html',
+    sourceName: 'SSA legislative chronology, 1960',
+  },
+  {
+    year: 1965,
+    title: 'Medicaid inherits it — and narrows it',
+    body: 'P.L. 89-97 §121(a), 79 Stat. 351–352, carries the 1950 sentence into the new Title XIX, now bounded by age, while §1905(a)(14) affirmatively covers people 65 and over in an IMD. SSA’s own contemporaneous account describes this as removing the exclusion with respect to payments for aged individuals.',
+    quote:
+      '“(B) any such payments with respect to care or services for any individual who has not attained 65 years of age and who is a patient in an institution for tuberculosis or mental diseases.”',
+    quoteCite: 'P.L. 89-97 §121(a), 79 Stat. 351–352',
+    after:
+      'Sixty-one years later those words are unchanged, except that “tuberculosis or” is gone. In 1965 there was no under-21 carve-out either — the exclusion hit everyone under 65. The 21–64 band was created in 1972.',
+    source: 'https://www.govinfo.gov/content/pkg/STATUTE-79/pdf/STATUTE-79-Pg286.pdf',
+    sourceName: 'P.L. 89-97, 79 Stat. 286',
+  },
+];
+
+export interface NumberStep {
+  year: number;
+  title: string;
+  what: string;
+}
+
+/** Where the figure 16 actually comes from, in order. */
+export const NUMBER_CHAIN: NumberStep[] = [
+  {
+    year: 1976,
+    title: 'A group-home rule',
+    what: 'SSI law exempts “a publicly operated community residence which serves no more than 16 residents.” This is the earliest 16 in this corner of federal law.',
+  },
+  {
+    year: 1978,
+    title: 'The IMD rule has no number',
+    what: '43 FR 45204 defines an institution for mental diseases by its “overall character” — no bed count anywhere in it. The figure 16 appears in that same rule only for community residences.',
+  },
+  {
+    year: 1988,
+    title: '16 becomes a wall',
+    what: 'OBRA ’87 had just emptied §1905(i). A 1988 “clarification” fills it with “more than 16 beds.”',
+  },
+  {
+    year: 1991,
+    title: 'The regulation catches up',
+    what: '56 FR 8854 edits the rule to match: “‘an institution’ is changed to ‘a hospital, nursing facility, or other institution of more than 16 beds’.” Two years and eight months after the statute.',
+  },
+];
+
+/**
+ * The hypothesis this research killed. Stated as a correction rather than
+ * buried, because it is the opposite of what almost every secondary source
+ * (including an earlier version of this site) implies.
+ */
+export const NUMBER_VERDICT = {
+  heading: 'A hypothesis this research killed',
+  body: 'The intuitive story — that career regulators invented 16 and Congress later rubber-stamped it — is wrong, and the paper trail runs the other way. Congress wrote the number in July 1988. HCFA copied it into the Code of Federal Regulations in March 1991, in a rule expressly titled “OBRA ’87 Conforming Amendments.” The agency was conforming to Congress, not the reverse. So the “technical correction” that carried the number was not correcting anything: there was nothing yet to correct.',
+  placement: [
+    'SEC. 411. TECHNICAL CORRECTIONS TO CERTAIN HEALTH CARE PROVISIONS',
+    '(k) CORRECTIONS TO SUBTITLE B OF TITLE IV (RELATING TO MEDICAID)',
+    '(13) TREATMENT OF EDUCATIONALLY-RELATED SERVICES',
+    '(14) CLARIFICATION OF TERM “INSTITUTION FOR MENTAL DISEASES”',
+    '(15) ELIGIBILITY VERIFICATION TECHNICAL CORRECTION',
+  ],
+  placementNote:
+    'Sandwiched between a schools provision and a paperwork fix. The 1976 → 1988 link is a documented structural parallel, not a documented causal chain — no paper trail says Congress borrowed the SSI figure. What is established: the number did not come from the IMD regulation, and no clinical or empirical basis for it appears anywhere in the record searched.',
+  source: 'https://www.govinfo.gov/content/pkg/STATUTE-102/pdf/STATUTE-102-Pg683.pdf',
+  sourceName: 'P.L. 100-360, 102 Stat. 683',
+};
+
+export const VOTE_CAVEAT =
+  'Every row is a vote on an omnibus. A member voting yes in April 1965 was voting to create Medicare; a member voting no was voting against Medicare, not for the exclusion — the Republican substitute would not have removed it either. In sixty-one years the exclusion has never once been put to a standalone recorded vote. That is the finding, not a hole in it.';
+
+export const NEGATIVE_METHOD = {
+  heading: 'How that negative was measured',
+  body: '“There was no vote” is a claim about a complete set, so the set was enumerated. All 394 House and 497 Senate roll calls of the 89th Congress were pulled and filtered to H.R. 6675: exactly 16 roll calls, every description read. The House took only three recorded votes on the bill in its entire life — recommit, passage, conference report — and none on any amendment at all. Then the amendments themselves: all 513 Senate amendments were read from the official conference print. Every Title XIX provision touching institutions for mental diseases — amendments 255, 262–263, 275, 276 and 279 — is labelled a Committee amendment. Not one reached the floor.',
+  control:
+    'Positive control: the same method surfaced 13 Senate roll calls on other specific 1965 provisions, including a 26–64 vote to strike Medicare Parts A and B outright, and it did flag Senator McCarthy’s psychiatric-exclusion amendment (which concerned Medicare and drew no roll call). An instrument that found those found zero for the Medicaid IMD exclusion.',
+  gate: 'Document gate: that 32-page conference print is a pure image scan with no text layer. A keyword search would have returned zero and meant nothing, so it was read page by page.',
+};
+
+export interface CboOption {
+  option: string;
+  cost: string;
+  status: string;
+  enacted: boolean;
+}
+
+/** CBO Publication 59071, April 2023. Net federal Medicaid spending 2024–2033. */
+export const CBO_OPTIONS: CboOption[] = [
+  {
+    option: 'Extend the narrow addiction option',
+    cost: '$0.2–0.6B',
+    status: 'Congress passed this',
+    enacted: true,
+  },
+  {
+    option: 'Repeal for addiction',
+    cost: '$7.7B',
+    status: 'Passed House, died in Senate',
+    enacted: false,
+  },
+  { option: 'Repeal for mental illness', cost: '$33.5B', status: 'Never voted on', enacted: false },
+  { option: 'Full repeal', cost: '$38.4B', status: 'Never scored in a bill', enacted: false },
+];
+
+export const PRICE_VERDICT =
+  'Every IMD change that has ever become law sits on the cheap side of that line. Every repeal bill sits on the expensive side, and not one has ever been reported out of committee, scored, or given a vote in any Congress. The gap between what passes and what does not is roughly 70× to 250×.';
+
+export const CLOSEST_CALL = {
+  heading: '2023: the closest it has ever come',
+  body: 'H.R. 4531 in the 118th Congress carried a section titled, verbatim, LIFTING THE IMD EXCLUSION FOR SUBSTANCE USE DISORDER. It cleared subcommittee 49–0 and full committee 29–3, then passed the House 386–37 on 12 December 2023 — Republicans 190–26, Democrats 196–11. It went to the Senate HELP Committee the next day and never moved again: no hearing, no markup, no vote, and no recorded opponent. The substance was rescued three months later inside an appropriations bill, which made the narrow 30-day addiction option permanent. The broader relief was not.',
+};
+
+export const LIVE_BILLS_NOTE =
+  'The Michelle Alyssa Go Act has been introduced in three consecutive Congresses and has never had a Senate companion. Its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of these — a bill has to leave committee to get one.';
+
+/** The answer to “which party did this”, which is that the question has no answer. */
+export const PARTY_VERDICT = {
+  lede: 'The voting record does not support a partisan answer. Every enactment carrying this exclusion passed with majority Republican support, under Democratic and Republican presidents alike.',
+  points: [
+    '1950, when mental institutions were first carved out: House Republicans voted 137–1 in favour.',
+    '1960, the one contested moment: the amendment to abolish it was killed by a conference committee, not a party. More Democrats than Republicans opposed the underlying bill.',
+    '1984: a Democratic House and a Republican Senate together deleted the tuberculosis half and kept the psychiatric half. Nobody in either party moved to delete both.',
+    '1988: the number 16 rode in on a conference report backed by 98 Republicans and 230 Democrats, and was signed by Ronald Reagan.',
+    '2023: the House voted to lift part of it 386–37, with overwhelming majorities of both parties. It still died.',
+  ],
+  conclusion:
+    'If you are looking for someone who destroyed this, the record refuses to give you one. What it gives you is worse and more useful: a 1950 cost-allocation decision between the states and Washington that nobody has ever had to defend on a floor, because nobody has ever been made to vote on it — protected now by a $38.4 billion price tag and a constituency too sick and too poor to hire lobbyists. It survives on procedure and arithmetic, not ideology. That is why it has outlasted every majority of the last sixty-one years.',
+};
+
+export interface MeasuredAbsence {
+  searched: string;
+  lookedFor: string;
+  result: string;
+  control: string;
+}
+
+/**
+ * Absences that were MEASURED, not assumed. Every row carries the positive
+ * control that proves the instrument could have found the thing it did not
+ * find — a search with no control is not evidence of absence.
+ */
+export const MEASURED_ABSENCES: MeasuredAbsence[] = [
+  {
+    searched: '1935 Ways and Means report + CES report to the President',
+    lookedFor: 'Any mention of insanity or asylums',
+    result: 'Zero',
+    control: 'All 10 “institution” hits found',
+  },
+  {
+    searched: '1935, 1950 and 1965 statutes + contemporaneous SSA accounts',
+    lookedFor: 'Any stated reason for the exclusion',
+    result: 'None at any step',
+    control: 'Rule itself located in each',
+  },
+  {
+    searched: '43 FR 45204, first 400 pages',
+    lookedFor: '“16 beds” in the 1978 IMD definition',
+    result: 'Zero',
+    control: 'Page 45204 confirmed present in the extract',
+  },
+  {
+    searched: 'Every CFR amendment to the IMD definition, 1978–1996',
+    lookedFor: 'When the regulation acquired the number',
+    result: '1991 — after the statute',
+    control: 'Amendment chain read in full',
+  },
+  {
+    searched: 'Pre-1978 regulation (45 CFR 248.60)',
+    lookedFor: 'Whether any earlier bed count existed',
+    result: 'Not searched — no CFR before 1996 is online',
+    control: '—',
+  },
+  {
+    searched: 'All 394 House + 497 Senate roll calls, 89th Congress; all 513 Senate amendments',
+    lookedFor: 'Any vote on the IMD exclusion',
+    result: 'Zero',
+    control: '13 other amendment roll calls found',
+  },
+  {
+    searched: 'MACPAC Report to Congress on IMDs (128 pages)',
+    lookedFor: 'Any rationale for the figure 16',
+    result: '2 mentions, both descriptive',
+    control: '“beds” → 15 hits',
+  },
+  {
+    searched: '2025 SUPPORT Act reauthorisation, all six text versions',
+    lookedFor: 'Any IMD or Medicaid provision',
+    result: 'Zero',
+    control: '“opioid” → 36 hits',
+  },
+  {
+    searched: 'CRS report IF10222 · congress.gov',
+    lookedFor: 'Congressional intent for the threshold',
+    result: 'Unmeasured — bot wall, not bypassed',
+    control: '—',
+  },
+];
+
+/**
+ * The Pierce correction. This one matters because the site itself used to
+ * carry the causal version, and because it is the single most repeated
+ * claim about the exclusion's origin.
+ */
+export const PIERCE_CORRECTION =
+  'The familiar story — that Congress excluded asylums because President Pierce established in 1854 that they are a state responsibility — is a reconstruction by later scholars. Pierce’s veto is real and says what it is quoted as saying. But no 1935, 1950 or 1965 primary document reached here connects the two, and the 1935 record actively cuts against it: those drafters were legislating about almshouses and never mentioned insanity at all.';
+
+export const RECORD_CAVEATS =
+  'Stated so you can discount them yourself. Vote sourcing: GovTrack draws its pre-1990 roll calls from Voteview, so they are one lineage, not two. The 1965 totals and the two conference-report party splits are independently confirmed by SSA’s official tally page; the 1965 passage-vote party splits rest on the Voteview lineage alone. Voteview’s member-level file and its own summary field also disagree by one vote on several 1965 and 1972 roll calls — official tallies are shown throughout. Bill status: congress.gov is bot-walled, so this came from GovInfo BILLSTATUS, the same Library of Congress feed, with as-of dates between November 2025 and June 2026; very recent committee action would not appear. Not established: no document connects the 1976 SSI 16-resident figure to the 1988 Medicaid number — that remains a hypothesis. The pre-1978 regulation was never searched, because no CFR earlier than 1996 is online; nor were the 1966 Handbook of Public Assistance Administration, the 1975–76 field instructions, or the 1982 State Medicaid Manual, each of which MACPAC records as carrying an IMD definition. So “16 had no regulatory predecessor” is proven for 1978–1991 and unmeasured before that. Sponsorship of the 1950 and 1972 bills is single-sourced.';
 
 /* ------------------------------------------------------------------ *
  * 10. SOURCE INDEX (rendered as the page's bibliography)
@@ -1577,15 +1933,51 @@ export function buildKnowledgeBase(): string {
   // blind to a whole section of the page it is supposed to answer from,
   // and would tell a reader the site does not cover something it does.
   lines.push('## The legislative record — who actually built the rule');
+  lines.push(`SCOPE OF THE RULE: ${RECORD_SCOPE}`);
   for (const f of RECORD_FINDINGS) lines.push(`- ${f.claim} ${f.detail} (${f.sourceName})`);
+
+  lines.push('Lineage, verified against the enacted statute at each step:');
+  for (const s of LINEAGE) {
+    lines.push(
+      `${s.year} — ${s.title}. ${s.body}${s.after ? ` ${s.after}` : ''} (${s.sourceName})`,
+    );
+  }
+
+  lines.push('Where the number 16 came from, in order:');
+  for (const s of NUMBER_CHAIN) lines.push(`${s.year} — ${s.title}. ${s.what}`);
+  lines.push(`${NUMBER_VERDICT.heading}: ${NUMBER_VERDICT.body} ${NUMBER_VERDICT.placementNote}`);
+
   lines.push('Recorded votes on the measures that carried this rule:');
   for (const r of ROLL_CALLS) {
-    lines.push(`${r.year} ${r.chamber} — ${r.measure}: ${r.tally}. ${r.split}.`);
+    const split = r.dem && r.rep ? ` Democrats ${r.dem}, Republicans ${r.rep}.` : '';
+    lines.push(`${r.year} ${r.chamber} — ${r.measure}: ${r.tally}.${split} ${r.split}.`);
   }
+  lines.push(`IMPORTANT — none of those is a vote on the exclusion: ${VOTE_CAVEAT}`);
+  lines.push(`${NEGATIVE_METHOD.heading}: ${NEGATIVE_METHOD.body} ${NEGATIVE_METHOD.control}`);
+
   for (const n of RECORD_NAMED) lines.push(`- ${n.who}: ${n.what}`);
+  for (const n of RECORD_UNIDENTIFIED) lines.push(`- ${n.who} (${n.role}): ${n.what}`);
   lines.push(`WHAT THE RECORD DOES NOT SHOW: ${RECORD_UNKNOWNS}`);
+
+  lines.push('Why it survives — CBO Publication 59071, April 2023, net federal cost 2024-2033:');
+  for (const o of CBO_OPTIONS) lines.push(`- ${o.option}: ${o.cost}. ${o.status}.`);
+  lines.push(PRICE_VERDICT);
+  lines.push(`${CLOSEST_CALL.heading}: ${CLOSEST_CALL.body}`);
+  lines.push(LIVE_BILLS_NOTE);
+
+  lines.push(`WHICH PARTY DID THIS: ${PARTY_VERDICT.lede}`);
+  for (const p of PARTY_VERDICT.points) lines.push(`- ${p}`);
+  lines.push(PARTY_VERDICT.conclusion);
+
+  lines.push('Measured absences — each searched with a control proving the method could find it:');
+  for (const a of MEASURED_ABSENCES) {
+    lines.push(`- ${a.searched} → looked for ${a.lookedFor} → ${a.result} (control: ${a.control})`);
+  }
+  lines.push(`PIERCE CORRECTION: ${PIERCE_CORRECTION}`);
+  lines.push(`CAVEATS: ${RECORD_CAVEATS}`);
+
   lines.push(
-    `The full 15-page report, with every citation, is published on this site at ${REPORT.href}. If someone asks who wrote the 16-bed paragraph, or why the number is 16, say plainly that the record does not name a drafter and gives no rationale. Do not guess at a person or a reason.`,
+    `All of the above is on the page itself, in section 04b. The same research is also published as a ${REPORT.pages}-page PDF at ${REPORT.href} for citing and printing — but the page is complete on its own, so never tell a reader they must download the PDF to get the answer. If someone asks who wrote the 16-bed paragraph, or why the number is 16, say plainly that the record does not name a drafter and gives no rationale. Do not guess at a person or a reason.`,
   );
   lines.push('');
 
