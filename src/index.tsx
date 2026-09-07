@@ -714,7 +714,11 @@ app.get('/', (c) => {
             <h1>
               Medicaid stops paying at <b>16 beds</b>
               <sup>
-                <a href="#headline-note" class="hero__note-mark" aria-label="Read the legal nuance behind this figure">
+                <a
+                  href="#headline-note"
+                  class="hero__note-mark"
+                  aria-label="Read the legal nuance behind this figure"
+                >
                   *
                 </a>
               </sup>
@@ -738,7 +742,11 @@ app.get('/', (c) => {
                 <a href={HEADLINE_FOOTNOTE.dshSource} rel="noopener">
                   {HEADLINE_FOOTNOTE.dshSourceName}
                 </a>
-                . Full statutory text: <a href={STATUTE.definitionSource} rel="noopener">{STATUTE.definitionCite}</a>.
+                . Full statutory text:{' '}
+                <a href={STATUTE.definitionSource} rel="noopener">
+                  {STATUTE.definitionCite}
+                </a>
+                .
               </p>
             </div>
 
@@ -1018,8 +1026,8 @@ app.get('/', (c) => {
                 15 days in a month, and a state plan option allows up to 30 days a year for
                 substance use disorder treatment. This dataset is now part of the same automated
                 freshness watch as the bed, prison and jail counts on this page: it checks weekly
-                whether the KFF tracker above has changed and flags it for a person to re-read.
-                Live status: <a href="/api/freshness">/api/freshness</a>.
+                whether the KFF tracker above has changed and flags it for a person to re-read. Live
+                status: <a href="/api/freshness">/api/freshness</a>.
               </p>
             </div>
           </section>
@@ -1373,8 +1381,8 @@ app.get('/', (c) => {
                   <b>The 36-bed bill is a bridge, not the fix</b>
                   <p>{PREFERRED_REFORM.bridgeNote}</p>
                   <p class="why__searched">
-                    The case for each approach, made in full, with the strongest objection and how
-                    a bill can answer it: <a href="#bills">Bills</a> and <a href="#debate">Debate</a>.
+                    The case for each approach, made in full, with the strongest objection and how a
+                    bill can answer it: <a href="#bills">Bills</a> and <a href="#debate">Debate</a>.
                   </p>
                 </div>
               </div>

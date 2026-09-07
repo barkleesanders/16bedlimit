@@ -22,7 +22,7 @@ export const RETRIEVED = '2026-08-26';
  * page's visible content changes; leave RETRIEVED alone unless the data
  * itself was re-fetched.
  */
-export const PAGE_UPDATED = '2026-09-02';
+export const PAGE_UPDATED = '2026-09-07';
 
 export interface Sourced<T> {
   value: T;
@@ -76,11 +76,11 @@ export const STATUTE = {
  * and the managed-care carve-in, which is why it is named separately here.
  */
 export const HEADLINE_FOOTNOTE = {
-  lede:
-    'The bar applies only to adults aged 21-64 treated in a facility that meets Medicaid’s statutory definition of an “institution for mental diseases” (IMD) — the 16-bed line quoted above is part of that definition, not a separate rule.',
+  lede: 'The bar applies only to adults aged 21-64 treated in a facility that meets Medicaid’s statutory definition of an “institution for mental diseases” (IMD) — the 16-bed line quoted above is part of that definition, not a separate rule.',
   exceptions:
     'It is not absolute. States can route around it for some patients through a section 1115 waiver, a 15-day managed-care carve-in, and a 30-day substance-use-disorder option — see Waivers and Who decides — and IMDs can receive a separate, capped share of Medicaid disproportionate-share (DSH) payments under 42 U.S.C. §1396r-4(h), a different mechanism from the exclusion itself.',
-  dshSource: 'https://www.medicaid.gov/medicaid/financial-management/medicaid-disproportionate-share-hospital-dsh-payments',
+  dshSource:
+    'https://www.medicaid.gov/medicaid/financial-management/medicaid-disproportionate-share-hospital-dsh-payments',
   dshSourceName: 'Medicaid.gov, Disproportionate Share Hospital (DSH) Payments',
   retrieved: '2026-09-06',
 } as const;
@@ -914,8 +914,7 @@ export const PREVALENCE = [
  */
 export const PREFERRED_REFORM = {
   heading: 'What this site actually argues for',
-  lede:
-    'Repeal the age bar in §1905(a) — not the bed count in §1905(i) — and attach conditions to it. That combination is the preferred fix; raising the bed threshold to 36, which H.R. 5462 does, is a bridge worth supporting while the larger repeal is stuck, not a substitute for it.',
+  lede: 'Repeal the age bar in §1905(a) — not the bed count in §1905(i) — and attach conditions to it. That combination is the preferred fix; raising the bed threshold to 36, which H.R. 5462 does, is a bridge worth supporting while the larger repeal is stuck, not a substitute for it.',
   guardrails: [
     'Medical necessity: the standing rule that federal money follows a clinical decision to admit, not a facility’s size or a diagnosis category.',
     'Community-care investment kept whole: a maintenance-of-effort requirement on non-federal community spending, so federal inpatient dollars cannot quietly replace state community dollars. §1915(l)(3) is the existing model.',
