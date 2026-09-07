@@ -60,8 +60,10 @@ describe('probe configuration', () => {
     }
   });
 
-  it('covers every series the chart draws', () => {
-    expect(new Set(PROBES.map((p) => p.key))).toEqual(new Set(['beds', 'prison', 'jail']));
+  it('covers every series the chart draws, plus the waiver dataset', () => {
+    expect(new Set(PROBES.map((p) => p.key))).toEqual(
+      new Set(['beds', 'prison', 'jail', 'waivers']),
+    );
   });
 });
 
@@ -93,10 +95,9 @@ describe('fingerprint (change-watch)', () => {
 
 describe('probe modes', () => {
   it('uses change-watch only where the source publishes no dated titles', () => {
-    const beds = PROBES.find((p) => p.key === 'beds');
-    expect(beds?.mode).toBe('change-watch');
-    for (const p of PROBES.filter((x) => x.key !== 'beds')) {
-      expect(p.mode).toBe('year-list');
+    const changeWatchKeys = new Set(['beds', 'waivers']);
+    for (const p of PROBES) {
+      expect(p.mode).toBe(changeWatchKeys.has(p.key) ? 'change-watch' : 'year-list');
     }
   });
 

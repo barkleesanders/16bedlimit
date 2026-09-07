@@ -97,6 +97,12 @@ a:hover { color: var(--signal); }
   margin: 0 0 1.2rem; max-width: 20ch;
 }
 .hero h1 b { color: var(--signal); font-weight: 700; }
+.hero h1 sup { font-size: 0.42em; top: -0.5em; }
+.hero__note-mark {
+  color: var(--signal); text-decoration: none; font-weight: 700;
+  padding: 0 0.05em;
+}
+.hero__note-mark:hover { text-decoration: underline; }
 .hero__lede--turn{margin-top:.85rem;font-weight:500;color:var(--ink,oklch(0.235 0.014 260))}
 .hero__lede--turn::before{content:"";display:block;width:34px;height:2px;background:oklch(0.545 0.196 27);margin:0 0 .8rem}
 .hero__lede { font-size: clamp(1.05rem, 2.4vw, 1.28rem); max-width: 64ch; color: var(--ink-2); margin: 0 0 2rem; }

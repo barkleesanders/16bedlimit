@@ -59,6 +59,32 @@ export const STATUTE = {
   retrieved: RETRIEVED,
 } as const;
 
+/**
+ * The headline's own footnote. Added 2026-09-06 as a small superscript mark
+ * on the hero, not a rewrite of it — the owner asked to keep "Medicaid stops
+ * paying at 16 beds" exactly as written and instead name, once, the precise
+ * legal mechanism the hero prose already gestures at without spelling out:
+ * this is an age rule (21-64) that attaches through a bed-count DEFINITION,
+ * and the bar on payment is not absolute.
+ *
+ * DSH is the one claim here that is new rather than restated from elsewhere
+ * on the page. Confirmed 2026-09-06 against Medicaid.gov's own DSH page and
+ * CRS R42865: SSA §1923(h) sets a separate, capped "IMD DSH" allotment for
+ * each state, distinct from the general disproportionate-share pool, so an
+ * IMD can receive some DSH payment despite §1905(a)'s exclusion of ordinary
+ * per-patient claims. That is a different mechanism from the §1115 waivers
+ * and the managed-care carve-in, which is why it is named separately here.
+ */
+export const HEADLINE_FOOTNOTE = {
+  lede:
+    'The bar applies only to adults aged 21-64 treated in a facility that meets Medicaid’s statutory definition of an “institution for mental diseases” (IMD) — the 16-bed line quoted above is part of that definition, not a separate rule.',
+  exceptions:
+    'It is not absolute. States can route around it for some patients through a section 1115 waiver, a 15-day managed-care carve-in, and a 30-day substance-use-disorder option — see Waivers and Who decides — and IMDs can receive a separate, capped share of Medicaid disproportionate-share (DSH) payments under 42 U.S.C. §1396r-4(h), a different mechanism from the exclusion itself.',
+  dshSource: 'https://www.medicaid.gov/medicaid/financial-management/medicaid-disproportionate-share-hospital-dsh-payments',
+  dshSourceName: 'Medicaid.gov, Disproportionate Share Hospital (DSH) Payments',
+  retrieved: '2026-09-06',
+} as const;
+
 /* ------------------------------------------------------------------ *
  * 1b. THE ORDER AND THE STATUTE
  *
@@ -540,6 +566,12 @@ export const DATA_THROUGH = {
   beds: 2023,
   prison: 2023,
   jail: 2024,
+  // Year portion of WAIVER_AS_OF, below. Not a "data year" in the same sense
+  // as the other three — the waiver tracker is a point-in-time status page,
+  // not an annual release series — but freshness.ts's probe interface wants
+  // one number per key, and the freshness test asserts this value matches
+  // what the site's own waiver probe says it plots.
+  waivers: 2025,
   checked: '2026-08-26',
 } as const;
 
@@ -587,6 +619,25 @@ export const HOSPITAL_SIZE = {
  * 5. STATE §1115 WAIVERS
  * Source: CRS IF10222 Table 1, which cites KFF's Medicaid Waiver Tracker
  * as of 2025-01-14.
+ *
+ * LIVE REFRESH ATTEMPTED 2026-09-06 — figures left unchanged, coverage
+ * added instead. congress.gov (the CRS source) still returns HTTP 403 to an
+ * automated fetch, on every path tried, matching the account's established
+ * pattern for that host. KFF's tracker itself answered 200 and IS newer
+ * (page marked "Published: Jul 14, 2026"), but it has been restructured
+ * since Jan 2025 into an omnibus 1115-waiver table — "Expanded Eligibility
+ * Groups", "Benefit Restrictions", "SDOH Provisions", "Other Select DSRs"
+ * — that no longer exposes the simple by-state "IMD payment exclusion for
+ * SUD" / "for SMI" boolean pair CRS IF10222 tabulated. Re-deriving 51
+ * per-state SUD/SMI classifications from that different table shape inside
+ * one implementation pass risks silently mis-sorting a state, which is a
+ * worse outcome than a dated-but-correct figure — so the 2025-01-14 counts
+ * below stand. One partial cross-check: a search summary citing the same
+ * KFF tracker states 15 states had an approved SMI/MH IMD waiver as of May
+ * 2025, matching SMI_APPROVED's count of 15 exactly; the SUD side has no
+ * equivalent independent confirmation. See freshness.ts's new 'waivers'
+ * probe, which now watches WAIVER_TRACKER for exactly this kind of change
+ * so a person re-reads it on the next restructure too.
  * ------------------------------------------------------------------ */
 
 export const WAIVER_AS_OF = '2025-01-14';
@@ -848,6 +899,35 @@ export const PREVALENCE = [
     sourceName: 'Manhattan Institute (2025)',
   },
 ];
+
+/**
+ * The site's single prioritized preferred reform, stated once, above the
+ * consequences it names.
+ *
+ * This does not introduce a new position — it consolidates two things the
+ * site already argues separately (FIX, below, on why the age bar rather
+ * than the bed count is the sentence to change; OBJECTION_ANSWER, in The
+ * disagreement, on what a repeal bill needs to answer the strongest
+ * objection to it) into one plain statement, so a reader who never reaches
+ * either of those sections still sees the site's actual position and does
+ * not mistake "raise the threshold to 36 beds" for it.
+ */
+export const PREFERRED_REFORM = {
+  heading: 'What this site actually argues for',
+  lede:
+    'Repeal the age bar in §1905(a) — not the bed count in §1905(i) — and attach conditions to it. That combination is the preferred fix; raising the bed threshold to 36, which H.R. 5462 does, is a bridge worth supporting while the larger repeal is stuck, not a substitute for it.',
+  guardrails: [
+    'Medical necessity: the standing rule that federal money follows a clinical decision to admit, not a facility’s size or a diagnosis category.',
+    'Community-care investment kept whole: a maintenance-of-effort requirement on non-federal community spending, so federal inpatient dollars cannot quietly replace state community dollars. §1915(l)(3) is the existing model.',
+    'A community-capacity requirement, on the model H.R. 4022 already uses: each state plans for, and reports annually on, outpatient and crisis capacity.',
+    'Adequate rates and workforce capacity: repeal does not answer for itself if the community system it is supposed to strengthen cannot staff or afford the care it is asked to deliver.',
+    'Discharge continuity: a person leaving an IMD has a documented, funded path into community treatment, not just a payment authorization that ends at the hospital door.',
+    'Quality reporting on outcomes, not just spending, so a bill’s effect can be measured after enactment rather than assumed.',
+    'An explicit ADA Title II / Rehabilitation Act §504 most-integrated-setting condition, rather than assuming Medicaid compliance already carries it — the exact gap HHS itself has identified.',
+  ],
+  bridgeNote:
+    'H.R. 5462 raises the bed threshold to 36. That still excludes the average U.S. psychiatric hospital, which has 108 beds — so it helps whichever facilities happen to fall under the new line, while removing the age bar does not depend on facility size at all. Worth passing now; not the reform this site is asking for.',
+} as const;
 
 /* ------------------------------------------------------------------ *
  * 7. BILLS IN THE 119th CONGRESS
@@ -1423,6 +1503,19 @@ I would like to know your position on each, and whether you will cosponsor eithe
 Thank you.`,
   },
 ];
+
+/**
+ * Shown once, directly above the intake form below — the point where a
+ * reader is actually about to attach a document or describe what happened
+ * to them. Checked 2026-09-06 for a duplicate before adding this: the only
+ * existing language was "Redact what you need to" inside the records
+ * blurb below, which is a suggestion, not a warning, and names none of the
+ * specific identifiers a redaction actually has to remove.
+ */
+export const RECORDS_SAFETY_NOTICE = {
+  heading: 'Before you send anything',
+  body: 'Do not email unredacted medical records. Remove or black out names, dates of birth, home addresses, case or docket numbers, Social Security numbers, and any other identifying information before you send a document — send only redacted copies. This site is not a patient-care portal and cannot provide medical or legal advice; nothing sent here creates a provider or attorney relationship. In crisis, call or text 988.',
+} as const;
 
 export const CONTACT_INTENTS = [
   {

@@ -19,6 +19,7 @@ import {
   FEDERAL_LEVERS,
   FIX,
   FUNDING_ROUTES,
+  HEADLINE_FOOTNOTE,
   HERO_CAVEAT,
   HOSPITAL_SIZE,
   INCARCERATION_NOTE,
@@ -34,6 +35,7 @@ import {
   PAGE_UPDATED,
   PARTY_VERDICT,
   PIERCE_CORRECTION,
+  PREFERRED_REFORM,
   PREVALENCE,
   PRICE_VERDICT,
   PRISON_SERIES,
@@ -44,6 +46,7 @@ import {
   RECORD_SCOPE,
   RECORD_UNIDENTIFIED,
   RECORD_UNKNOWNS,
+  RECORDS_SAFETY_NOTICE,
   REPORT,
   RETRIEVED,
   ROLL_CALLS,
@@ -696,6 +699,7 @@ app.get('/', (c) => {
               <a href="#record">The record</a>
               <a href="#instead">Consequences</a>
               <a href="#bills">Bills</a>
+              <a href="#debate">Debate</a>
               <a href="#levers">Who decides</a>
               <a href="#act">Contact</a>
               <a href="#sources">Sources</a>
@@ -708,7 +712,13 @@ app.get('/', (c) => {
           <div class="wrap hero">
             <p class="hero__kicker">Medicaid · 42 U.S.C. §1396d · in force since 1965</p>
             <h1>
-              Medicaid stops paying at <b>16 beds</b>.
+              Medicaid stops paying at <b>16 beds</b>
+              <sup>
+                <a href="#headline-note" class="hero__note-mark" aria-label="Read the legal nuance behind this figure">
+                  *
+                </a>
+              </sup>
+              .
             </h1>
             <p class="hero__lede">
               Medicaid has refused to pay for adults in psychiatric institutions since it was
@@ -720,6 +730,17 @@ app.get('/', (c) => {
               The average psychiatric hospital in the United States has 108 beds. So the rule does
               not fund small hospitals. It defunds almost all of them.
             </p>
+
+            <div class="plain" id="headline-note">
+              <b>* {HEADLINE_FOOTNOTE.lede}</b>
+              <p>
+                {HEADLINE_FOOTNOTE.exceptions}{' '}
+                <a href={HEADLINE_FOOTNOTE.dshSource} rel="noopener">
+                  {HEADLINE_FOOTNOTE.dshSourceName}
+                </a>
+                . Full statutory text: <a href={STATUTE.definitionSource} rel="noopener">{STATUTE.definitionCite}</a>.
+              </p>
+            </div>
 
             <div class="readout">
               <div class="readout__hd">
@@ -995,7 +1016,10 @@ app.get('/', (c) => {
                 </a>{' '}
                 for the current picture. Separately, managed care plans may pay for stays of up to
                 15 days in a month, and a state plan option allows up to 30 days a year for
-                substance use disorder treatment.
+                substance use disorder treatment. This dataset is now part of the same automated
+                freshness watch as the bed, prison and jail counts on this page: it checks weekly
+                whether the KFF tracker above has changed and flags it for a person to re-read.
+                Live status: <a href="/api/freshness">/api/freshness</a>.
               </p>
             </div>
           </section>
@@ -1336,6 +1360,24 @@ app.get('/', (c) => {
                   </div>
                 ))}
               </div>
+
+              <div class="why" style="margin-top:2.4rem">
+                <h3>{PREFERRED_REFORM.heading}</h3>
+                <p>{PREFERRED_REFORM.lede}</p>
+                <ul class="why__list">
+                  {PREFERRED_REFORM.guardrails.map((g) => (
+                    <li>{g}</li>
+                  ))}
+                </ul>
+                <div class="why__gap">
+                  <b>The 36-bed bill is a bridge, not the fix</b>
+                  <p>{PREFERRED_REFORM.bridgeNote}</p>
+                  <p class="why__searched">
+                    The case for each approach, made in full, with the strongest objection and how
+                    a bill can answer it: <a href="#bills">Bills</a> and <a href="#debate">Debate</a>.
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -1611,6 +1653,11 @@ app.get('/', (c) => {
                 Every message goes to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Each
                 button below opens your email app with the subject and prompts already filled in.
               </p>
+
+              <div class="plain">
+                <b>{RECORDS_SAFETY_NOTICE.heading}</b>
+                <p>{RECORDS_SAFETY_NOTICE.body}</p>
+              </div>
 
               <div class="intents">
                 {CONTACT_INTENTS.map((i) => (

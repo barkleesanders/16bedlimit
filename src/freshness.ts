@@ -16,10 +16,10 @@
  * silently shows you a number nobody verified".
  */
 
-import { DATA_THROUGH } from './data';
+import { DATA_THROUGH, WAIVER_TRACKER } from './data';
 
 export interface SourceProbe {
-  key: 'beds' | 'prison' | 'jail';
+  key: 'beds' | 'prison' | 'jail' | 'waivers';
   label: string;
   /** The agency's own list/index page. Never a constructed deep link. */
   listUrl: string;
@@ -89,6 +89,21 @@ export const PROBES: SourceProbe[] = [
     label: 'Treatment Advocacy Center state hospital bed census',
     listUrl: 'https://www.tac.org/reports_publications/state-beds-data/',
     plotted: DATA_THROUGH.beds,
+    mode: 'change-watch',
+  },
+  {
+    key: 'waivers',
+    label: 'KFF Section 1115 Medicaid waiver tracker',
+    listUrl: WAIVER_TRACKER,
+    plotted: DATA_THROUGH.waivers,
+    // Added 2026-09-06. Same reasoning as beds: verified live that day that
+    // this tracker carries no dated titles per state — it is a status page
+    // ("Published: <date>" once, at the top), not a list of dated releases
+    // — so 'year-list' would return "unknown" forever. change-watch instead
+    // notices when KFF edits the page (they restructured it once already,
+    // between our Jan 2025 snapshot and this check) and flags it for a
+    // person to re-read, rather than silently re-scraping new per-state
+    // numbers into WAIVER_AS_OF.
     mode: 'change-watch',
   },
 ];
