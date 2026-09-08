@@ -20,6 +20,7 @@ import {
   OBJECTION,
   OBJECTION_ANSWER,
   PARTY_VERDICT,
+  PREFERRED_REFORM,
   PREVALENCE,
   PRISON_SERIES,
   PUBLISHER,
@@ -706,6 +707,14 @@ describe('which sentence has to change', () => {
     expect(FIX.inference.caution.toLowerCase()).toContain('legislative counsel');
     expect(FIX.inference.body).toContain('home or community setting');
     expect(new Set(SOURCES.map((x) => x.url)).has(FIX.inference.source)).toBe(true);
+  });
+});
+
+describe('the Olmstead soundbite ties back to the actual ask, not a generic slogan', () => {
+  it('names both halves and points at the section this site asks to repeal', () => {
+    expect(PREFERRED_REFORM.soundbite).toContain('Olmstead');
+    expect(PREFERRED_REFORM.soundbite).toContain('§1905(a)');
+    expect(PREFERRED_REFORM.soundbite.toLowerCase()).toContain('not in tension');
   });
 });
 

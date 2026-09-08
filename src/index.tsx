@@ -1371,7 +1371,9 @@ app.get('/', (c) => {
 
               <div class="why" style="margin-top:2.4rem">
                 <h3>{PREFERRED_REFORM.heading}</h3>
-                <p>{PREFERRED_REFORM.lede}</p>
+                <p>
+                  <strong>{PREFERRED_REFORM.soundbite}</strong> {PREFERRED_REFORM.lede}
+                </p>
                 <ul class="why__list">
                   {PREFERRED_REFORM.guardrails.map((g) => (
                     <li>{g}</li>

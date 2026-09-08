@@ -914,6 +914,8 @@ export const PREVALENCE = [
  */
 export const PREFERRED_REFORM = {
   heading: 'What this site actually argues for',
+  soundbite:
+    'Enforce Olmstead. Fund community care. Repeal the age bar. These are not in tension — Olmstead bars unnecessary institutionalization; §1905(a) decides whether Medicaid pays for the institutional care a person’s own clinicians say is necessary.',
   lede: 'Repeal the age bar in §1905(a) — not the bed count in §1905(i) — and attach conditions to it. That combination is the preferred fix; raising the bed threshold to 36, which H.R. 5462 does, is a bridge worth supporting while the larger repeal is stuck, not a substitute for it.',
   guardrails: [
     'Medical necessity: the standing rule that federal money follows a clinical decision to admit, not a facility’s size or a diagnosis category.',
