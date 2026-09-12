@@ -1755,6 +1755,22 @@ app.get('/', (c) => {
               </ul>
             </div>
           </section>
+          <section id="veteran-resources" aria-labelledby="veteran-resources-heading">
+            <div class="wrap">
+              <span class="sec__idx">For veterans and families</span>
+              <h2 id="veteran-resources-heading">Preparing a VA disability claim?</h2>
+              <p class="lede">
+                AIVA Claims helps you organize medical records and prepare claim documents for your
+                review. You review and submit your own documents.
+              </p>
+              <a
+                class="btn btn--ghost"
+                href="https://aivaclaims.com/?utm_source=16bedlimit&utm_medium=referral&utm_campaign=veteran_resources"
+              >
+                Explore AIVA Claims
+              </a>
+            </div>
+          </section>
         </main>
 
         <footer>

@@ -22,7 +22,7 @@ export const RETRIEVED = '2026-08-26';
  * page's visible content changes; leave RETRIEVED alone unless the data
  * itself was re-fetched.
  */
-export const PAGE_UPDATED = '2026-09-07';
+export const PAGE_UPDATED = '2026-09-11';
 
 export interface Sourced<T> {
   value: T;
