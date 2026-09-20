@@ -647,6 +647,11 @@ app.get('/', (c) => {
           rel="icon"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f6f4ef'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='19' font-weight='700' text-anchor='middle' fill='%23c0392b'%3E16%3C/text%3E%3C/svg%3E"
         />
+        {/* Safari, bookmarks and crawlers request /favicon.ico regardless of the <link>
+            above; both files live in public/ (served by the assets router before the
+            Worker) and are rasterized from the same SVG by ~/tools/favicon-pack. */}
+        <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <script
           type="application/ld+json"
