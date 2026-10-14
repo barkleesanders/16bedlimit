@@ -22,7 +22,7 @@ export const RETRIEVED = '2026-08-26';
  * page's visible content changes; leave RETRIEVED alone unless the data
  * itself was re-fetched.
  */
-export const PAGE_UPDATED = '2026-09-11';
+export const PAGE_UPDATED = '2026-10-13';
 
 export interface Sourced<T> {
   value: T;
@@ -951,8 +951,14 @@ export interface Bill {
 }
 
 /**
- * All six were read against GovInfo BILLSTATUS and against the introduced
+ * The first six were read against GovInfo BILLSTATUS and against the introduced
  * bill text on 2026-09-02, and are listed in the order they were introduced.
+ * The seventh, H.R. 10647, was added on 2026-10-13 and read from its
+ * introduced text (GovInfo BILLS-119hr10647ih); it was introduced on
+ * 2026-10-01, after the September enumeration, which is why the earlier
+ * count said six. The composition note below no longer states a cosponsor
+ * total: the seventh bill changed the denominator, and a current total for
+ * all seven has not been re-read from BILLSTATUS in this pass.
  * Every one has exactly three recorded actions — introduced, introduced,
  * referred — and none has moved since. congress.gov refuses automated
  * requests, so the status here comes from GovInfo, which is the same Library
@@ -982,7 +988,7 @@ export const BILLS: Bill[] = [
     cosponsors: '7 (5 D, 2 R)',
     approach: 'Repeal, with a duty attached',
     effect:
-      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the six that pairs the repeal with a community-capacity obligation.',
+      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the seven that pairs a repeal with a community-capacity obligation.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/4022',
   },
@@ -1027,7 +1033,7 @@ export const BILLS: Bill[] = [
     cosponsors: '3 (2 R, 1 D)',
     approach: 'Let the bar expire',
     effect:
-      'The most surgical drafting of the six. It removes the “other than services in an institution for mental diseases” parentheticals from §1905(a)(1), (a)(4)(A) and (a)(15), repeals (a)(14) as spent, and — instead of deleting the age-bar clause — inserts “furnished before January 1, 2027” into it, so the bar expires rather than being struck. The state-plan option for addiction treatment at §1915(l) is given the same end date.',
+      'The most surgical drafting of the seven. It removes the “other than services in an institution for mental diseases” parentheticals from §1905(a)(1), (a)(4)(A) and (a)(15), repeals (a)(14) as spent, and — instead of deleting the age-bar clause — inserts “furnished before January 1, 2027” into it, so the bar expires rather than being struck. The state-plan option for addiction treatment at §1915(l) is given the same end date.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/5944',
   },
@@ -1057,19 +1063,98 @@ export const BILLS: Bill[] = [
     cosponsors: '1 (1 D)',
     approach: 'Carve out one group',
     effect:
-      'The narrowest of the six, and the only one written for a named group. It leaves the age bar standing and adds an exception to it: a child in foster care placed in a qualified residential treatment program, as that term is defined at §472(k)(4), stays covered. Everyone else the bar reaches is unaffected. Like H.R. 5944 it edits the clause by position rather than by paragraph number — “the matter designated as subdivision (B) following the last numbered paragraph” — which is the drafting that survives the next renumbering of §1905(a).',
+      'The narrowest of the seven, and the only one written for a named group. It leaves the age bar standing and adds an exception to it: a child in foster care placed in a qualified residential treatment program, as that term is defined at §472(k)(4), stays covered. Everyone else the bar reaches is unaffected. Like H.R. 5944 it edits the clause by position rather than by paragraph number — “the matter designated as subdivision (B) following the last numbered paragraph” — which is the drafting that survives the next renumbering of §1905(a).',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/8095',
+  },
+  {
+    number: 'H.R. 10647',
+    slug: 'hr10647',
+    title: 'IMD CARE Act',
+    sponsor: 'Cliff Bentz',
+    party: 'R',
+    district: 'OR-2',
+    introduced: '2026-10-01',
+    approach: 'Opt in by state plan, capped at 30 days',
+    effect:
+      'Does not move the bed line and does not strike the age bar. Instead it adds a new §1915(m): from quarters beginning on or after January 1, 2027, a state may elect by state plan amendment — no §1115 waiver negotiation — to claim federal payment for an enrolled adult aged 21 to 64 with a mental disorder in the current DSM who is a patient in an IMD, for up to 30 days in a 12-month period for each person. The conditions are the longest in any of the seven bills: the state must hold its non-federal spending on outpatient and community-based services at its fiscal 2023 level, report to the Secretary, use evidence-based placement criteria, and meet transition-of-care duties that include contact with each discharged beneficiary within 72 hours. A rule of construction says nothing in it encourages placement in an institution where a community setting would be more appropriate, and it does not displace §1115 demonstrations. Introduced by Bentz with Goldman — the sponsor of H.R. 5462 — as his cosponsor, so the member who three times proposed raising the threshold is now also on the bill that leaves the threshold where it is and routes around it. Read from the introduced text on 2026-10-13.',
+    status: 'Introduced; referred to committee',
+    congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/10647',
   },
 ];
 
 /**
  * What the set shows, stated flatly. Each half of this was read off the
  * BILLSTATUS records, not inferred: the referral line is identical in all
- * six, and the party letters come from the sponsor and cosponsor fields.
+ * seven (for H.R. 10647 it is printed in the introduced text itself), and
+ * the party letters come from the sponsor and cosponsor fields.
  */
 export const BILLS_COMPOSITION =
-  'All six went to the same place — the House Committee on Energy and Commerce — and none has left it. Not one has had a hearing, a markup, a vote or a CBO score. None of the six has a Senate companion; the Senate has no vehicle for this at all. The sponsorship is bipartisan across the set rather than within each bill: two of the six are sponsored by Republicans, and three of the six carry Republican cosponsors. Between them they hold 25 cosponsors. They also disagree with each other about the remedy, which is five different answers competing for the same committee slot.';
+  'All seven went to the same place — the House Committee on Energy and Commerce — and none has left it. Not one has had a hearing, a markup, a vote or a CBO score. None of the seven has a Senate companion; the Senate has no vehicle for this at all. The sponsorship is bipartisan across the set rather than within each bill: three of the seven are sponsored by Republicans, and three of the seven carry Republican cosponsors. They also disagree with each other about the remedy, which is six different answers competing for the same committee slot.';
+
+/* ------------------------------------------------------------------ *
+ * 6b. THE OTHER LIMIT — MEDICARE'S 190 DAYS
+ *
+ * Added 2026-10-13, after a comparison against the Treatment Advocacy
+ * Center's Medicaid and Medicare Reform stance page, which treats this
+ * limit and the IMD exclusion as a pair. Everything below was read that
+ * day from the sources named: CMS's Medicare Benefit Policy Manual for
+ * the rule itself, MedPAC's June 2023 report to Congress (Chapter 6,
+ * Table 6-21) for the counts, and GovInfo / Congress.gov for the bills.
+ * MedPAC's count is fee-for-service only and is dated January 2023;
+ * TAC's page carries a January 2024 version of the same figure. The two
+ * are stated separately below rather than merged.
+ * ------------------------------------------------------------------ */
+
+export interface MedicareBill {
+  number: string;
+  title: string;
+  sponsor: string;
+  introduced: string;
+  committee: string;
+  effect: string;
+  url: string;
+}
+
+export const MEDICARE_LIMIT = {
+  heading: 'Medicare has a limit of its own: 190 days, once, in a lifetime',
+  lede: 'This page is about a Medicaid rule. The same Congress wrote a second limit into the other program, and it reaches many of the same people first — because a person with a serious mental illness often arrives on Medicare through disability, years before they turn 65.',
+  rule:
+    'Medicare Part A will pay for no more than 190 days of inpatient care in a freestanding psychiatric hospital over a beneficiary’s entire lifetime. The days do not renew. The limit does not apply to a psychiatric unit inside a general hospital, and no other inpatient service in Medicare carries a lifetime cap of this kind.',
+  ruleCite: 'Social Security Act §1812, 42 U.S.C. §1395d; CMS, Medicare Benefit Policy Manual, Chapter 1, §50',
+  ruleSource: 'https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Downloads/bp102c04.pdf',
+  ruleSourceName: 'CMS Medicare Benefit Policy Manual',
+  points: [
+    'As of January 2023, nearly 50,000 Medicare fee-for-service beneficiaries had reached the limit or were within 15 days of reaching it. Three quarters of them were on Medicare through disability rather than age, and 85 percent were low income. Nearly half had fewer than 60 lifetime reserve days left in any hospital; a fifth had none.',
+    'The limit is a reason to refuse a patient, not just a reason a payment stops. Facilities told MedPAC that after a patient passes 190 days they provide the care uncompensated and help the patient obtain Medicaid — the program whose own exclusion is the subject of this page — or try to move the patient into a general-hospital unit, where Medicare still pays. Most facilities MedPAC interviewed considered 190 days insufficient for people with chronic serious mental illness, and said it made discharge placement harder.',
+    'So the two limits are not parallel. They are in sequence. Medicare runs out first, on a day count; then the person falls to Medicaid, which will not pay at all if the building has more than 16 beds.',
+  ],
+  bills: [
+    {
+      number: 'H.R. 4619',
+      title: 'Medicare Mental Health Inpatient Equity Act of 2025',
+      sponsor: 'Paul Tonko (D-NY), with Huizenga (R-MI), Doggett (D-TX) and Fitzpatrick (R-PA)',
+      introduced: '2025-07-22',
+      committee: 'House Ways and Means',
+      effect:
+        'Amends §1812 to strike the 190-day lifetime limit on inpatient psychiatric hospital services under Medicare. Nothing else in the bill conditions or caps the change.',
+      url: 'https://www.congress.gov/bill/119th-congress/house-bill/4619',
+    },
+    {
+      number: 'S. 4076',
+      title: 'Removing Medicare Mental Health Inpatient Limitations Act of 2026',
+      sponsor: 'Bill Cassidy (R-LA), with Collins (R-ME) and Smith (D-MN)',
+      introduced: '2026-03-12',
+      committee: 'Senate Finance',
+      effect:
+        'The Senate companion approach to the same sentence: amends Title XVIII to eliminate the 190-day lifetime limit. Note the contrast with the IMD bills above — for this limit, a Senate vehicle exists, sponsored by a Republican and cosponsored from both parties.',
+      url: 'https://www.congress.gov/bill/119th-congress/senate-bill/4076',
+    },
+  ] as MedicareBill[],
+  countSource: 'https://www.medpac.gov/wp-content/uploads/2023/06/Jun23_Ch6_MedPAC_Report_To_Congress_SEC.pdf',
+  countSourceName: 'MedPAC, Report to Congress, June 2023, Chapter 6',
+  retrieved: '2026-10-13',
+};
 
 /* ------------------------------------------------------------------ *
  * 7b. WHICH SENTENCE ACTUALLY HAS TO CHANGE
@@ -1305,7 +1390,7 @@ export const ACTION_TARGETS: ActionTarget[] = [
     id: 'carbajal',
     who: 'Rep. Salud Carbajal',
     role: 'Sponsor, H.R. 4022 — California’s 24th district',
-    why: 'His is the only one of the six bills that pairs repeal with a duty on states to build outpatient and crisis capacity, which is the drafting that answers the main objection to repeal.',
+    why: 'His is the only one of the seven bills that pairs repeal with a duty on states to build outpatient and crisis capacity, which is the drafting that answers the main objection to repeal.',
     url: 'https://carbajal.house.gov/contact/',
     method: 'Web form.',
     verified: '2026-09-02',
@@ -1323,7 +1408,7 @@ export const ACTION_TARGETS: ActionTarget[] = [
     id: 'finstad',
     who: 'Rep. Brad Finstad',
     role: 'Sponsor, H.R. 5944 — Minnesota’s 1st district',
-    why: 'One of the two Republican sponsors in the set. Anything that moves in this committee needs support on both sides of it, so this office is where a bipartisan hearing request would have to start.',
+    why: 'One of the three Republican sponsors in the set. Anything that moves in this committee needs support on both sides of it, so this office is where a bipartisan hearing request would have to start.',
     url: 'https://finstad.house.gov/contact/',
     method: 'Web form.',
     verified: '2026-09-02',
@@ -1332,10 +1417,19 @@ export const ACTION_TARGETS: ActionTarget[] = [
     id: 'bilirakis',
     who: 'Rep. Gus Bilirakis',
     role: 'Sponsor, H.R. 8095 — Florida’s 12th district',
-    why: 'The other Republican sponsor, and the one already on Energy and Commerce. His bill is the narrow version — it protects foster children in residential treatment and leaves the bar standing for everyone else — so his office is the one to ask why the same sentence should not be fixed for the rest of the people it reaches.',
+    why: 'Another of the three Republican sponsors. His bill is the narrow version — it protects foster children in residential treatment and leaves the bar standing for everyone else — so his office is the one to ask why the same sentence should not be fixed for the rest of the people it reaches.',
     url: 'https://bilirakis.house.gov/contact/',
     method: 'Web form.',
     verified: '2026-09-02',
+  },
+  {
+    id: 'bentz',
+    who: 'Rep. Cliff Bentz',
+    role: 'Sponsor, H.R. 10647 — Oregon’s 2nd district',
+    why: 'Lead sponsor of the newest bill, introduced October 1, 2026 with Goldman as cosponsor: the state-plan route, capped at 30 days, with the maintenance-of-effort and discharge conditions attached. His office is the one to ask when it gets a hearing, and whether the 30-day cap is the price of the option or a position he would move on.',
+    url: 'https://bentz.house.gov/contact',
+    method: 'Web form.',
+    verified: '2026-10-13',
   },
   {
     id: 'yours',
@@ -2010,7 +2104,7 @@ export const CLOSEST_CALL = {
 };
 
 export const LIVE_BILLS_NOTE =
-  'Six bills in the 119th Congress would change this rule, and all six are sitting in the same committee. Not one of them has a Senate companion — the Michelle Alyssa Go Act has now been introduced in three consecutive Congresses without ever getting one, and its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of the six; a bill has to leave committee to get one.';
+  'Seven bills in the 119th Congress would change this rule, and all seven are sitting in the same committee. Not one of them has a Senate companion — the Michelle Alyssa Go Act has now been introduced in three consecutive Congresses without ever getting one, and its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of the seven; a bill has to leave committee to get one.';
 
 /** The answer to “which party did this”, which is that the question has no answer. */
 export const PARTY_VERDICT = {
@@ -2336,6 +2430,45 @@ export const SOURCES: SourceEntry[] = [
     kind: 'research',
     used: 'Underlying source for the state waiver table.',
   },
+  /* --- Added 2026-10-13 with the Medicare 190-day section and the seventh
+     bill. Each was fetched and read that day: the H.R. 10647 text in full
+     from GovInfo, the MedPAC chapter's 190-day analysis and Table 6-21,
+     and the CMS manual section that states the limit. --- */
+  {
+    name: 'Medicare Benefit Policy Manual, Chapter 1, §50 — Inpatient Psychiatric Hospital Services, Lifetime Limitation',
+    org: 'Centers for Medicare & Medicaid Services',
+    url: 'https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Downloads/bp102c04.pdf',
+    kind: 'primary',
+    used: 'The 190-day lifetime limit as CMS states it to the facilities that have to apply it.',
+  },
+  {
+    name: 'Behavioral Health Services in the Medicare Program (Chapter 6), Report to Congress, June 2023',
+    org: 'MedPAC',
+    url: 'https://www.medpac.gov/wp-content/uploads/2023/06/Jun23_Ch6_MedPAC_Report_To_Congress_SEC.pdf',
+    kind: 'government',
+    used: 'Nearly 50,000 fee-for-service beneficiaries at or within 15 days of the 190-day limit as of January 2023 (Table 6-21), and what facilities reported doing once a patient passes it.',
+  },
+  {
+    name: 'H.R. 10647 (IMD CARE Act), introduced text',
+    org: 'U.S. Government Publishing Office (GovInfo)',
+    url: 'https://www.govinfo.gov/content/pkg/BILLS-119hr10647ih/html/BILLS-119hr10647ih.htm',
+    kind: 'primary',
+    used: 'The seventh bill: the new §1915(m) state plan option, its 30-day cap, maintenance-of-effort and transition-of-care conditions, read in full.',
+  },
+  {
+    name: 'H.R. 4619 (Medicare Mental Health Inpatient Equity Act of 2025), introduced text',
+    org: 'U.S. Government Publishing Office (GovInfo)',
+    url: 'https://www.govinfo.gov/app/details/BILLS-119hr4619ih',
+    kind: 'primary',
+    used: 'The House bill that would strike the 190-day limit from §1812.',
+  },
+  {
+    name: 'Medicaid and Medicare Reform',
+    org: 'Treatment Advocacy Center (stance page, document 26-9)',
+    url: 'https://www.tac.org/our_stances/medicaid-and-medicare-reform/',
+    kind: 'advocacy',
+    used: 'The comparison that prompted the 190-day section: TAC treats the IMD exclusion and the 190-day limit as a pair of discriminatory policies, and adds positions on reentry waivers and work-requirement exemptions that this page does not yet cover.',
+  },
 ];
 
 /* ------------------------------------------------------------------ *
@@ -2455,6 +2588,16 @@ export function buildKnowledgeBase(): string {
     );
   }
   lines.push(BILLS_COMPOSITION);
+  lines.push('');
+
+  lines.push("## Medicare's 190-day lifetime limit (the other program's limit)");
+  lines.push(`${MEDICARE_LIMIT.rule} (${MEDICARE_LIMIT.ruleCite})`);
+  for (const p of MEDICARE_LIMIT.points) lines.push(`- ${p}`);
+  for (const b of MEDICARE_LIMIT.bills)
+    lines.push(
+      `${b.number} — ${b.title}. Sponsor ${b.sponsor}, introduced ${b.introduced}, ${b.committee}. ${b.effect}`,
+    );
+  lines.push(`Counts: ${MEDICARE_LIMIT.countSourceName}, read ${MEDICARE_LIMIT.retrieved}.`);
   lines.push('');
 
   lines.push('## Which sentence actually has to change');

@@ -27,6 +27,7 @@ import {
   LINEAGE,
   LIVE_BILLS_NOTE,
   MEASURED_ABSENCES,
+  MEDICARE_LIMIT,
   NEGATIVE_METHOD,
   NUMBER_CHAIN,
   NUMBER_VERDICT,
@@ -704,6 +705,7 @@ app.get('/', (c) => {
               <a href="#record">The record</a>
               <a href="#instead">Consequences</a>
               <a href="#bills">Bills</a>
+              <a href="#medicare">190 days</a>
               <a href="#debate">Debate</a>
               <a href="#levers">Who decides</a>
               <a href="#act">Contact</a>
@@ -1400,11 +1402,11 @@ app.get('/', (c) => {
           <section id="bills">
             <div class="wrap">
               <span class="sec__idx">06 — What is moving in Congress</span>
-              <h2>Six bills, five different answers</h2>
+              <h2>Seven bills, six different answers</h2>
               <p class="lede">
-                All six are in the 119th Congress. All six are in committee. They disagree about
-                whether to move the line, erase it, let it expire, or erase it and require something
-                in its place.
+                All seven are in the 119th Congress. All seven are in committee. They disagree
+                about whether to move the line, erase it, let it expire, erase it and require
+                something in its place, or leave it standing and let states opt around it.
               </p>
               <div class="bills">
                 {BILLS.map((b) => (
@@ -1451,8 +1453,9 @@ app.get('/', (c) => {
               <p class="caveat">
                 Sponsor, party, district, introduction date, cosponsor counts and status were read
                 from GovInfo BILLSTATUS on {FIX.retrieved}, and each bill's described effect was
-                read from its introduced text. Follow the Congress.gov links for the current record,
-                which is authoritative.
+                read from its introduced text. H.R. 10647 was added later and read from its
+                introduced text on 2026-10-13. Follow the Congress.gov links for the current
+                record, which is authoritative.
               </p>
 
               <div class="why" id="fix">
@@ -1548,6 +1551,61 @@ app.get('/', (c) => {
                   gets fixed.
                 </p>
               </div>
+            </div>
+          </section>
+
+          {/* ---------------- MEDICARE 190-DAY LIMIT ---------------- */}
+          <section id="medicare">
+            <div class="wrap">
+              <span class="sec__idx">06b — The other limit</span>
+              <h2>{MEDICARE_LIMIT.heading}</h2>
+              <p class="lede">{MEDICARE_LIMIT.lede}</p>
+              <figure class="quote">
+                <blockquote>{MEDICARE_LIMIT.rule}</blockquote>
+                <figcaption>
+                  {MEDICARE_LIMIT.ruleCite}
+                  <a class="why__src" href={MEDICARE_LIMIT.ruleSource} rel="noopener">
+                    {MEDICARE_LIMIT.ruleSourceName} →
+                  </a>
+                </figcaption>
+              </figure>
+              {MEDICARE_LIMIT.points.map((p) => (
+                <p style="font-size:16.5px;max-width:68ch">{p}</p>
+              ))}
+              <div class="bills">
+                {MEDICARE_LIMIT.bills.map((b) => (
+                  <article class="bill">
+                    <div class="bill__hd">
+                      <span class="bill__no">{b.number}</span>
+                      <span class="bill__ap">{b.committee}</span>
+                    </div>
+                    <div class="bill__bd">
+                      <h3>{b.title}</h3>
+                      <p class="bill__meta">
+                        Sponsor: {b.sponsor}
+                        <br />
+                        Introduced: {b.introduced}
+                      </p>
+                      <p>{b.effect}</p>
+                      <div class="bill__links">
+                        <a href={b.url} rel="noopener">
+                          Congress.gov
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <p class="caveat">
+                Counts read from {MEDICARE_LIMIT.countSourceName} on {MEDICARE_LIMIT.retrieved};
+                they cover fee-for-service Medicare and are dated January 2023. The Treatment
+                Advocacy Center, whose stance page treats this limit and the IMD exclusion as a
+                pair, carries a January 2024 version of the same count.
+                <a class="why__src" href={MEDICARE_LIMIT.countSource} rel="noopener">
+                  {' '}
+                  {MEDICARE_LIMIT.countSourceName} →
+                </a>
+              </p>
             </div>
           </section>
 

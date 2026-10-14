@@ -16,6 +16,7 @@ import {
   JAIL_SERIES,
   LINEAGE,
   MEASURED_ABSENCES,
+  MEDICARE_LIMIT,
   NUMBER_CHAIN,
   OBJECTION,
   OBJECTION_ANSWER,
@@ -643,10 +644,10 @@ describe('executive order 14321', () => {
 });
 
 describe('the bills table', () => {
-  it('carries all six bills, each identified uniquely', () => {
-    expect(BILLS).toHaveLength(6);
-    expect(new Set(BILLS.map((b) => b.number)).size).toBe(6);
-    expect(new Set(BILLS.map((b) => b.slug)).size).toBe(6);
+  it('carries all seven bills, each identified uniquely', () => {
+    expect(BILLS).toHaveLength(7);
+    expect(new Set(BILLS.map((b) => b.number)).size).toBe(7);
+    expect(new Set(BILLS.map((b) => b.slug)).size).toBe(7);
     for (const b of BILLS) {
       expect(b.number, b.slug).toMatch(/^H\.R\. \d+$/);
       expect(b.slug).toMatch(/^hr\d+$/);
@@ -674,19 +675,38 @@ describe('the bills table', () => {
       const n = b.number.replace('H.R. ', '');
       expect(b.congressUrl).toBe(`https://www.congress.gov/bill/119th-congress/house-bill/${n}`);
     }
-    expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(6);
+    expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(7);
   });
 
   it('records the bipartisan sponsors the set actually has', () => {
     // Republican sponsorship is the single most load-bearing fact in the
     // composition note. If a row is ever dropped, the note becomes false.
     const rep = BILLS.filter((b) => b.party === 'R');
-    expect(rep).toHaveLength(2);
-    expect(rep.map((b) => b.number).sort()).toEqual(['H.R. 5944', 'H.R. 8095']);
+    expect(rep).toHaveLength(3);
+    expect(rep.map((b) => b.number).sort()).toEqual(['H.R. 10647', 'H.R. 5944', 'H.R. 8095']);
     expect(BILLS_COMPOSITION).toContain('Energy and Commerce');
     // Referred to the COMMITTEE — no subcommittee referral is recorded for
-    // any of the six, checked against BILLSTATUS with a positive control.
+    // any of the seven, checked against BILLSTATUS with a positive control.
     expect(BILLS_COMPOSITION.toLowerCase()).not.toContain('subcommittee');
+  });
+});
+
+describe('the Medicare 190-day limit section', () => {
+  it('states the limit and cites both of its sources in SOURCES', () => {
+    expect(MEDICARE_LIMIT.rule).toContain('190 days');
+    expect(MEDICARE_LIMIT.rule.toLowerCase()).toContain('lifetime');
+    const urls = new Set(SOURCES.map((x) => x.url));
+    expect(urls.has(MEDICARE_LIMIT.ruleSource), 'CMS manual in SOURCES').toBe(true);
+    expect(urls.has(MEDICARE_LIMIT.countSource), 'MedPAC chapter in SOURCES').toBe(true);
+  });
+
+  it('carries one House and one Senate bill, each on its own record', () => {
+    expect(MEDICARE_LIMIT.bills).toHaveLength(2);
+    const nums = MEDICARE_LIMIT.bills.map((b) => b.number).sort();
+    expect(nums).toEqual(['H.R. 4619', 'S. 4076']);
+    for (const b of MEDICARE_LIMIT.bills) {
+      expect(b.url).toMatch(/^https:\/\/www\.congress\.gov\/bill\/119th-congress\//);
+    }
   });
 });
 
