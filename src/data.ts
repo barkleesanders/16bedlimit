@@ -1119,10 +1119,11 @@ export interface MedicareBill {
 export const MEDICARE_LIMIT = {
   heading: 'Medicare has a limit of its own: 190 days, once, in a lifetime',
   lede: 'This page is about a Medicaid rule. The same Congress wrote a second limit into the other program, and it reaches many of the same people first — because a person with a serious mental illness often arrives on Medicare through disability, years before they turn 65.',
-  rule:
-    'Medicare Part A will pay for no more than 190 days of inpatient care in a freestanding psychiatric hospital over a beneficiary’s entire lifetime. The days do not renew. The limit does not apply to a psychiatric unit inside a general hospital, and no other inpatient service in Medicare carries a lifetime cap of this kind.',
-  ruleCite: 'Social Security Act §1812, 42 U.S.C. §1395d; CMS, Medicare Benefit Policy Manual, Chapter 1, §50',
-  ruleSource: 'https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Downloads/bp102c04.pdf',
+  rule: 'Medicare Part A will pay for no more than 190 days of inpatient care in a freestanding psychiatric hospital over a beneficiary’s entire lifetime. The days do not renew. The limit does not apply to a psychiatric unit inside a general hospital, and no other inpatient service in Medicare carries a lifetime cap of this kind.',
+  ruleCite:
+    'Social Security Act §1812, 42 U.S.C. §1395d; CMS, Medicare Benefit Policy Manual, Chapter 1, §50',
+  ruleSource:
+    'https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Downloads/bp102c04.pdf',
   ruleSourceName: 'CMS Medicare Benefit Policy Manual',
   points: [
     'As of January 2023, nearly 50,000 Medicare fee-for-service beneficiaries had reached the limit or were within 15 days of reaching it. Three quarters of them were on Medicare through disability rather than age, and 85 percent were low income. Nearly half had fewer than 60 lifetime reserve days left in any hospital; a fifth had none.',
@@ -1151,9 +1152,79 @@ export const MEDICARE_LIMIT = {
       url: 'https://www.congress.gov/bill/119th-congress/senate-bill/4076',
     },
   ] as MedicareBill[],
-  countSource: 'https://www.medpac.gov/wp-content/uploads/2023/06/Jun23_Ch6_MedPAC_Report_To_Congress_SEC.pdf',
+  countSource:
+    'https://www.medpac.gov/wp-content/uploads/2023/06/Jun23_Ch6_MedPAC_Report_To_Congress_SEC.pdf',
   countSourceName: 'MedPAC, Report to Congress, June 2023, Chapter 6',
   retrieved: '2026-10-13',
+};
+
+/* ------------------------------------------------------------------ *
+ * 6c. THE INMATE EXCLUSION AND SECTION 1115 REENTRY WAIVERS
+ * 6d. MEDICAID WORK REQUIREMENTS AND THE UNDEFINED SMI EXEMPTION
+ *
+ * Added 2026-10-15, closing the two gaps the Treatment Advocacy Center
+ * comparison flagged. The 19-state count is TAC's, dated June 2026; the
+ * KFF waiver tracker is linked as the live count. Suspension of coverage
+ * is stated as a federal mandate only for juveniles (Consolidated
+ * Appropriations Act, 2023, per CRS IF11830); for adults it is described
+ * as state policy CMS encourages, because no public law making it a
+ * universal adult mandate was located. No new figures are introduced.
+ * ------------------------------------------------------------------ */
+
+export interface SectionSource {
+  name: string;
+  url: string;
+}
+
+export const REENTRY = {
+  heading: 'A second exclusion: Medicaid stops at the jail door',
+  lede: 'The IMD exclusion decides which hospitals Medicaid will pay. A separate rule, older in practice and just as blunt, decides which people it will pay for: federal Medicaid does not pay for most care for anyone who is an inmate of a jail or prison. For the people this page follows into jails and forensic wait lists, the two rules meet.',
+  points: [
+    'The inmate exclusion is not the IMD exclusion. It does not depend on bed counts or age. It turns on custody: while a person is an inmate of a public institution, federal Medicaid generally does not pay for their care, and the cost falls on the jail, the prison or the state.',
+    'Section 1115 reentry demonstrations are the exception states have been building. Under an approved waiver, Medicaid can pay for a defined set of services in the period shortly before release, such as case management, medication for addiction treatment, and a supply of medication at release, so that treatment does not stop on the day a person walks out.',
+    'The Treatment Advocacy Center counted 19 states with approved reentry waivers as of June 2026. That number moves as CMS acts on pending requests, so the KFF waiver tracker linked below is the live count.',
+    'CMS guidance issued in September 2026 describes a coverage window of up to 60 days before release for people leaving prison. The exact window, the services covered and who qualifies are set state by state in each approved demonstration, so any single state can differ.',
+    'Whether coverage is suspended or terminated on entry matters as much as the waiver. Since January 1, 2025, the Consolidated Appropriations Act, 2023 has required states to suspend, rather than end, Medicaid for eligible juveniles who are incarcerated. For adults, suspension is widespread state policy that CMS encourages, not a uniform federal requirement this page can cite to a public law.',
+    'This is the same story as the forensic wait list from the other side. People held in jail waiting for a state hospital bed are the people a reentry waiver is written for, and the people most at risk of leaving custody with no coverage and no prescription.',
+  ],
+  sources: [
+    {
+      name: 'KFF, Medicaid Waiver Tracker: Approved and Pending Section 1115 Waivers by State',
+      url: WAIVER_TRACKER,
+    },
+    {
+      name: 'CMS, Reentry Section 1115 Demonstration FAQs, September 2026',
+      url: 'https://www.medicaid.gov/federal-policy-guidance/downloads/reentry-faqs-090920264015.pdf',
+    },
+    {
+      name: 'Congressional Research Service, IF11830',
+      url: 'https://www.congress.gov/crs-product/IF11830',
+    },
+  ] as SectionSource[],
+  retrieved: '2026-10-15',
+};
+
+export const WORK_REQUIREMENTS = {
+  heading: 'Work requirements, and an exemption no one has defined',
+  lede: 'The 2025 reconciliation law adds a new way to lose Medicaid that works the way the IMD exclusion does: coverage ends on a rule applied to paperwork, before any clinician is asked whether the person needs care.',
+  points: [
+    'H.R. 1, enacted as Public Law 119-21 in 2025, requires adults in the ACA Medicaid expansion group to show 80 hours a month of work, job training, education or community service, or to qualify for an exemption. State deadlines to begin enforcing it start January 1, 2027.',
+    'The law exempts people with a substance use disorder or a "disabling" mental disorder. As of June 2026, according to the Treatment Advocacy Center, HHS had not defined "disabling" mental disorder or said what documentation a person would need to prove it.',
+    'That gap falls hardest on the people this page is about. KFF found that the ACA expansion group is the main Medicaid pathway for adults with serious mental illness, and that the symptoms of those illnesses are exactly what make monthly reporting and exemption paperwork hard to complete.',
+    'New York’s Office of Addiction Services and Supports has published its own summary of what H.R. 1 means for providers, an example of a state agency preparing before the federal definition exists.',
+    'The mechanism is the one this page tracks throughout. Under the IMD exclusion, the building decides; under work requirements, the form decides. In neither case is the person’s own clinician the one who decides whether they keep coverage.',
+  ],
+  sources: [
+    {
+      name: 'KFF, Implications of Medicaid Work and Reporting Requirements for Adults with Mental Health or Substance Use Disorders',
+      url: 'https://www.kff.org/medicaid/implications-of-medicaid-work-and-reporting-requirements-for-adults-with-mental-health-or-substance-use-disorders/',
+    },
+    {
+      name: 'New York State OASAS, H.R. 1 summary for providers',
+      url: 'https://oasas.ny.gov/providers/hr-1',
+    },
+  ] as SectionSource[],
+  retrieved: '2026-10-15',
 };
 
 /* ------------------------------------------------------------------ *
@@ -2428,7 +2499,7 @@ export const SOURCES: SourceEntry[] = [
     org: 'KFF',
     url: 'https://www.kff.org/medicaid/medicaid-waiver-tracker-approved-and-pending-section-1115-waivers-by-state/',
     kind: 'research',
-    used: 'Underlying source for the state waiver table.',
+    used: 'Underlying source for the state waiver table, and the live count of approved and pending Section 1115 reentry demonstrations against which the June 2026 figure of 19 states should be checked.',
   },
   /* --- Added 2026-10-13 with the Medicare 190-day section and the seventh
      bill. Each was fetched and read that day: the H.R. 10647 text in full
@@ -2467,7 +2538,35 @@ export const SOURCES: SourceEntry[] = [
     org: 'Treatment Advocacy Center (stance page, document 26-9)',
     url: 'https://www.tac.org/our_stances/medicaid-and-medicare-reform/',
     kind: 'advocacy',
-    used: 'The comparison that prompted the 190-day section: TAC treats the IMD exclusion and the 190-day limit as a pair of discriminatory policies, and adds positions on reentry waivers and work-requirement exemptions that this page does not yet cover.',
+    used: 'The comparison that prompted the 190-day section: TAC treats the IMD exclusion and the 190-day limit as a pair of discriminatory policies, and adds positions on reentry waivers and work-requirement exemptions, now covered in their own sections, along with the June 2026 reentry waiver count and the status of the undefined mental disorder exemption.',
+  },
+  {
+    name: 'Reentry Section 1115 Demonstration Opportunity, Frequently Asked Questions (September 2026)',
+    org: 'Centers for Medicare & Medicaid Services',
+    url: 'https://www.medicaid.gov/federal-policy-guidance/downloads/reentry-faqs-090920264015.pdf',
+    kind: 'government',
+    used: 'The pre-release coverage window of up to 60 days for people leaving prison, and the services reentry demonstrations can cover.',
+  },
+  {
+    name: 'IF11830, Medicaid and incarcerated individuals',
+    org: 'Congressional Research Service',
+    url: 'https://www.congress.gov/crs-product/IF11830',
+    kind: 'government',
+    used: 'The inmate exclusion, and the Consolidated Appropriations Act, 2023 requirement, effective January 1, 2025, that states suspend rather than terminate Medicaid for eligible incarcerated juveniles.',
+  },
+  {
+    name: 'Implications of Medicaid Work and Reporting Requirements for Adults with Mental Health or Substance Use Disorders',
+    org: 'KFF',
+    url: 'https://www.kff.org/medicaid/implications-of-medicaid-work-and-reporting-requirements-for-adults-with-mental-health-or-substance-use-disorders/',
+    kind: 'research',
+    used: 'The 80-hour requirement, the exemption for substance use disorders and "disabling" mental disorders, and why exemption paperwork is hardest for people with serious mental illness.',
+  },
+  {
+    name: 'H.R. 1 summary for providers',
+    org: 'New York State Office of Addiction Services and Supports',
+    url: 'https://oasas.ny.gov/providers/hr-1',
+    kind: 'government',
+    used: 'A state agency summary of the H.R. 1 community-engagement requirement as it affects addiction treatment providers.',
   },
 ];
 
@@ -2598,6 +2697,22 @@ export function buildKnowledgeBase(): string {
       `${b.number} — ${b.title}. Sponsor ${b.sponsor}, introduced ${b.introduced}, ${b.committee}. ${b.effect}`,
     );
   lines.push(`Counts: ${MEDICARE_LIMIT.countSourceName}, read ${MEDICARE_LIMIT.retrieved}.`);
+  lines.push('');
+
+  lines.push('## The inmate exclusion and Section 1115 reentry waivers');
+  lines.push(REENTRY.lede);
+  for (const p of REENTRY.points) lines.push(`- ${p}`);
+  lines.push(
+    `Sources (read ${REENTRY.retrieved}): ${REENTRY.sources.map((x) => x.url).join(', ')}`,
+  );
+  lines.push('');
+
+  lines.push('## Medicaid work requirements and the undefined mental disorder exemption');
+  lines.push(WORK_REQUIREMENTS.lede);
+  for (const p of WORK_REQUIREMENTS.points) lines.push(`- ${p}`);
+  lines.push(
+    `Sources (read ${WORK_REQUIREMENTS.retrieved}): ${WORK_REQUIREMENTS.sources.map((x) => x.url).join(', ')}`,
+  );
   lines.push('');
 
   lines.push('## Which sentence actually has to change');

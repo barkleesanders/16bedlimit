@@ -48,6 +48,7 @@ import {
   RECORD_UNIDENTIFIED,
   RECORD_UNKNOWNS,
   RECORDS_SAFETY_NOTICE,
+  REENTRY,
   REPORT,
   RETRIEVED,
   ROLL_CALLS,
@@ -68,6 +69,7 @@ import {
   WAIVER_SOURCE_NAME,
   WAIVER_TRACKER,
   WHY_SIXTEEN,
+  WORK_REQUIREMENTS,
 } from './data';
 import { FRESHNESS_KEY, type FreshnessReport, runFreshnessCheck } from './freshness';
 import { OG_HEIGHT, OG_WIDTH, ogPng } from './og-image';
@@ -706,6 +708,8 @@ app.get('/', (c) => {
               <a href="#instead">Consequences</a>
               <a href="#bills">Bills</a>
               <a href="#medicare">190 days</a>
+              <a href="#reentry">Reentry</a>
+              <a href="#work">Work rules</a>
               <a href="#debate">Debate</a>
               <a href="#levers">Who decides</a>
               <a href="#act">Contact</a>
@@ -1404,9 +1408,9 @@ app.get('/', (c) => {
               <span class="sec__idx">06 — What is moving in Congress</span>
               <h2>Seven bills, six different answers</h2>
               <p class="lede">
-                All seven are in the 119th Congress. All seven are in committee. They disagree
-                about whether to move the line, erase it, let it expire, erase it and require
-                something in its place, or leave it standing and let states opt around it.
+                All seven are in the 119th Congress. All seven are in committee. They disagree about
+                whether to move the line, erase it, let it expire, erase it and require something in
+                its place, or leave it standing and let states opt around it.
               </p>
               <div class="bills">
                 {BILLS.map((b) => (
@@ -1454,8 +1458,8 @@ app.get('/', (c) => {
                 Sponsor, party, district, introduction date, cosponsor counts and status were read
                 from GovInfo BILLSTATUS on {FIX.retrieved}, and each bill's described effect was
                 read from its introduced text. H.R. 10647 was added later and read from its
-                introduced text on 2026-10-13. Follow the Congress.gov links for the current
-                record, which is authoritative.
+                introduced text on 2026-10-13. Follow the Congress.gov links for the current record,
+                which is authoritative.
               </p>
 
               <div class="why" id="fix">
@@ -1605,6 +1609,48 @@ app.get('/', (c) => {
                   {' '}
                   {MEDICARE_LIMIT.countSourceName} →
                 </a>
+              </p>
+            </div>
+          </section>
+
+          {/* ---------------- REENTRY WAIVERS ---------------- */}
+          <section id="reentry">
+            <div class="wrap">
+              <span class="sec__idx">06c · The inmate exclusion</span>
+              <h2>{REENTRY.heading}</h2>
+              <p class="lede">{REENTRY.lede}</p>
+              {REENTRY.points.map((p) => (
+                <p style="font-size:16.5px;max-width:68ch">{p}</p>
+              ))}
+              <p class="caveat">
+                Read {REENTRY.retrieved}.
+                {REENTRY.sources.map((x) => (
+                  <a class="why__src" href={x.url} rel="noopener">
+                    {' '}
+                    {x.name} →
+                  </a>
+                ))}
+              </p>
+            </div>
+          </section>
+
+          {/* ---------------- WORK REQUIREMENTS ---------------- */}
+          <section id="work">
+            <div class="wrap">
+              <span class="sec__idx">06d · Work requirements</span>
+              <h2>{WORK_REQUIREMENTS.heading}</h2>
+              <p class="lede">{WORK_REQUIREMENTS.lede}</p>
+              {WORK_REQUIREMENTS.points.map((p) => (
+                <p style="font-size:16.5px;max-width:68ch">{p}</p>
+              ))}
+              <p class="caveat">
+                Read {WORK_REQUIREMENTS.retrieved}.
+                {WORK_REQUIREMENTS.sources.map((x) => (
+                  <a class="why__src" href={x.url} rel="noopener">
+                    {' '}
+                    {x.name} →
+                  </a>
+                ))}
               </p>
             </div>
           </section>

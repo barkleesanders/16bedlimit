@@ -29,6 +29,7 @@ import {
   RECORD_NAMED,
   RECORD_UNIDENTIFIED,
   RECORD_UNKNOWNS,
+  REENTRY,
   REPORT,
   ROLL_CALLS,
   SMI_APPROVED,
@@ -41,6 +42,7 @@ import {
   systemPrompt,
   TIMELINE,
   WHY_SIXTEEN,
+  WORK_REQUIREMENTS,
 } from './data';
 
 /**
@@ -812,5 +814,42 @@ describe('sources added on 2026-09-02', () => {
     expect(kb).toContain('H.R. 4022');
     expect(kb).toContain(OBJECTION.quote);
     expect(kb).toContain('Energy and Commerce');
+  });
+});
+
+describe('the reentry and work-requirement sections', () => {
+  const urls = new Set(SOURCES.map((x) => x.url));
+  for (const [label, sec] of [
+    ['reentry', REENTRY],
+    ['work requirements', WORK_REQUIREMENTS],
+  ] as const) {
+    it(`${label}: every cited source is in SOURCES and the prose has no em dashes`, () => {
+      for (const x of sec.sources) expect(urls.has(x.url), x.url).toBe(true);
+      const prose = [sec.heading, sec.lede, ...sec.points].join(' ');
+      expect(prose).not.toContain('\u2014');
+      expect(sec.retrieved).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    });
+  }
+
+  it('states the juvenile suspension mandate without claiming an adult one', () => {
+    const t = REENTRY.points.join(' ');
+    expect(t).toContain('juveniles');
+    expect(t).toContain('January 1, 2025');
+    expect(t).toContain('not a uniform federal requirement');
+    expect(t).toContain('19 states');
+    expect(t).toContain('June 2026');
+  });
+
+  it('dates the work requirement and the undefined exemption', () => {
+    const t = WORK_REQUIREMENTS.points.join(' ');
+    expect(t).toContain('119-21');
+    expect(t).toContain('80 hours');
+    expect(t).toContain('January 1, 2027');
+    expect(t).toContain('As of June 2026');
+  });
+
+  it('no longer says the page does not cover these topics', () => {
+    for (const x of SOURCES) expect(x.used).not.toContain('does not yet cover');
+    expect(buildKnowledgeBase()).toContain('Section 1115 reentry waivers');
   });
 });
