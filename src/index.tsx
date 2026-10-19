@@ -478,6 +478,18 @@ app.post('/api/stt', async (c) => {
 
   const contentType = c.req.header('content-type') || 'audio/webm';
 
+  // Idempotent STT: same audio bytes => same transcript (cfdoctor
+  // CFDOC-COST-AI-NO-IDEMPOTENCY, 2026-10-18). Retried uploads return the
+  // cached transcript instead of paying for inference again.
+  const audioHash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", buf))]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  const sttKey = `stt:${audioHash}`;
+  try {
+    const cached = await c.env.FRESHNESS.get(sttKey, "json") as { text?: string; model?: string } | null;
+    if (cached?.text) return c.json({ text: cached.text }, 200, { 'x-stt-model': cached.model ?? 'cached' });
+  } catch {}
+
   try {
     const r = (await c.env.AI.run(
       '@cf/deepgram/nova-3' as keyof AiModels,
@@ -486,7 +498,10 @@ app.post('/api/stt', async (c) => {
       } as never,
     )) as { text?: string; results?: unknown };
     const text = extractTranscript(r);
-    if (text) return c.json({ text }, 200, { 'x-stt-model': 'nova-3' });
+    if (text) {
+      try { await c.env.FRESHNESS.put(sttKey, JSON.stringify({ text, model: 'nova-3' }), { expirationTtl: 7 * 24 * 60 * 60 }); } catch {}
+      return c.json({ text }, 200, { 'x-stt-model': 'nova-3' });
+    }
     console.log(JSON.stringify({ event: 'stt_nova3_empty', bytes: buf.byteLength, contentType }));
   } catch (err) {
     console.log(
@@ -511,7 +526,10 @@ app.post('/api/stt', async (c) => {
         audio: btoa(bin),
       } as never,
     )) as { text?: string };
-    if (r?.text) return c.json({ text: r.text }, 200, { 'x-stt-model': 'whisper-large-v3-turbo' });
+    if (r?.text) {
+      try { await c.env.FRESHNESS.put(sttKey, JSON.stringify({ text: r.text, model: 'whisper-large-v3-turbo' }), { expirationTtl: 7 * 24 * 60 * 60 }); } catch {}
+      return c.json({ text: r.text }, 200, { 'x-stt-model': 'whisper-large-v3-turbo' });
+    }
     return c.json({ error: 'No speech detected in that clip.' }, 200);
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err);
