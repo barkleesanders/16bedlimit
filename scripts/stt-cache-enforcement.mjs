@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { cpSync, mkdtempSync, readFileSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { stripVTControlCharacters } from 'node:util';
 
 const root = process.cwd();
 const source = readFileSync(join(root, 'src/index.tsx'), 'utf8');
@@ -68,13 +69,14 @@ for (const control of controls) {
     maxBuffer: 4 * 1024 * 1024,
     env: { ...process.env, CI: 'true', WRANGLER_SEND_METRICS: 'false' },
   });
-  const output = (result.stdout || '') + (result.stderr || '');
-  writeFileSync(join(fixture, 'check.log'), output);
+  const rawOutput = (result.stdout || '') + (result.stderr || '');
+  writeFileSync(join(fixture, 'check.log'), rawOutput);
+  const output = stripVTControlCharacters(rawOutput);
   assert(!result.error, `${control.name}: ${result.error?.message}`);
   assert(result.status !== 0, `${control.name}: release accepted defective code`);
   assert(
     output.includes(`FAIL  src/stt-cache.test.ts`),
-    `${control.name}: behavioral tests did not fail`,
+    `${control.name}: behavioral tests did not fail\n${output.slice(-8000)}`,
   );
   assert(output.includes(control.failure), `${control.name}: expected behavioral failure absent`);
   console.log(`${control.name}=BLOCKED by actual Wrangler build gate; ${fixture}`);
