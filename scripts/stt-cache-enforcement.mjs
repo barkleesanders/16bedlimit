@@ -22,8 +22,14 @@ const controls = [
   {
     name: 'cache-write-key',
     before: 'put(sttKey,',
-    after: 'put(`${sttKey}:incorrect`,',
+    after: "put(sttKey + ':incorrect',",
     failure: 'reuses a successful transcript for matching audio without a second inference',
+  },
+  {
+    name: 'transcript-http-cache',
+    before: "c.res.headers.set('cache-control', 'private, no-store');",
+    after: "c.res.headers.set('cache-control', 'public, max-age=300');",
+    failure: 'keeps audio-derived responses private for cache hits and errors',
   },
 ];
 

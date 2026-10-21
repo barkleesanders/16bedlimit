@@ -36,6 +36,19 @@ function fixture() {
 }
 
 describe('STT cache through the actual Worker handler', () => {
+  it('keeps audio-derived responses private for cache hits and errors', async () => {
+    const f = fixture();
+    for (const audio of ['synthetic audio', 'synthetic audio', '']) {
+      const response = await f.transcribe(audio);
+      expect(response.headers.get('cache-control')).toBe('private, no-store');
+    }
+    f.limiter.limit.mockResolvedValue({ success: false });
+    const limited = await f.transcribe();
+    expect(limited.status).toBe(429);
+    expect(limited.headers.get('cache-control')).toBe('private, no-store');
+    expect(f.run).toHaveBeenCalledTimes(1);
+  });
+
   it('reuses a successful transcript for matching audio without a second inference', async () => {
     const f = fixture();
     const first = await f.transcribe();

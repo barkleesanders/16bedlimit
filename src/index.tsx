@@ -468,6 +468,13 @@ app.post('/api/chat', async (c) => {
  * and fall back to whisper-large-v3-turbo, whose base64 shape IS documented.
  * Whichever answers is reported in x-stt-model.
  */
+app.use('/api/stt', async (c, next) => {
+  await next();
+  // Transcripts can contain private speech. This also covers raw rate-limit
+  // responses and validation/model errors, before the global cache fallback.
+  c.res.headers.set('cache-control', 'private, no-store');
+});
+
 app.post('/api/stt', async (c) => {
   const limited = await rateLimited(c.env.MEDIA_LIMIT, c.req.raw, 'stt');
   if (limited) return limited;
