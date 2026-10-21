@@ -4,6 +4,7 @@
   "main": "src/index.tsx",
   "compatibility_date": "2026-08-01",
   "compatibility_flags": ["nodejs_compat"],
+  "build": { "command": "npm run gate:release" },
   "observability": { "enabled": true },
   "ai": { "binding": "AI" },
 

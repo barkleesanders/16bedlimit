@@ -468,6 +468,13 @@ app.post('/api/chat', async (c) => {
  * and fall back to whisper-large-v3-turbo, whose base64 shape IS documented.
  * Whichever answers is reported in x-stt-model.
  */
+app.use('/api/stt', async (c, next) => {
+  await next();
+  // Transcripts can contain private speech. This also covers raw rate-limit
+  // responses and validation/model errors, before the global cache fallback.
+  c.res.headers.set('cache-control', 'private, no-store');
+});
+
 app.post('/api/stt', async (c) => {
   const limited = await rateLimited(c.env.MEDIA_LIMIT, c.req.raw, 'stt');
   if (limited) return limited;
@@ -478,16 +485,21 @@ app.post('/api/stt', async (c) => {
 
   const contentType = c.req.header('content-type') || 'audio/webm';
 
-  // Idempotent STT: same audio bytes => same transcript (cfdoctor
-  // CFDOC-COST-AI-NO-IDEMPOTENCY, 2026-10-18). Retried uploads return the
-  // cached transcript instead of paying for inference again.
-  const audioHash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", buf))]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  // Retried uploads can reuse a stored successful transcript. KV is eventually
+  // consistent, so this does not deduplicate simultaneous inference requests.
+  const audioHash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', buf))]
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
   const sttKey = `stt:${audioHash}`;
   try {
-    const cached = await c.env.FRESHNESS.get(sttKey, "json") as { text?: string; model?: string } | null;
-    if (cached?.text) return c.json({ text: cached.text }, 200, { 'x-stt-model': cached.model ?? 'cached' });
+    const cached = await c.env.FRESHNESS?.get<{ text?: string; model?: string }>(sttKey, 'json');
+    if (typeof cached?.text === 'string' && cached.text.trim()) {
+      const model =
+        cached.model === 'nova-3' || cached.model === 'whisper-large-v3-turbo'
+          ? cached.model
+          : 'cached';
+      return c.json({ text: cached.text }, 200, { 'x-stt-model': model, 'x-stt-cache': 'HIT' });
+    }
   } catch {}
 
   try {
@@ -499,8 +511,12 @@ app.post('/api/stt', async (c) => {
     )) as { text?: string; results?: unknown };
     const text = extractTranscript(r);
     if (text) {
-      try { await c.env.FRESHNESS.put(sttKey, JSON.stringify({ text, model: 'nova-3' }), { expirationTtl: 7 * 24 * 60 * 60 }); } catch {}
-      return c.json({ text }, 200, { 'x-stt-model': 'nova-3' });
+      try {
+        await c.env.FRESHNESS?.put(sttKey, JSON.stringify({ text, model: 'nova-3' }), {
+          expirationTtl: 7 * 24 * 60 * 60,
+        });
+      } catch {}
+      return c.json({ text }, 200, { 'x-stt-model': 'nova-3', 'x-stt-cache': 'MISS' });
     }
     console.log(JSON.stringify({ event: 'stt_nova3_empty', bytes: buf.byteLength, contentType }));
   } catch (err) {
@@ -527,8 +543,17 @@ app.post('/api/stt', async (c) => {
       } as never,
     )) as { text?: string };
     if (r?.text) {
-      try { await c.env.FRESHNESS.put(sttKey, JSON.stringify({ text: r.text, model: 'whisper-large-v3-turbo' }), { expirationTtl: 7 * 24 * 60 * 60 }); } catch {}
-      return c.json({ text: r.text }, 200, { 'x-stt-model': 'whisper-large-v3-turbo' });
+      try {
+        await c.env.FRESHNESS?.put(
+          sttKey,
+          JSON.stringify({ text: r.text, model: 'whisper-large-v3-turbo' }),
+          { expirationTtl: 7 * 24 * 60 * 60 },
+        );
+      } catch {}
+      return c.json({ text: r.text }, 200, {
+        'x-stt-model': 'whisper-large-v3-turbo',
+        'x-stt-cache': 'MISS',
+      });
     }
     return c.json({ error: 'No speech detected in that clip.' }, 200);
   } catch (err) {
@@ -1619,7 +1644,8 @@ app.get('/', (c) => {
                 ))}
               </div>
               <p class="caveat">
-                Counts read from {MEDICARE_LIMIT.countSourceName} on {MEDICARE_LIMIT.retrieved};
+                Counts read from {MEDICARE_LIMIT.countSourceName} on {MEDICARE_LIMIT.retrieved}
+                {'; '}
                 they cover fee-for-service Medicare and are dated January 2023. The Treatment
                 Advocacy Center, whose stance page treats this limit and the IMD exclusion as a
                 pair, carries a January 2024 version of the same count.
