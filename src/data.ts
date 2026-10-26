@@ -1160,15 +1160,15 @@ export const MEDICARE_LIMIT = {
 
 /* ------------------------------------------------------------------ *
  * 6c. THE INMATE EXCLUSION AND SECTION 1115 REENTRY WAIVERS
- * 6d. MEDICAID WORK REQUIREMENTS AND THE UNDEFINED SMI EXEMPTION
+ * 6d. MEDICAID WORK REQUIREMENTS AND THE MENTAL DISORDER EXEMPTION
  *
- * Added 2026-10-15, closing the two gaps the Treatment Advocacy Center
- * comparison flagged. The 19-state count is TAC's, dated June 2026; the
- * KFF waiver tracker is linked as the live count. Suspension of coverage
- * is stated as a federal mandate only for juveniles (Consolidated
- * Appropriations Act, 2023, per CRS IF11830); for adults it is described
- * as state policy CMS encourages, because no public law making it a
- * universal adult mandate was located. No new figures are introduced.
+ * Sections added 2026-10-15 and corrected 2026-10-19 against primary
+ * sources: P.L. 118-42 sec. 205 (GovInfo) for the adult no-termination
+ * rule effective January 1, 2026; CMS's September 23 and 25, 2026
+ * approval notices and the KFF tracker for the reentry count; the CMS
+ * September 2026 FAQs and the Louisiana approval letter for the 60/90-day
+ * windows; P.L. 119-21 sec. 71119 and the CMS interim final rule
+ * (91 FR 33348, June 3, 2026) for work requirements.
  * ------------------------------------------------------------------ */
 
 export interface SectionSource {
@@ -1182,9 +1182,9 @@ export const REENTRY = {
   points: [
     'The inmate exclusion is not the IMD exclusion. It does not depend on bed counts or age. It turns on custody: while a person is an inmate of a public institution, federal Medicaid generally does not pay for their care, and the cost falls on the jail, the prison or the state.',
     'Section 1115 reentry demonstrations are the exception states have been building. Under an approved waiver, Medicaid can pay for a defined set of services in the period shortly before release, such as case management, medication for addiction treatment, and a supply of medication at release, so that treatment does not stop on the day a person walks out.',
-    'The Treatment Advocacy Center counted 19 states with approved reentry waivers as of June 2026. That number moves as CMS acts on pending requests, so the KFF waiver tracker linked below is the live count.',
-    'CMS guidance issued in September 2026 describes a coverage window of up to 60 days before release for people leaving prison. The exact window, the services covered and who qualifies are set state by state in each approved demonstration, so any single state can differ.',
-    'Whether coverage is suspended or terminated on entry matters as much as the waiver. Since January 1, 2025, the Consolidated Appropriations Act, 2023 has required states to suspend, rather than end, Medicaid for eligible juveniles who are incarcerated. For adults, suspension is widespread state policy that CMS encourages, not a uniform federal requirement this page can cite to a public law.',
+    'As of late September 2026, 22 states and the District of Columbia had approved reentry demonstrations. The Biden administration approved 19 state waivers and Michigan withdrew its approval in December 2025; in September 2026 CMS approved new demonstrations for Louisiana, Minnesota and Nevada and added reentry authority to renewals for Maine and the District of Columbia. The KFF waiver tracker linked below is the live count.',
+    'CMS guidance issued on September 23, 2026 shortens the window for new approvals. For adults in jails, prisons and adult tribal correctional facilities, CMS now considers up to 60 days of pre-release coverage appropriate, down from the up to 90 days its April 2023 guidance (SMD 23-003) allowed; youth correctional facilities can still be approved for up to 90 days. The window is set facility by facility, and the services covered and who qualifies are still set state by state in each approved demonstration.',
+    'Whether coverage is suspended or terminated on entry matters as much as the waiver. Since January 1, 2026, federal law has barred states from terminating anyone’s Medicaid because they are an inmate of a public institution: section 205 of the Consolidated Appropriations Act, 2024 extended to adults a rule that had covered only juveniles, so a state may suspend coverage during incarceration but may not end it. The juvenile rule dates to the SUPPORT Act of 2018, and since January 1, 2025 the Consolidated Appropriations Act, 2023 has also required screening and case management for eligible juveniles in the 30 days before release after adjudication.',
     'This is the same story as the forensic wait list from the other side. People held in jail waiting for a state hospital bed are the people a reentry waiver is written for, and the people most at risk of leaving custody with no coverage and no prescription.',
   ],
   sources: [
@@ -1197,24 +1197,50 @@ export const REENTRY = {
       url: 'https://www.medicaid.gov/federal-policy-guidance/downloads/reentry-faqs-090920264015.pdf',
     },
     {
+      name: 'CMS, approval notice for Louisiana, Minnesota, Nevada and the District of Columbia, September 23, 2026',
+      url: 'https://content.govdelivery.com/accounts/USCMSMEDICAID/bulletins/42c2db8',
+    },
+    {
+      name: 'CMS, approval notice for Maine, September 25, 2026',
+      url: 'https://content.govdelivery.com/accounts/USCMSMEDICAID/bulletins/42c8c33',
+    },
+    {
+      name: 'CMS, Louisiana Reentry Demonstration approval letter, September 23, 2026',
+      url: 'https://www.medicaid.gov/medicaid/section-1115-demonstrations/downloads/la-reentry-1115-demo-al-stc-09232026.pdf',
+    },
+    {
+      name: 'Public Law 118-42, Consolidated Appropriations Act, 2024, section 205',
+      url: 'https://www.govinfo.gov/content/pkg/PLAW-118publ42/html/PLAW-118publ42.htm',
+    },
+    {
       name: 'Congressional Research Service, IF11830',
       url: 'https://www.congress.gov/crs-product/IF11830',
     },
   ] as SectionSource[],
-  retrieved: '2026-10-15',
+  retrieved: '2026-10-19',
 };
 
 export const WORK_REQUIREMENTS = {
-  heading: 'Work requirements, and an exemption no one has defined',
+  heading: 'Work requirements, and an exemption each state must define',
   lede: 'The 2025 reconciliation law adds a new way to lose Medicaid that works the way the IMD exclusion does: coverage ends on a rule applied to paperwork, before any clinician is asked whether the person needs care.',
   points: [
-    'H.R. 1, enacted as Public Law 119-21 in 2025, requires adults in the ACA Medicaid expansion group to show 80 hours a month of work, job training, education or community service, or to qualify for an exemption. State deadlines to begin enforcing it start January 1, 2027.',
-    'The law exempts people with a substance use disorder or a "disabling" mental disorder. As of June 2026, according to the Treatment Advocacy Center, HHS had not defined "disabling" mental disorder or said what documentation a person would need to prove it.',
+    'H.R. 1, enacted as Public Law 119-21 on July 4, 2025, requires adults aged 19 to 64 in the ACA Medicaid expansion group to show, each month, 80 hours of work, community service or a work program (or a combination), half-time enrollment in school, or earnings equal to 80 hours at the federal minimum wage, unless they are excluded or exempt. States must start no later than January 1, 2027 and may start earlier. A state that shows a good-faith effort can be given more time, but no exemption can run past December 31, 2028.',
+    'The law excludes people who are medically frail, which it says includes people with a substance use disorder or a "disabling mental disorder." CMS’s interim final rule, published June 3, 2026 and effective July 31, 2026, narrows that: a person counts as medically frail only if their condition "significantly impairs" their ability to comply, and people with a substance use disorder who have been in recovery for five years or more are left out. CMS declined to define "disabling mental disorder" further and left it to each state, which must keep an auditable list of qualifying conditions and a way to ask for the exclusion when a condition is not on the list.',
+    'States must first try to verify the exclusion from data they already hold, including the past 12 months of claims and encounter records. Until January 1, 2028 a state may accept a statement under penalty of perjury when that data is missing; after that, only once per period of enrollment.',
+    'The requirement does not apply to anyone while they are an inmate of a public institution, and a person is treated as meeting it for a month if they were incarcerated at any point in the three months before that month began, so people leaving jail or prison are not tested on their first months out.',
     'That gap falls hardest on the people this page is about. KFF found that the ACA expansion group is the main Medicaid pathway for adults with serious mental illness, and that the symptoms of those illnesses are exactly what make monthly reporting and exemption paperwork hard to complete.',
     'New York’s Office of Addiction Services and Supports has published its own summary of what H.R. 1 means for providers, an example of a state agency preparing before the federal definition exists.',
     'The mechanism is the one this page tracks throughout. Under the IMD exclusion, the building decides; under work requirements, the form decides. In neither case is the person’s own clinician the one who decides whether they keep coverage.',
   ],
   sources: [
+    {
+      name: 'Public Law 119-21, section 71119 (community engagement requirement)',
+      url: 'https://www.govinfo.gov/content/pkg/PLAW-119publ21/html/PLAW-119publ21.htm',
+    },
+    {
+      name: 'CMS, Medicaid Program; Community Engagement Requirement for Certain Individuals, interim final rule, 91 FR 33348 (June 3, 2026)',
+      url: 'https://www.federalregister.gov/documents/2026/06/03/2026-11094/medicaid-program-community-engagement-requirement-for-certain-individuals',
+    },
     {
       name: 'KFF, Implications of Medicaid Work and Reporting Requirements for Adults with Mental Health or Substance Use Disorders',
       url: 'https://www.kff.org/medicaid/implications-of-medicaid-work-and-reporting-requirements-for-adults-with-mental-health-or-substance-use-disorders/',
@@ -1224,7 +1250,7 @@ export const WORK_REQUIREMENTS = {
       url: 'https://oasas.ny.gov/providers/hr-1',
     },
   ] as SectionSource[],
-  retrieved: '2026-10-15',
+  retrieved: '2026-10-19',
 };
 
 /* ------------------------------------------------------------------ *
@@ -2499,7 +2525,7 @@ export const SOURCES: SourceEntry[] = [
     org: 'KFF',
     url: 'https://www.kff.org/medicaid/medicaid-waiver-tracker-approved-and-pending-section-1115-waivers-by-state/',
     kind: 'research',
-    used: 'Underlying source for the state waiver table, and the live count of approved and pending Section 1115 reentry demonstrations against which the June 2026 figure of 19 states should be checked.',
+    used: 'Underlying source for the state waiver table, and the live count of approved and pending Section 1115 reentry demonstrations, including the 19 Biden-era approvals, the September 2026 approvals and Michigan’s December 2025 withdrawal.',
   },
   /* --- Added 2026-10-13 with the Medicare 190-day section and the seventh
      bill. Each was fetched and read that day: the H.R. 10647 text in full
@@ -2538,28 +2564,70 @@ export const SOURCES: SourceEntry[] = [
     org: 'Treatment Advocacy Center (stance page, document 26-9)',
     url: 'https://www.tac.org/our_stances/medicaid-and-medicare-reform/',
     kind: 'advocacy',
-    used: 'The comparison that prompted the 190-day section: TAC treats the IMD exclusion and the 190-day limit as a pair of discriminatory policies, and adds positions on reentry waivers and work-requirement exemptions, now covered in their own sections, along with the June 2026 reentry waiver count and the status of the undefined mental disorder exemption.',
+    used: 'The comparison that prompted the 190-day section: TAC treats the IMD exclusion and the 190-day limit as a pair of discriminatory policies, and adds positions on reentry waivers and work-requirement exemptions, now covered in their own sections. Its June 2026 reentry count and exemption status have since been superseded by the primary sources below.',
   },
   {
     name: 'Reentry Section 1115 Demonstration Opportunity, Frequently Asked Questions (September 2026)',
     org: 'Centers for Medicare & Medicaid Services',
     url: 'https://www.medicaid.gov/federal-policy-guidance/downloads/reentry-faqs-090920264015.pdf',
     kind: 'government',
-    used: 'The pre-release coverage window of up to 60 days for people leaving prison, and the services reentry demonstrations can cover.',
+    used: 'For new approvals, up to 60 days of pre-release coverage in jails, prisons and adult tribal correctional facilities and up to 90 days in youth correctional facilities, replacing the up to 90 days in SMD 23-003.',
   },
   {
     name: 'IF11830, Medicaid and incarcerated individuals',
     org: 'Congressional Research Service',
     url: 'https://www.congress.gov/crs-product/IF11830',
     kind: 'government',
-    used: 'The inmate exclusion, and the Consolidated Appropriations Act, 2023 requirement, effective January 1, 2025, that states suspend rather than terminate Medicaid for eligible incarcerated juveniles.',
+    used: 'Background on the inmate exclusion and Medicaid coverage during incarceration.',
+  },
+  {
+    name: 'Consolidated Appropriations Act, 2024 (Public Law 118-42), division G, section 205',
+    org: 'U.S. Government Publishing Office (GovInfo)',
+    url: 'https://www.govinfo.gov/content/pkg/PLAW-118publ42/html/PLAW-118publ42.htm',
+    kind: 'primary',
+    used: 'Prohibition on terminating Medicaid because of incarceration, extended from juveniles to all individuals effective January 1, 2026.',
+  },
+  {
+    name: 'CMS approves three new reentry Section 1115 demonstrations and releases reentry FAQs (September 23, 2026)',
+    org: 'Centers for Medicare & Medicaid Services',
+    url: 'https://content.govdelivery.com/accounts/USCMSMEDICAID/bulletins/42c2db8',
+    kind: 'government',
+    used: 'Approvals for Louisiana, Minnesota and Nevada and reentry authority in the District of Columbia renewal, and the release of the September 2026 FAQs.',
+  },
+  {
+    name: 'CMS approves a five-year renewal of Maine’s Whole Person Care waiver (September 25, 2026)',
+    org: 'Centers for Medicare & Medicaid Services',
+    url: 'https://content.govdelivery.com/accounts/USCMSMEDICAID/bulletins/42c8c33',
+    kind: 'government',
+    used: 'New pre-release authority for Maine.',
+  },
+  {
+    name: 'Louisiana Reentry Demonstration approval letter and special terms and conditions (September 23, 2026)',
+    org: 'Centers for Medicare & Medicaid Services',
+    url: 'https://www.medicaid.gov/medicaid/section-1115-demonstrations/downloads/la-reentry-1115-demo-al-stc-09232026.pdf',
+    kind: 'government',
+    used: 'CMS’s reasoning for 60 rather than 90 days and for setting the window by facility.',
   },
   {
     name: 'Implications of Medicaid Work and Reporting Requirements for Adults with Mental Health or Substance Use Disorders',
     org: 'KFF',
     url: 'https://www.kff.org/medicaid/implications-of-medicaid-work-and-reporting-requirements-for-adults-with-mental-health-or-substance-use-disorders/',
     kind: 'research',
-    used: 'The 80-hour requirement, the exemption for substance use disorders and "disabling" mental disorders, and why exemption paperwork is hardest for people with serious mental illness.',
+    used: 'Why exemption paperwork is hardest for adults with serious mental illness, and the expansion group as their main Medicaid pathway.',
+  },
+  {
+    name: 'One Big Beautiful Bill Act (Public Law 119-21), section 71119',
+    org: 'U.S. Government Publishing Office (GovInfo)',
+    url: 'https://www.govinfo.gov/content/pkg/PLAW-119publ21/html/PLAW-119publ21.htm',
+    kind: 'primary',
+    used: 'The community engagement requirement: who it covers, the 80-hour standard, the January 1, 2027 start, the December 31, 2028 limit on exemptions, the medically frail and inmate exclusions, and the three-month post-release rule.',
+  },
+  {
+    name: 'Medicaid Program; Community Engagement Requirement for Certain Individuals, interim final rule with comment period, 91 FR 33348 (June 3, 2026)',
+    org: 'Centers for Medicare & Medicaid Services (Federal Register)',
+    url: 'https://www.federalregister.gov/documents/2026/06/03/2026-11094/medicaid-program-community-engagement-requirement-for-certain-individuals',
+    kind: 'primary',
+    used: 'The "significantly impairs" test for medical frailty, the five-year stable-recovery carve-out for substance use disorder, CMS declining to define disabling mental disorder further, state condition lists, and verification rules before and after January 1, 2028.',
   },
   {
     name: 'H.R. 1 summary for providers',
@@ -2707,7 +2775,7 @@ export function buildKnowledgeBase(): string {
   );
   lines.push('');
 
-  lines.push('## Medicaid work requirements and the undefined mental disorder exemption');
+  lines.push('## Medicaid work requirements and the mental disorder exemption');
   lines.push(WORK_REQUIREMENTS.lede);
   for (const p of WORK_REQUIREMENTS.points) lines.push(`- ${p}`);
   lines.push(

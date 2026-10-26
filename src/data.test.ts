@@ -831,21 +831,43 @@ describe('the reentry and work-requirement sections', () => {
     });
   }
 
-  it('states the juvenile suspension mandate without claiming an adult one', () => {
+  it('states the 2026 adult no-termination rule, the 60/90-day split and the current count', () => {
     const t = REENTRY.points.join(' ');
+    expect(t).toContain('January 1, 2026');
+    expect(t).toContain('Consolidated Appropriations Act, 2024');
     expect(t).toContain('juveniles');
     expect(t).toContain('January 1, 2025');
-    expect(t).toContain('not a uniform federal requirement');
-    expect(t).toContain('19 states');
-    expect(t).toContain('June 2026');
+    expect(t).toContain('22 states and the District of Columbia');
+    expect(t).toContain('youth correctional facilities');
+    expect(t).toContain('up to 60 days');
+    expect(t).not.toContain('not a uniform federal requirement');
+    expect(t).not.toContain('for people leaving prison');
   });
 
-  it('dates the work requirement and the undefined exemption', () => {
+  it('dates the work requirement and reflects the interim final rule', () => {
     const t = WORK_REQUIREMENTS.points.join(' ');
     expect(t).toContain('119-21');
     expect(t).toContain('80 hours');
     expect(t).toContain('January 1, 2027');
-    expect(t).toContain('As of June 2026');
+    expect(t).toContain('December 31, 2028');
+    expect(t).toContain('June 3, 2026');
+    expect(t).toContain('significantly impairs');
+    expect(t).toContain('three months');
+    expect(t).not.toContain('had not defined');
+    expect(WORK_REQUIREMENTS.heading).not.toContain('no one has defined');
+  });
+
+  it('cites the new primary sources in SOURCES', () => {
+    const all = SOURCES.map((x) => x.url);
+    expect(all).toContain(
+      'https://www.govinfo.gov/content/pkg/PLAW-118publ42/html/PLAW-118publ42.htm',
+    );
+    expect(all).toContain(
+      'https://www.govinfo.gov/content/pkg/PLAW-119publ21/html/PLAW-119publ21.htm',
+    );
+    expect(all.some((u) => u.includes('federalregister.gov/documents/2026/06/03/2026-11094'))).toBe(
+      true,
+    );
   });
 
   it('no longer says the page does not cover these topics', () => {
