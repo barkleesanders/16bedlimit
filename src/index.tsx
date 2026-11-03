@@ -720,6 +720,10 @@ app.get('/', (c) => {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          http-equiv="origin-trial"
+          content="AiCiddYXJEjsU3oAZd0aTy/BETqTiSr8lsr2DgVBcf/40bttQgQHrlJkz2HAB//W/VvZMCbTcKczmTZeWCXDIQoAAABOeyJvcmlnaW4iOiJodHRwczovLzE2YmVkbGltaXQuY29tOjQ0MyIsImZlYXR1cmUiOiJXZWJNQ1AiLCJleHBpcnkiOjE4MDYzNjQ4MDB9"
+        />
         <title>{title}</title>
         <meta name="description" content={desc} />
         <link rel="canonical" href={`${origin}/`} />
@@ -2095,6 +2099,10 @@ app.notFound((c) =>
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          http-equiv="origin-trial"
+          content="AiCiddYXJEjsU3oAZd0aTy/BETqTiSr8lsr2DgVBcf/40bttQgQHrlJkz2HAB//W/VvZMCbTcKczmTZeWCXDIQoAAABOeyJvcmlnaW4iOiJodHRwczovLzE2YmVkbGltaXQuY29tOjQ0MyIsImZlYXR1cmUiOiJXZWJNQ1AiLCJleHBpcnkiOjE4MDYzNjQ4MDB9"
+        />
         <title>Not found — The 16-Bed Limit</title>
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
       </head>
