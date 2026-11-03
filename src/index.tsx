@@ -87,6 +87,10 @@ type Bindings = {
   /** Stores the weekly data-freshness report. Optional so a missing binding
    *  degrades to "not checked yet" rather than throwing on every request. */
   FRESHNESS?: KVNamespace;
+  /** WebMCP usage-beacon event store (see WEBMCP.md). Optional so a missing
+   *  binding degrades to dropping pings rather than throwing: the beacon
+   *  endpoint answers 204 either way. */
+  WEBMCP_DB?: D1Database;
 };
 
 /**
@@ -396,6 +400,66 @@ async function runChatStream(
   }
   return result;
 }
+
+// ---------------------------------------------------------------------------
+// WebMCP usage beacon (/ship Phase 1.4w — ship skill shared/webmcp.md, "Usage
+// beacon"). Tool execution happens in the visitor's browser, so this anonymous
+// ping is the only count of real agent usage: {event:'register', tools, path}
+// once per page, {event:'execute', tool, argKeys, path} per call. NEVER
+// argument values — key names only. The endpoint ALWAYS answers 204, bad
+// input included: a beacon failure must never surface in the page.
+// ---------------------------------------------------------------------------
+app.post('/api/webmcp-beacon', async (c) => {
+  try {
+    const raw = await c.req.text();
+    const db = c.env.WEBMCP_DB;
+
+    if (raw.length <= 2048 && db) {
+      const body = JSON.parse(raw) as {
+        event?: unknown;
+        tool?: unknown;
+        tools?: unknown;
+        argKeys?: unknown;
+        path?: unknown;
+      };
+      const strList = (v: unknown, cap: number): string[] | null =>
+        Array.isArray(v) && v.every((s) => typeof s === 'string' && s.length <= cap)
+          ? (v as string[]).slice(0, 32)
+          : null;
+      const tool =
+        typeof body.tool === 'string' && body.tool.length >= 1 && body.tool.length <= 128
+          ? body.tool
+          : null;
+      const tools = strList(body.tools, 128);
+      const argKeys = strList(body.argKeys, 64);
+      const path =
+        typeof body.path === 'string' && body.path.length <= 256 && body.path.startsWith('/')
+          ? body.path
+          : null;
+      const ua = (c.req.header('user-agent') ?? '').slice(0, 512) || null;
+
+      if (body.event === 'register' && tools) {
+        await db
+          .prepare(
+            'INSERT INTO webmcp_beacon_events (event, tool, tools, arg_keys, path, user_agent) VALUES (?, ?, ?, ?, ?, ?)',
+          )
+          .bind('register', null, JSON.stringify(tools), null, path, ua)
+          .run();
+      } else if (body.event === 'execute' && tool) {
+        await db
+          .prepare(
+            'INSERT INTO webmcp_beacon_events (event, tool, tools, arg_keys, path, user_agent) VALUES (?, ?, ?, ?, ?, ?)',
+          )
+          .bind('execute', tool, null, JSON.stringify(argKeys ?? []), path, ua)
+          .run();
+      }
+    }
+  } catch {
+    // Dropped silently by design — see the header comment.
+  }
+
+  return c.body(null, 204);
+});
 
 app.post('/api/chat', async (c) => {
   const limited = await rateLimited(c.env.CHAT_LIMIT, c.req.raw, 'chat');
@@ -2014,6 +2078,11 @@ app.get('/', (c) => {
           </p>
         </aside>
 
+        {/* WebMCP agent tools (/ship Phase 1.4w — see WEBMCP.md): tool definitions in
+            public/webmcp-tools.js, canonical registrar in public/webmcp.js. Same-origin
+            files; browsers without document.modelContext are untouched. */}
+        <script src="/webmcp-tools.js" defer={true} />
+        <script src="/webmcp.js" defer={true} />
         <script type="module" src="/app.js" />
       </body>
     </html>,
