@@ -64,18 +64,29 @@ npx wrangler d1 execute sixteen-bed-limit-webmcp --remote -c ./wrangler.jsonc \
 
 ## Chrome origin trial
 
-**Not yet enrolled.** Neither `16bedlimit.com` nor `www.16bedlimit.com` carries a
-WebMCP origin-trial token yet; enrollment happens in Google's Origin Trials portal
-and is tracked as a fleet-level follow-up (the portal sign-in is the blocker, not
-this repo). Until enrollment — or until WebMCP ships in Chrome stable — the tools
-are live in WebMCP-native browsers (e.g. the ChatGPT desktop app's browser, which
-enables the API internally) and are exercised by the harness below; stock Chrome
-exposure starts at enrollment. When enrolling: the token goes in a
-`<meta http-equiv="origin-trial">` in the served head, and the expiry read off the
-portal gets recorded here. Only the apex origin serves the site —
-`www.16bedlimit.com` redirects to `16bedlimit.com` (measured 2026-11-03:
-`webmcp-check --live https://www.16bedlimit.com` reports the off-host redirect), so
-the apex is the only origin that needs a token unless that redirect is ever removed.
+**Enrolled 2026-11-03** in Google's Origin Trials portal for the WebMCP trial.
+
+| Field | Value |
+|---|---|
+| Origin | `https://16bedlimit.com` |
+| Token expiry | **2027-03-29** (read off the portal at enrollment) |
+| Chrome range | 149–162 |
+| Registration ID | `-5472594826882973695` |
+
+The token is embedded as `<meta http-equiv="origin-trial" content="…">` in the
+served `<head>` of both page shells in `src/index.tsx` (the homepage shell and the
+404 shell), immediately after the viewport meta, so every HTML page this Worker
+serves carries it. The token is not a secret — it is served in public HTML and
+stored nowhere else. Renewal before the 2027-03-29 expiry is a ship task; an
+expired token silently removes the tools from stock Chrome while leaving
+WebMCP-native browsers (e.g. the ChatGPT desktop app's browser, which enables the
+API internally) unaffected.
+
+Only the apex origin serves the site — `www.16bedlimit.com` redirects to
+`16bedlimit.com` (measured 2026-11-03: `webmcp-check --live
+https://www.16bedlimit.com` reports the off-host redirect), so the apex is the
+only origin enrolled and no www token exists. If that redirect is ever removed,
+the www origin must be enrolled separately.
 
 ## Verification record
 
