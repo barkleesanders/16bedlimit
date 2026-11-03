@@ -75,6 +75,19 @@
     }
   ],
 
+  // WebMCP usage-beacon events (see WEBMCP.md). A dedicated database on
+  // purpose: the FRESHNESS KV above is documented as holding the freshness
+  // report only, and beacon pings are an unrelated event stream. D1 is the
+  // fleet-standard beacon store (same shape as the other sites' read-back).
+  "d1_databases": [
+    {
+      "binding": "WEBMCP_DB",
+      "database_name": "sixteen-bed-limit-webmcp",
+      "database_id": "ec23bf98-e774-42d6-8fad-41ae13437ac3",
+      "migrations_dir": "migrations"
+    }
+  ],
+
   "vars": {
     "SITE_ORIGIN": "https://16bedlimit.com"
   }

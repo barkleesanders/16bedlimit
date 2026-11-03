@@ -7,6 +7,7 @@
       "!dist",
       "!node_modules",
       "!src/og-image.ts",
+      "!public/webmcp.js",
       "!**/__fixtures__",
       "!**/fixtures",
       "!**/__snapshots__",
