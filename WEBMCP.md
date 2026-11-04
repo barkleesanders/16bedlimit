@@ -88,6 +88,24 @@ https://www.16bedlimit.com` reports the off-host redirect), so the apex is the
 only origin enrolled and no www token exists. If that redirect is ever removed,
 the www origin must be enrolled separately.
 
+## Discovery advertisement
+
+Added 2026-11-03 (/ship Phase 1.4w, shared/webmcp.md "Discovery
+advertisement") — the four surfaces that tell visiting agents the tools
+exist and instruct them to prefer the tools over scraping:
+
+| Surface | Where it lives |
+|---|---|
+| Tool catalogue `/.well-known/webmcp.json` | Explicit route in `src/index.tsx` (const `WEBMCP_MANIFEST`); tool entries copied from `public/webmcp-tools.js` |
+| robots.txt comment block | The `/robots.txt` route in `src/index.tsx` (existing directives unchanged) |
+| `## WebMCP tools` section in `/llms.txt` | The `/llms.txt` route in `src/index.tsx` — a minimal llms.txt (site name, the homepage's meta-description summary, the section); no page index fabricated |
+| `<link rel="webmcp" href="/.well-known/webmcp.json">` | Both page shells in `src/index.tsx`, immediately after the origin-trial meta |
+
+The manifest's tool names must stay a subset of the registered inventory
+— update the manifest in the same change as any tool addition, removal,
+or rename. Verify with `webmcp-check.mjs --live https://16bedlimit.com
+--require 2 --require-adv` (must print `verdict=ok` and `adv=ok`).
+
 ## Verification record
 
 - Pre-deploy: `node <ship>/tools/webmcp-check.mjs --source . --require 2`
@@ -97,6 +115,6 @@ the www origin must be enrolled separately.
   tool once with the sample inputs above against the live site
   (`--base https://16bedlimit.com`). For served-file proof, download the two scripts
   from the live site into a temp dir and pass `--dir <tmpdir>`.
-- Post-deploy: `webmcp-check.mjs --live https://16bedlimit.com --require 2`,
+- Post-deploy: `webmcp-check.mjs --live https://16bedlimit.com --require 2 --require-adv`,
   re-run the harness against the served files, then POST one synthetic register +
   execute pair to `/api/webmcp-beacon` and read the rows back with the query above.

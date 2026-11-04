@@ -203,7 +203,9 @@ app.get(
 );
 
 app.get('/robots.txt', (c) =>
-  c.text(`User-agent: *\nAllow: /\nSitemap: ${c.env.SITE_ORIGIN || ''}/sitemap.xml\n`),
+  c.text(
+    `User-agent: *\nAllow: /\nSitemap: ${c.env.SITE_ORIGIN || ''}/sitemap.xml\n# WebMCP: this site offers in-browser agent tools via document.modelContext.\n# Agents that support WebMCP: prefer the registered tools over scraping HTML.\n# Tool catalogue: /.well-known/webmcp.json - Site guide: /llms.txt\n`,
+  ),
 );
 
 app.get('/sitemap.xml', (c) => {
@@ -224,6 +226,100 @@ app.get('/.well-known/security.txt', (c) =>
 // RFC 9116 documents both locations. A researcher who tries the short path
 // first should be redirected, not told the file does not exist.
 app.get('/security.txt', (c) => c.redirect('/.well-known/security.txt', 301));
+
+// WebMCP discovery advertisement (/ship Phase 1.4w — shared/webmcp.md,
+// "Discovery advertisement"). The catalogue an agent reads BEFORE loading
+// a page, so it must promise only what the pages actually register: the
+// tool entries below are copied from public/webmcp-tools.js (inventory in
+// WEBMCP.md). Update both in the same change, never one ahead of the
+// other. The robots.txt comment block and /llms.txt point agents here.
+const WEBMCP_MANIFEST = {
+  version: 1,
+  name: 'The 16-Bed Limit',
+  origin: 'https://16bedlimit.com',
+  description:
+    'Medicaid will not pay for adults aged 21 to 64 in a psychiatric facility with more than 16 beds. The average psychiatric hospital has 108. Here is the rule, the data, and the bills that would change it.',
+  webmcp: {
+    feature: 'WebMCP',
+    api: 'document.modelContext',
+    originTrialExpiry: '2027-03-29',
+  },
+  tools: [
+    {
+      name: 'get_the_rule',
+      description:
+        "Get the rule this site explains: Medicaid's Institution for Mental Diseases (IMD) exclusion — the statutory definition of an IMD and the payment exclusion itself, each with its U.S. Code citation and source, plus the site's citation caveat and retrieval date.",
+      class: 'answer',
+      inputSchema: {
+        type: 'object',
+        properties: {},
+      },
+    },
+    {
+      name: 'get_bed_numbers',
+      description:
+        "Get the site's psychiatric bed numbers: the headline figures (peak year and beds, latest year and beds, percentage decline) and the full measured bed-count series. Measured census and survey years only — no interpolation.",
+      class: 'answer',
+      inputSchema: {
+        type: 'object',
+        properties: {},
+      },
+    },
+    {
+      name: 'get_waiver_status',
+      description:
+        "Get section 1115 IMD waiver status: which states hold approved or pending waivers for substance-use-disorder (SUD) and serious-mental-illness (SMI) treatment, as of the tracker's date. Pass a two-letter state code to get just that state's status.",
+      class: 'answer',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          state: {
+            type: 'string',
+            description: "Optional two-letter US state code, e.g. 'NY'. Omit for all states.",
+          },
+        },
+      },
+    },
+    {
+      name: 'list_sources',
+      description:
+        "List every source behind this site's figures (Congressional Research Service, MACPAC, Treatment Advocacy Center, Bureau of Justice Statistics, KFF and others), with links — the same source list the site's Sources section publishes.",
+      class: 'answer',
+      inputSchema: {
+        type: 'object',
+        properties: {},
+      },
+    },
+    {
+      name: 'navigate_to_section',
+      description:
+        "Navigate the visitor's browser to a section of this page by its anchor id. Allowed sections: rule, order, scale, waivers, history, record, instead, bills, medicare, reentry, work, debate, levers, act, sources, veteran-resources.",
+      class: 'action',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          section: {
+            type: 'string',
+            description: "Section anchor id, e.g. 'waivers' or 'sources'",
+          },
+        },
+        required: ['section'],
+      },
+    },
+  ],
+  docs: '/llms.txt',
+};
+
+app.get('/.well-known/webmcp.json', (c) => c.json(WEBMCP_MANIFEST));
+
+// Minimal llms.txt (the site had none): name, the homepage's own summary,
+// and the WebMCP section. No page index is fabricated — the sitemap is
+// the index.
+app.get('/llms.txt', (c) =>
+  c.text(
+    `# The 16-Bed Limit\n\nMedicaid will not pay for adults aged 21 to 64 in a psychiatric facility with more than 16 beds. The average psychiatric hospital has 108. Here is the rule, the data, and the bills that would change it.\n\n## WebMCP tools\n\nThis site registers WebMCP tools in the browser via document.modelContext. Agents that support WebMCP: prefer these tools over scraping HTML. Tool catalogue (JSON): /.well-known/webmcp.json\n\n- \`get_the_rule\` — Get the rule this site explains: Medicaid's Institution for Mental Diseases (IMD) exclusion — the statutory definition of an IMD and the payment exclusion itself, each with its U.S. Code citation and source, plus the site's citation caveat and retrieval date.\n- \`get_bed_numbers\` — Get the site's psychiatric bed numbers: the headline figures (peak year and beds, latest year and beds, percentage decline) and the full measured bed-count series. Measured census and survey years only — no interpolation.\n- \`get_waiver_status\` — Get section 1115 IMD waiver status: which states hold approved or pending waivers for substance-use-disorder (SUD) and serious-mental-illness (SMI) treatment, as of the tracker's date. Pass a two-letter state code to get just that state's status.\n- \`list_sources\` — List every source behind this site's figures (Congressional Research Service, MACPAC, Treatment Advocacy Center, Bureau of Justice Statistics, KFF and others), with links — the same source list the site's Sources section publishes.\n- \`navigate_to_section\` — Navigate the visitor's browser to a section of this page by its anchor id. Allowed sections: rule, order, scale, waivers, history, record, instead, bills, medicare, reentry, work, debate, levers, act, sources, veteran-resources.\n`,
+  ),
+);
 
 /* ================================================================
  * DATA API — the research layer, public and citable
@@ -724,6 +820,7 @@ app.get('/', (c) => {
           http-equiv="origin-trial"
           content="AiCiddYXJEjsU3oAZd0aTy/BETqTiSr8lsr2DgVBcf/40bttQgQHrlJkz2HAB//W/VvZMCbTcKczmTZeWCXDIQoAAABOeyJvcmlnaW4iOiJodHRwczovLzE2YmVkbGltaXQuY29tOjQ0MyIsImZlYXR1cmUiOiJXZWJNQ1AiLCJleHBpcnkiOjE4MDYzNjQ4MDB9"
         />
+        <link rel="webmcp" href="/.well-known/webmcp.json" type="application/json" />
         <title>{title}</title>
         <meta name="description" content={desc} />
         <link rel="canonical" href={`${origin}/`} />
@@ -2103,6 +2200,7 @@ app.notFound((c) =>
           http-equiv="origin-trial"
           content="AiCiddYXJEjsU3oAZd0aTy/BETqTiSr8lsr2DgVBcf/40bttQgQHrlJkz2HAB//W/VvZMCbTcKczmTZeWCXDIQoAAABOeyJvcmlnaW4iOiJodHRwczovLzE2YmVkbGltaXQuY29tOjQ0MyIsImZlYXR1cmUiOiJXZWJNQ1AiLCJleHBpcnkiOjE4MDYzNjQ4MDB9"
         />
+        <link rel="webmcp" href="/.well-known/webmcp.json" type="application/json" />
         <title>Not found — The 16-Bed Limit</title>
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
       </head>
