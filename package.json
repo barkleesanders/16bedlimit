@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "wrangler dev --config ./wrangler.jsonc --env=\"\"",
     "build": "wrangler deploy --dry-run --config ./wrangler.jsonc --env=\"\" --outdir=dist",
-    "check": "npm run build",
+    "check": "npm run lint:observability && npm run build",
+    "lint:observability": "node scripts/check-observability.mjs",
     "gate:release": "npm run lint && npm run typecheck && npm test && npm audit",
     "gate:release:enforcement": "node scripts/stt-cache-enforcement.mjs",
     "lint": "biome check --error-on-warnings .",

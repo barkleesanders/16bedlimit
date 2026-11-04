@@ -5,7 +5,24 @@
   "compatibility_date": "2026-08-01",
   "compatibility_flags": ["nodejs_compat"],
   "build": { "command": "npm run gate:release" },
-  "observability": { "enabled": true },
+  // Native observability (Cloudflare-first, no external/paid products):
+  // Workers Logs + Workers Traces, persisted at full head sampling on this
+  // low-traffic site. Errors also feed Cloudflare Issues -> the cf-issues
+  // auto-fix loop. Guarded by `npm run lint:observability`.
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "persist": true,
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  },
   "ai": { "binding": "AI" },
 
   // Serves public/ as static assets — currently the one accountability report
