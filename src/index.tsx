@@ -74,6 +74,7 @@ import {
 import { FRESHNESS_KEY, type FreshnessReport, runFreshnessCheck } from './freshness';
 import { OG_HEIGHT, OG_WIDTH, ogPng } from './og-image';
 import { CSS } from './styles';
+import { wideEvent } from './wide-event';
 
 interface RateLimiter {
   limit(options: { key: string }): Promise<{ success: boolean }>;
@@ -129,6 +130,11 @@ async function rateLimited(
 }
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+/* Wide-event logging: one canonical JSON http_request event per request
+ * to Workers Logs (see src/wide-event.ts). Outermost middleware so every
+ * route — including error responses — is observed exactly once. */
+app.use('*', wideEvent);
 
 /* ---------------- security headers ----------------
  * Strict CSP. No inline script — the client island is served from /app.js.
