@@ -40,6 +40,7 @@ for (const control of controls) {
   for (const file of [
     'src',
     'scripts',
+    'tools',
     'public',
     'package.json',
     'package-lock.json',

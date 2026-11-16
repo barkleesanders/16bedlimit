@@ -108,8 +108,12 @@ or rename. Verify with `webmcp-check.mjs --live https://16bedlimit.com
 
 ## Verification record
 
-- Pre-deploy: `node <ship>/tools/webmcp-check.mjs --source . --require 2`
-  must print `verdict=ok`.
+- Pre-deploy: `npm run gate:webmcp` runs controls against mutations of this repository's own tool files, then `node tools/webmcp-source-check.mjs --source . --require 2`.
+  The source checker must report `verdict: "ok"`. It uses TypeScript AST extraction and
+  Ajv JSON Schema validation, preserves three outcomes, and pins the reviewed generic
+  registrar bytes so unrelated dynamic registrations remain unmeasured. It runs inside
+  `npm run check`; the missing external helper is not required for source verification.
+  This is a source-only checker. It does not replace the live or execution checks below.
 - Execution proof: `node tools/webmcp-harness.mjs` loads the tool files in a Node VM
   with a fake `document.modelContext`, registers the tools, and executes every Answer
   tool once with the sample inputs above against the live site
