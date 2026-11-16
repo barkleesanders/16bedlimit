@@ -39,6 +39,8 @@ for (const control of controls) {
   const fixture = mkdtempSync(join(tmpdir(), '16bed-stt-negative-'));
   for (const file of [
     'src',
+    'scripts',
+    'tools',
     'public',
     'package.json',
     'package-lock.json',
