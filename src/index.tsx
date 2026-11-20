@@ -813,7 +813,7 @@ app.get('/', (c) => {
   // on is correct on workers.dev today and on the custom domain tomorrow,
   // with no redeploy in between.
   const origin = new URL(c.req.url).origin;
-  const title = 'The 16-Bed Limit — how one Medicaid rule shaped American psychiatric care';
+  const title = "The 16-Bed Limit — Medicaid's psychiatric-care rule";
   const desc =
     'Medicaid will not pay for adults aged 21 to 64 in a psychiatric facility with more than 16 beds. The average psychiatric hospital has 108. Here is the rule, the data, and the bills that would change it.';
 
