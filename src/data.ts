@@ -1075,9 +1075,10 @@ export const BILLS: Bill[] = [
     party: 'R',
     district: 'OR-2',
     introduced: '2026-10-01',
+    cosponsors: '2 (2 D)',
     approach: 'Opt in by state plan, capped at 30 days',
     effect:
-      'Does not move the bed line and does not strike the age bar. Instead it adds a new §1915(m): from quarters beginning on or after January 1, 2027, a state may elect by state plan amendment — no §1115 waiver negotiation — to claim federal payment for an enrolled adult aged 21 to 64 with a mental disorder in the current DSM who is a patient in an IMD, for up to 30 days in a 12-month period for each person. The conditions are the longest in any of the seven bills: the state must hold its non-federal spending on outpatient and community-based services at its fiscal 2023 level, report to the Secretary, use evidence-based placement criteria, and meet transition-of-care duties that include contact with each discharged beneficiary within 72 hours. A rule of construction says nothing in it encourages placement in an institution where a community setting would be more appropriate, and it does not displace §1115 demonstrations. Introduced by Bentz with Goldman — the sponsor of H.R. 5462 — as his cosponsor, so the member who three times proposed raising the threshold is now also on the bill that leaves the threshold where it is and routes around it. Read from the introduced text on 2026-10-13.',
+      'Does not move the bed line and does not strike the age bar. Instead it adds a new §1915(m): from quarters beginning on or after January 1, 2027, a state may elect by state plan amendment — no §1115 waiver negotiation — to claim federal payment for an enrolled adult aged 21 to 64 with a mental disorder in the current DSM who is a patient in an IMD, for up to 30 days in a 12-month period for each person. The conditions are the longest in any of the seven bills: the state must hold its non-federal spending on outpatient and community-based services at its fiscal 2023 level, report to the Secretary, use evidence-based placement criteria, and meet transition-of-care duties under which every IMD taking part must meet one of three alternatives for follow-up care at a lower level of clinical intensity: it is itself able to provide that care; it has an established relationship with another facility or provider that is able to provide that care and accepts patients receiving medical assistance under Medicaid, so it can arrange for a discharged patient to receive it there; or it maintains protocols requiring that contact is made with each discharged beneficiary within 72 hours of discharge, to ensure access to and engagement in follow-up care. Contact within 72 hours is the third of those options, not a duty every facility owes on top of the other two. A rule of construction says nothing in it encourages placement in an institution where a community setting would be more appropriate, and it does not displace §1115 demonstrations. Introduced by Bentz with Goldman — the sponsor of H.R. 5462 — as his original cosponsor, so the member who three times proposed raising the threshold is now also on the bill that leaves the threshold where it is and routes around it. Rep. Andrea Salinas of Oregon joined as a cosponsor on November 17, 2026. Read from the introduced text on 2026-10-13; the transition-of-care alternatives were re-read in that text, and the cosponsor list checked against the bill’s BILLSTATUS record, on 2026-11-23.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/10647',
   },
@@ -1104,6 +1105,14 @@ export const BILLS_COMPOSITION =
  * MedPAC's count is fee-for-service only and is dated January 2023;
  * TAC's page carries a January 2024 version of the same figure. The two
  * are stated separately below rather than merged.
+ *
+ * H.R. 10876 was added on 2026-11-23, read that day from its introduced
+ * text (GovInfo BILLS-119hr10876ih) and its BILLSTATUS record: a second
+ * House repeal of the 190-day limit, and a broader deregulation bill
+ * besides. The same pass re-read H.R. 10647's §1915(m) transition-of-care
+ * clause — the 72-hour contact duty is the third of three alternatives,
+ * not a universal requirement — and recorded Rep. Andrea Salinas joining
+ * it as a cosponsor on 2026-11-17, from its BILLSTATUS record.
  * ------------------------------------------------------------------ */
 
 export interface MedicareBill {
@@ -1150,6 +1159,16 @@ export const MEDICARE_LIMIT = {
       effect:
         'The Senate companion approach to the same sentence: amends Title XVIII to eliminate the 190-day lifetime limit. Note the contrast with the IMD bills above — for this limit, a Senate vehicle exists, sponsored by a Republican and cosponsored from both parties.',
       url: 'https://www.congress.gov/bill/119th-congress/senate-bill/4076',
+    },
+    {
+      number: 'H.R. 10876',
+      title: 'Behavioral Healthcare Deregulation Act',
+      sponsor: 'Mike Kelly (R-PA)',
+      introduced: '2026-10-22',
+      committee: 'House Ways and Means and Energy and Commerce',
+      effect:
+        'A second House proposal to repeal the cap — and a much wider bill than either of the two above, so it should not be read as a cap repeal with a different sponsor. Section 3 does repeal it: it strikes the 190-day lifetime limit from §1812, for items and services furnished on or after October 1, 2027. But the bill’s own short title is the Behavioral Healthcare Deregulation Act, and the rest of it is deregulation. Section 5 strikes paragraphs (3) and (4) of §1861(f) — the clinical-record requirement and the staffing requirements the Secretary sets for an active program of treatment, which are part of what makes a facility a psychiatric hospital at all — and it strikes subparagraphs (E) and (F) of §1886(s)(4), the requirements that an inpatient psychiatric facility collect and submit standardized patient assessment data at admission and discharge and that the quality data it submits be made public, along with clause (iv) of subparagraph (D). Section 4 bars the §1813 deductible reduction for inpatient psychiatric services furnished to a person admitted after an involuntary commitment order. Section 6 pays for behavioral health integration in primary care at 175 percent of the ordinary rate in 2027, 150 percent in 2028 and 125 percent in 2029, waives budget neutrality for the increase, and funds technical assistance for practices adopting those models. This is a separate bill from the seven Medicaid bills above and is not counted among them. Read from the introduced text on 2026-11-23.',
+      url: 'https://www.congress.gov/bill/119th-congress/house-bill/10876',
     },
   ] as MedicareBill[],
   countSource:
@@ -1523,7 +1542,7 @@ export const ACTION_TARGETS: ActionTarget[] = [
     id: 'bentz',
     who: 'Rep. Cliff Bentz',
     role: 'Sponsor, H.R. 10647 — Oregon’s 2nd district',
-    why: 'Lead sponsor of the newest bill, introduced October 1, 2026 with Goldman as cosponsor: the state-plan route, capped at 30 days, with the maintenance-of-effort and discharge conditions attached. His office is the one to ask when it gets a hearing, and whether the 30-day cap is the price of the option or a position he would move on.',
+    why: 'Lead sponsor of the newest bill, introduced October 1, 2026 with Goldman as cosponsor and joined by Salinas on November 17, 2026: the state-plan route, capped at 30 days, with the maintenance-of-effort and discharge conditions attached. His office is the one to ask when it gets a hearing, and whether the 30-day cap is the price of the option or a position he would move on.',
     url: 'https://bentz.house.gov/contact',
     method: 'Web form.',
     verified: '2026-10-13',
@@ -2558,6 +2577,13 @@ export const SOURCES: SourceEntry[] = [
     url: 'https://www.govinfo.gov/app/details/BILLS-119hr4619ih',
     kind: 'primary',
     used: 'The House bill that would strike the 190-day limit from §1812.',
+  },
+  {
+    name: 'H.R. 10876 (Behavioral Healthcare Deregulation Act), introduced text',
+    org: 'U.S. Government Publishing Office (GovInfo)',
+    url: 'https://www.govinfo.gov/app/details/BILLS-119hr10876ih',
+    kind: 'primary',
+    used: 'Read on 2026-11-23. The second House bill that would strike the 190-day limit from §1812 — and the bill that would also remove the standardized admission-and-discharge assessment requirement and the public quality-reporting requirement for inpatient psychiatric facilities, at §1886(s)(4)(E) and (F).',
   },
   {
     name: 'Medicaid and Medicare Reform',

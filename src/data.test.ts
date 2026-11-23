@@ -680,6 +680,27 @@ describe('the bills table', () => {
     expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(7);
   });
 
+  it('states H.R. 10647’s 72-hour contact duty as one of three alternatives, not a universal one', () => {
+    // §1915(m)(4)(C)(iv) is a three-way "or": the IMD can provide the
+    // lower-intensity care itself, hold an established relationship with
+    // a Medicaid-accepting provider that can, or run 72-hour contact
+    // protocols. An earlier version of this entry stated the third as a
+    // duty every facility owed; that reading is wrong and must not return.
+    const b = BILLS.find((x) => x.number === 'H.R. 10647');
+    expect(b).toBeDefined();
+    expect(b?.effect).toContain('one of three alternatives');
+    expect(b?.effect).toContain('established relationship');
+    expect(b?.effect).toContain('within 72 hours of discharge');
+    expect(b?.effect).toContain('not a duty every facility owes');
+    expect(b?.effect.toLowerCase()).not.toContain('duties that include contact with each discharged');
+    // Cosponsors as read from BILLSTATUS on 2026-11-23: Goldman (original)
+    // and Salinas, who joined 2026-11-17.
+    expect(b?.cosponsors).toBe('2 (2 D)');
+    expect(b?.effect).toContain('Andrea Salinas');
+    expect(b?.effect).toContain('November 17, 2026');
+    expect(b?.status).toContain('Introduced');
+  });
+
   it('records the bipartisan sponsors the set actually has', () => {
     // Republican sponsorship is the single most load-bearing fact in the
     // composition note. If a row is ever dropped, the note becomes false.
@@ -702,13 +723,32 @@ describe('the Medicare 190-day limit section', () => {
     expect(urls.has(MEDICARE_LIMIT.countSource), 'MedPAC chapter in SOURCES').toBe(true);
   });
 
-  it('carries one House and one Senate bill, each on its own record', () => {
-    expect(MEDICARE_LIMIT.bills).toHaveLength(2);
+  it('carries two House bills and one Senate bill, each on its own record', () => {
+    expect(MEDICARE_LIMIT.bills).toHaveLength(3);
     const nums = MEDICARE_LIMIT.bills.map((b) => b.number).sort();
-    expect(nums).toEqual(['H.R. 4619', 'S. 4076']);
+    expect(nums).toEqual(['H.R. 10876', 'H.R. 4619', 'S. 4076']);
     for (const b of MEDICARE_LIMIT.bills) {
       expect(b.url).toMatch(/^https:\/\/www\.congress\.gov\/bill\/119th-congress\//);
     }
+  });
+
+  it('does not describe H.R. 10876 as merely a cap repeal', () => {
+    // H.R. 10876 is a second House repeal of the 190-day limit, but it is
+    // a separate bill from the seven Medicaid bills and a wider one: it
+    // also removes the standardized admission-and-discharge assessment
+    // requirement and the public quality-reporting requirement.
+    const b = MEDICARE_LIMIT.bills.find((x) => x.number === 'H.R. 10876');
+    expect(b).toBeDefined();
+    expect(b?.title).toBe('Behavioral Healthcare Deregulation Act');
+    expect(b?.sponsor).toContain('Mike Kelly');
+    expect(b?.introduced).toBe('2026-10-22');
+    expect(b?.effect).toContain('190-day');
+    expect(b?.effect.toLowerCase()).toContain('standardized patient assessment');
+    expect(b?.effect.toLowerCase()).toContain('made public');
+    expect(b?.effect).toContain('not counted among them');
+    // And it must not leak into the Medicaid count.
+    expect(BILLS.map((x) => x.number)).not.toContain('H.R. 10876');
+    expect(BILLS).toHaveLength(7);
   });
 });
 
