@@ -74,6 +74,7 @@ import {
 import { FRESHNESS_KEY, type FreshnessReport, runFreshnessCheck } from './freshness';
 import { OG_HEIGHT, OG_WIDTH, ogPng } from './og-image';
 import { CSS } from './styles';
+import traks, { TRAKS_SITE_KEY } from './traks';
 import { wideEvent } from './wide-event';
 
 interface RateLimiter {
@@ -187,6 +188,9 @@ app.use('*', async (c, next) => {
 /* ================================================================
  * ASSETS
  * ================================================================ */
+
+// Traks managed first-party mount: /__traks/t.js + /__traks/event (src/traks.ts).
+app.route('/', traks);
 
 app.get('/app.js', (c) =>
   c.body(CLIENT_JS, 200, {
@@ -2191,6 +2195,12 @@ app.get('/', (c) => {
         <script src="/webmcp-tools.js" defer={true} />
         <script src="/webmcp.js" defer={true} />
         <script type="module" src="/app.js" />
+        <script
+          defer={true}
+          src="/__traks/t.js"
+          data-site={TRAKS_SITE_KEY}
+          data-traks-managed="1"
+        />
       </body>
     </html>,
   );
