@@ -12,7 +12,7 @@ const checker = resolve('tools/webmcp-source-check.mjs');
 const cases = [
   ['actual inventory', (s) => s, 0],
   ['no inventory', (s) => s.replace('window.WEBMCP_TOOLS = [', 'window.NOT_TOOLS = ['), 1],
-  ['unreviewed registrar', (s) => s, 2, (s) => s + '\n// changed registrar bytes\n'],
+  ['unreviewed registrar', (s) => s, 2, (s) => `${s}\n// changed registrar bytes\n`],
   ['invalid name', (s) => s.replace("name: 'get_the_rule'", "name: 'bad name'"), 1],
   ['duplicate name', (s) => s.replace("name: 'get_bed_numbers'", "name: 'get_the_rule'"), 1],
   ['missing description', (s) => s.replace('description:', 'missingDescription:'), 1],
