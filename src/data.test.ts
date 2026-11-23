@@ -692,7 +692,9 @@ describe('the bills table', () => {
     expect(b?.effect).toContain('established relationship');
     expect(b?.effect).toContain('within 72 hours of discharge');
     expect(b?.effect).toContain('not a duty every facility owes');
-    expect(b?.effect.toLowerCase()).not.toContain('duties that include contact with each discharged');
+    expect(b?.effect.toLowerCase()).not.toContain(
+      'duties that include contact with each discharged',
+    );
     // Cosponsors as read from BILLSTATUS on 2026-11-23: Goldman (original)
     // and Salinas, who joined 2026-11-17.
     expect(b?.cosponsors).toBe('2 (2 D)');
