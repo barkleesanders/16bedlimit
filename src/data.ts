@@ -959,6 +959,12 @@ export interface Bill {
  * count said six. The composition note below no longer states a cosponsor
  * total: the seventh bill changed the denominator, and a current total for
  * all seven has not been re-read from BILLSTATUS in this pass.
+ * The eighth, H.R. 10270, was added on 2026-11-23 and read from its
+ * introduced text (GovInfo BILLS-119hr10270ih) and its BILLSTATUS record;
+ * it was introduced on 2026-09-03, the day after the September enumeration
+ * closed, and the October pass missed it as well. It surfaced in the
+ * nightly bill check of 2026-11-23, and the owner approved adding it the
+ * same day.
  * Every one has exactly three recorded actions — introduced, introduced,
  * referred — and none has moved since. congress.gov refuses automated
  * requests, so the status here comes from GovInfo, which is the same Library
@@ -988,7 +994,7 @@ export const BILLS: Bill[] = [
     cosponsors: '8 (6 D, 2 R)',
     approach: 'Repeal, with a duty attached',
     effect:
-      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the seven that pairs a repeal with a community-capacity obligation. Rep. Zoe Lofgren of California joined as a cosponsor on November 18, 2026 (checked against the bill’s Congress.gov cosponsor list on 2026-11-23).',
+      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the eight that pairs a repeal with a community-capacity obligation. Rep. Zoe Lofgren of California joined as a cosponsor on November 18, 2026 (checked against the bill’s Congress.gov cosponsor list on 2026-11-23).',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/4022',
   },
@@ -1033,7 +1039,7 @@ export const BILLS: Bill[] = [
     cosponsors: '3 (2 R, 1 D)',
     approach: 'Let the bar expire',
     effect:
-      'The most surgical drafting of the seven. It removes the “other than services in an institution for mental diseases” parentheticals from §1905(a)(1), (a)(4)(A) and (a)(15), repeals (a)(14) as spent, and — instead of deleting the age-bar clause — inserts “furnished before January 1, 2027” into it, so the bar expires rather than being struck. The state-plan option for addiction treatment at §1915(l) is given the same end date.',
+      'The most surgical drafting of the eight. It removes the “other than services in an institution for mental diseases” parentheticals from §1905(a)(1), (a)(4)(A) and (a)(15), repeals (a)(14) as spent, and — instead of deleting the age-bar clause — inserts “furnished before January 1, 2027” into it, so the bar expires rather than being struck. The state-plan option for addiction treatment at §1915(l) is given the same end date.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/5944',
   },
@@ -1063,9 +1069,24 @@ export const BILLS: Bill[] = [
     cosponsors: '1 (1 D)',
     approach: 'Carve out one group',
     effect:
-      'The narrowest of the seven, and the only one written for a named group. It leaves the age bar standing and adds an exception to it: a child in foster care placed in a qualified residential treatment program, as that term is defined at §472(k)(4), stays covered. Everyone else the bar reaches is unaffected. Like H.R. 5944 it edits the clause by position rather than by paragraph number — “the matter designated as subdivision (B) following the last numbered paragraph” — which is the drafting that survives the next renumbering of §1905(a).',
+      'The narrowest of the eight, and the only one written for a named group. It leaves the age bar standing and adds an exception to it: a child in foster care placed in a qualified residential treatment program, as that term is defined at §472(k)(4), stays covered. Everyone else the bar reaches is unaffected. Like H.R. 5944 it edits the clause by position rather than by paragraph number — “the matter designated as subdivision (B) following the last numbered paragraph” — which is the drafting that survives the next renumbering of §1905(a).',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/8095',
+  },
+  {
+    number: 'H.R. 10270',
+    slug: 'hr10270',
+    title: 'Supporting 9–8–8 Crisis Stabilization Act',
+    sponsor: 'Dan Goldman',
+    party: 'D',
+    district: 'NY-10',
+    introduced: '2026-09-03',
+    cosponsors: '5 (5 D)',
+    approach: 'Carve out facility types',
+    effect:
+      'Leaves the age bar and the bed line standing, and rewrites the definition both turn on instead. Beginning the day after enactment, §1905(i) would provide that an institution for mental diseases does not include four kinds of facility: a clinic certified by the state as a certified community behavioral health clinic for purposes of participating in a demonstration program conducted under section 223(d) of the Protecting Access to Medicare Act of 2014; a community mental health center that meets the criteria specified in section 1913(c) of the Public Health Service Act; a crisis receiving and stabilization facility, a term the bill defines in a new §1905(ll)(1); and a mental health and substance use urgent care facility, defined in §1905(ll)(2) as a facility where a person experiencing a mental or behavioral health crisis may walk in without an appointment to receive crisis assessment services, crisis intervention services, medication, and connection to other appropriate services. The crisis facility definition carries the conditions: the facility is licensed or certified under state law to furnish crisis response services, is available 24 hours a day and 7 days a week, provides at minimum 23 hours of observation and assessment services followed by 48 hours of crisis stabilization services including withdrawal management and 24-hour medical monitoring, does not deny or limit services on the basis of a patient’s ability to pay, place of residence, prior engagement with the criminal justice system, acuity, or intellectual or developmental disability, applies a sliding scale of fees adjusted to ability to pay, accepts referrals from law enforcement officers, emergency medical personnel and family members, and holds its average length of stay under 150 hours. A facility of one of the four kinds is not an IMD at all, whatever its bed count, so the exclusion never reaches the people treated in it. The Secretary owes states guidance within 180 days of enactment and, within one year, a report written with the Attorney General on how far these facilities divert mental health and substance use emergencies from law enforcement, emergency rooms, psychiatric hospitals and jails. It is Goldman’s second bill in this set: the sponsor of H.R. 5462, which would raise the threshold to 36 beds, here leaves the threshold where it is and takes four kinds of facility out of the definition instead. All five cosponsors are Democrats and all five were original; one of them, Rep. Doris Matsui of California, is the sponsor of H.R. 10280, the 9–8–8 Implementation Act of 2026, which the Congressional Research Service records as this bill’s related bill. Read from the introduced text and the bill’s BILLSTATUS record on 2026-11-23.',
+    status: 'Introduced; referred to committee',
+    congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/10270',
   },
   {
     number: 'H.R. 10647',
@@ -1078,7 +1099,7 @@ export const BILLS: Bill[] = [
     cosponsors: '2 (2 D)',
     approach: 'Opt in by state plan, capped at 30 days',
     effect:
-      'Does not move the bed line and does not strike the age bar. Instead it adds a new §1915(m): from quarters beginning on or after January 1, 2027, a state may elect by state plan amendment — no §1115 waiver negotiation — to claim federal payment for an enrolled adult aged 21 to 64 with a mental disorder in the current DSM who is a patient in an IMD, for up to 30 days in a 12-month period for each person. The conditions are the longest in any of the seven bills: the state must hold its non-federal spending on outpatient and community-based services at its fiscal 2023 level, report to the Secretary, use evidence-based placement criteria, and meet transition-of-care duties under which every IMD taking part must meet one of three alternatives for follow-up care at a lower level of clinical intensity: it is itself able to provide that care; it has an established relationship with another facility or provider that is able to provide that care and accepts patients receiving medical assistance under Medicaid, so it can arrange for a discharged patient to receive it there; or it maintains protocols requiring that contact is made with each discharged beneficiary within 72 hours of discharge, to ensure access to and engagement in follow-up care. Contact within 72 hours is the third of those options, not a duty every facility owes on top of the other two. A rule of construction says nothing in it encourages placement in an institution where a community setting would be more appropriate, and it does not displace §1115 demonstrations. Introduced by Bentz with Goldman — the sponsor of H.R. 5462 — as his original cosponsor, so the member who three times proposed raising the threshold is now also on the bill that leaves the threshold where it is and routes around it. Rep. Andrea Salinas of Oregon joined as a cosponsor on November 17, 2026. Read from the introduced text on 2026-10-13; the transition-of-care alternatives were re-read in that text, and the cosponsor list checked against the bill’s BILLSTATUS record, on 2026-11-23.',
+      'Does not move the bed line and does not strike the age bar. Instead it adds a new §1915(m): from quarters beginning on or after January 1, 2027, a state may elect by state plan amendment — no §1115 waiver negotiation — to claim federal payment for an enrolled adult aged 21 to 64 with a mental disorder in the current DSM who is a patient in an IMD, for up to 30 days in a 12-month period for each person. The conditions are the longest in any of the eight bills: the state must hold its non-federal spending on outpatient and community-based services at its fiscal 2023 level, report to the Secretary, use evidence-based placement criteria, and meet transition-of-care duties under which every IMD taking part must meet one of three alternatives for follow-up care at a lower level of clinical intensity: it is itself able to provide that care; it has an established relationship with another facility or provider that is able to provide that care and accepts patients receiving medical assistance under Medicaid, so it can arrange for a discharged patient to receive it there; or it maintains protocols requiring that contact is made with each discharged beneficiary within 72 hours of discharge, to ensure access to and engagement in follow-up care. Contact within 72 hours is the third of those options, not a duty every facility owes on top of the other two. A rule of construction says nothing in it encourages placement in an institution where a community setting would be more appropriate, and it does not displace §1115 demonstrations. Introduced by Bentz with Goldman — the sponsor of H.R. 5462 — as his original cosponsor, so the member who three times proposed raising the threshold is now also on the bill that leaves the threshold where it is and routes around it. Rep. Andrea Salinas of Oregon joined as a cosponsor on November 17, 2026. Read from the introduced text on 2026-10-13; the transition-of-care alternatives were re-read in that text, and the cosponsor list checked against the bill’s BILLSTATUS record, on 2026-11-23.',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/10647',
   },
@@ -1087,11 +1108,12 @@ export const BILLS: Bill[] = [
 /**
  * What the set shows, stated flatly. Each half of this was read off the
  * BILLSTATUS records, not inferred: the referral line is identical in all
- * seven (for H.R. 10647 it is printed in the introduced text itself), and
+ * eight (for H.R. 10647 and H.R. 10270 it is printed in the introduced text
+ * itself), and
  * the party letters come from the sponsor and cosponsor fields.
  */
 export const BILLS_COMPOSITION =
-  'All seven went to the same place — the House Committee on Energy and Commerce — and none has left it. Not one has had a hearing, a markup, a vote or a CBO score. None of the seven has a Senate companion; the Senate has no vehicle for this at all. The sponsorship is bipartisan across the set rather than within each bill: three of the seven are sponsored by Republicans, and three of the seven carry Republican cosponsors. They also disagree with each other about the remedy, which is six different answers competing for the same committee slot.';
+  'All eight went to the same place — the House Committee on Energy and Commerce — and none has left it. Not one has had a hearing, a markup, a vote or a CBO score. None of the eight has a Senate companion; the Senate has no vehicle for this at all. The sponsorship is bipartisan across the set rather than within each bill: three of the eight are sponsored by Republicans, and three of the eight carry Republican cosponsors. They also disagree with each other about the remedy, which is seven different answers competing for the same committee slot.';
 
 /* ------------------------------------------------------------------ *
  * 6b. THE OTHER LIMIT — MEDICARE'S 190 DAYS
@@ -1167,7 +1189,7 @@ export const MEDICARE_LIMIT = {
       introduced: '2026-10-22',
       committee: 'House Ways and Means and Energy and Commerce',
       effect:
-        'A second House proposal to repeal the cap — and a much wider bill than either of the two above, so it should not be read as a cap repeal with a different sponsor. Section 3 does repeal it: it strikes the 190-day lifetime limit from §1812, for items and services furnished on or after October 1, 2027. But the bill’s own short title is the Behavioral Healthcare Deregulation Act, and the rest of it is deregulation. Section 5 strikes paragraphs (3) and (4) of §1861(f) — the clinical-record requirement and the staffing requirements the Secretary sets for an active program of treatment, which are part of what makes a facility a psychiatric hospital at all — and it strikes subparagraphs (E) and (F) of §1886(s)(4), the requirements that an inpatient psychiatric facility collect and submit standardized patient assessment data at admission and discharge and that the quality data it submits be made public, along with clause (iv) of subparagraph (D). Section 4 bars the §1813 deductible reduction for inpatient psychiatric services furnished to a person admitted after an involuntary commitment order. Section 6 pays for behavioral health integration in primary care at 175 percent of the ordinary rate in 2027, 150 percent in 2028 and 125 percent in 2029, waives budget neutrality for the increase, and funds technical assistance for practices adopting those models. This is a separate bill from the seven Medicaid bills above and is not counted among them. Read from the introduced text on 2026-11-23.',
+        'A second House proposal to repeal the cap — and a much wider bill than either of the two above, so it should not be read as a cap repeal with a different sponsor. Section 3 does repeal it: it strikes the 190-day lifetime limit from §1812, for items and services furnished on or after October 1, 2027. But the bill’s own short title is the Behavioral Healthcare Deregulation Act, and the rest of it is deregulation. Section 5 strikes paragraphs (3) and (4) of §1861(f) — the clinical-record requirement and the staffing requirements the Secretary sets for an active program of treatment, which are part of what makes a facility a psychiatric hospital at all — and it strikes subparagraphs (E) and (F) of §1886(s)(4), the requirements that an inpatient psychiatric facility collect and submit standardized patient assessment data at admission and discharge and that the quality data it submits be made public, along with clause (iv) of subparagraph (D). Section 4 bars the §1813 deductible reduction for inpatient psychiatric services furnished to a person admitted after an involuntary commitment order. Section 6 pays for behavioral health integration in primary care at 175 percent of the ordinary rate in 2027, 150 percent in 2028 and 125 percent in 2029, waives budget neutrality for the increase, and funds technical assistance for practices adopting those models. This is a separate bill from the eight Medicaid bills above and is not counted among them. Read from the introduced text on 2026-11-23.',
       url: 'https://www.congress.gov/bill/119th-congress/house-bill/10876',
     },
   ] as MedicareBill[],
@@ -1486,7 +1508,7 @@ export const ACTION_TARGETS: ActionTarget[] = [
   {
     id: 'goldman',
     who: 'Rep. Dan Goldman',
-    role: 'Sponsor, H.R. 5462 — New York’s 10th district',
+    role: 'Sponsor, H.R. 5462 and H.R. 10270 — New York’s 10th district',
     why: 'He introduced the bill that would raise the limit from 16 beds to 36. Messages of support to a sponsor are counted by their staff and cited when they ask leadership for a hearing.',
     url: 'https://goldman.house.gov/contact',
     method:
@@ -1506,7 +1528,7 @@ export const ACTION_TARGETS: ActionTarget[] = [
     id: 'carbajal',
     who: 'Rep. Salud Carbajal',
     role: 'Sponsor, H.R. 4022 — California’s 24th district',
-    why: 'His is the only one of the seven bills that pairs repeal with a duty on states to build outpatient and crisis capacity, which is the drafting that answers the main objection to repeal.',
+    why: 'His is the only one of the eight bills that pairs repeal with a duty on states to build outpatient and crisis capacity, which is the drafting that answers the main objection to repeal.',
     url: 'https://carbajal.house.gov/contact/',
     method: 'Web form.',
     verified: '2026-09-02',
@@ -2220,7 +2242,7 @@ export const CLOSEST_CALL = {
 };
 
 export const LIVE_BILLS_NOTE =
-  'Seven bills in the 119th Congress would change this rule, and all seven are sitting in the same committee. Not one of them has a Senate companion — the Michelle Alyssa Go Act has now been introduced in three consecutive Congresses without ever getting one, and its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of the seven; a bill has to leave committee to get one.';
+  'Eight bills in the 119th Congress would change this rule, and all eight are sitting in the same committee. Not one of them has a Senate companion — the Michelle Alyssa Go Act has now been introduced in three consecutive Congresses without ever getting one, and its cosponsor count and its bipartisanship have both gone down since the 118th. No CBO score exists for any of the eight; a bill has to leave committee to get one.';
 
 /** The answer to “which party did this”, which is that the question has no answer. */
 export const PARTY_VERDICT = {
@@ -2570,6 +2592,16 @@ export const SOURCES: SourceEntry[] = [
     url: 'https://www.govinfo.gov/content/pkg/BILLS-119hr10647ih/html/BILLS-119hr10647ih.htm',
     kind: 'primary',
     used: 'The seventh bill: the new §1915(m) state plan option, its 30-day cap, maintenance-of-effort and transition-of-care conditions, read in full.',
+  },
+  /* --- Added 2026-11-23 with the eighth bill. The H.R. 10270 text was
+     fetched and read in full that day from GovInfo, with its BILLSTATUS
+     record. --- */
+  {
+    name: 'H.R. 10270 (Supporting 9–8–8 Crisis Stabilization Act), introduced text',
+    org: 'U.S. Government Publishing Office (GovInfo)',
+    url: 'https://www.govinfo.gov/content/pkg/BILLS-119hr10270ih/html/BILLS-119hr10270ih.htm',
+    kind: 'primary',
+    used: 'The eighth bill: the new §1905(i)(2) carve-out taking certified community behavioral health clinics, community mental health centers, crisis receiving and stabilization facilities and mental health and substance use urgent care facilities out of the IMD definition, with the §1905(ll) definitions and their conditions, read in full.',
   },
   {
     name: 'H.R. 4619 (Medicare Mental Health Inpatient Equity Act of 2025), introduced text',

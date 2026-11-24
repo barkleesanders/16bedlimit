@@ -646,10 +646,10 @@ describe('executive order 14321', () => {
 });
 
 describe('the bills table', () => {
-  it('carries all seven bills, each identified uniquely', () => {
-    expect(BILLS).toHaveLength(7);
-    expect(new Set(BILLS.map((b) => b.number)).size).toBe(7);
-    expect(new Set(BILLS.map((b) => b.slug)).size).toBe(7);
+  it('carries all eight bills, each identified uniquely', () => {
+    expect(BILLS).toHaveLength(8);
+    expect(new Set(BILLS.map((b) => b.number)).size).toBe(8);
+    expect(new Set(BILLS.map((b) => b.slug)).size).toBe(8);
     for (const b of BILLS) {
       expect(b.number, b.slug).toMatch(/^H\.R\. \d+$/);
       expect(b.slug).toMatch(/^hr\d+$/);
@@ -677,7 +677,7 @@ describe('the bills table', () => {
       const n = b.number.replace('H.R. ', '');
       expect(b.congressUrl).toBe(`https://www.congress.gov/bill/119th-congress/house-bill/${n}`);
     }
-    expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(7);
+    expect(new Set(BILLS.map((b) => b.congressUrl)).size).toBe(8);
   });
 
   it('states H.R. 10647’s 72-hour contact duty as one of three alternatives, not a universal one', () => {
@@ -703,6 +703,35 @@ describe('the bills table', () => {
     expect(b?.status).toContain('Introduced');
   });
 
+  it('carves facility types, not people, out of the definition in H.R. 10270', () => {
+    // The eighth bill works on §1905(i) itself: the four facility kinds in
+    // the new (i)(2) are not IMDs at all. Read from BILLS-119hr10270ih and
+    // BILLSTATUS-119hr10270 on 2026-11-23: five cosponsors, all Democrats,
+    // all original; Energy and Commerce, like the rest of the set.
+    const b = BILLS.find((x) => x.number === 'H.R. 10270');
+    expect(b).toBeDefined();
+    expect(b?.title).toBe('Supporting 9–8–8 Crisis Stabilization Act');
+    expect(b?.sponsor).toBe('Dan Goldman');
+    expect(b?.party).toBe('D');
+    expect(b?.district).toBe('NY-10');
+    expect(b?.introduced).toBe('2026-09-03');
+    expect(b?.cosponsors).toBe('5 (5 D)');
+    expect(b?.effect).toContain('certified community behavioral health clinic');
+    expect(b?.effect).toContain('community mental health center');
+    expect(b?.effect).toContain('crisis receiving and stabilization facility');
+    expect(b?.effect).toContain('mental health and substance use urgent care facility');
+    expect(b?.effect).toContain('150 hours');
+    // The related bill is named, with its sponsor: Matsui, H.R. 10280.
+    expect(b?.effect).toContain('H.R. 10280');
+    expect(b?.effect).toContain('Matsui');
+    expect(b?.status).toContain('Introduced');
+    // It is Goldman's second bill in the set, and it belongs to the
+    // Medicaid count only — never the Medicare one.
+    expect(BILLS.filter((x) => x.sponsor === 'Dan Goldman')).toHaveLength(2);
+    expect(MEDICARE_LIMIT.bills.map((x) => x.number)).not.toContain('H.R. 10270');
+    expect(BILLS_COMPOSITION).toContain('All eight went to the same place');
+  });
+
   it('records the bipartisan sponsors the set actually has', () => {
     // Republican sponsorship is the single most load-bearing fact in the
     // composition note. If a row is ever dropped, the note becomes false.
@@ -711,7 +740,7 @@ describe('the bills table', () => {
     expect(rep.map((b) => b.number).sort()).toEqual(['H.R. 10647', 'H.R. 5944', 'H.R. 8095']);
     expect(BILLS_COMPOSITION).toContain('Energy and Commerce');
     // Referred to the COMMITTEE — no subcommittee referral is recorded for
-    // any of the seven, checked against BILLSTATUS with a positive control.
+    // any of the eight, checked against BILLSTATUS with a positive control.
     expect(BILLS_COMPOSITION.toLowerCase()).not.toContain('subcommittee');
   });
 });
@@ -736,7 +765,7 @@ describe('the Medicare 190-day limit section', () => {
 
   it('does not describe H.R. 10876 as merely a cap repeal', () => {
     // H.R. 10876 is a second House repeal of the 190-day limit, but it is
-    // a separate bill from the seven Medicaid bills and a wider one: it
+    // a separate bill from the eight Medicaid bills and a wider one: it
     // also removes the standardized admission-and-discharge assessment
     // requirement and the public quality-reporting requirement.
     const b = MEDICARE_LIMIT.bills.find((x) => x.number === 'H.R. 10876');
@@ -750,7 +779,7 @@ describe('the Medicare 190-day limit section', () => {
     expect(b?.effect).toContain('not counted among them');
     // And it must not leak into the Medicaid count.
     expect(BILLS.map((x) => x.number)).not.toContain('H.R. 10876');
-    expect(BILLS).toHaveLength(7);
+    expect(BILLS).toHaveLength(8);
   });
 });
 

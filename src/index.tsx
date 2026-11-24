@@ -1624,11 +1624,12 @@ app.get('/', (c) => {
           <section id="bills">
             <div class="wrap">
               <span class="sec__idx">06 — What is moving in Congress</span>
-              <h2>Seven bills, six different answers</h2>
+              <h2>Eight bills, seven different answers</h2>
               <p class="lede">
-                All seven are in the 119th Congress. All seven are in committee. They disagree about
+                All eight are in the 119th Congress. All eight are in committee. They disagree about
                 whether to move the line, erase it, let it expire, erase it and require something in
-                its place, or leave it standing and let states opt around it.
+                its place, leave it standing and let states opt around it, or leave it standing and
+                carve whole kinds of facility out of the definition it turns on.
               </p>
               <div class="bills">
                 {BILLS.map((b) => (
