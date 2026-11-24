@@ -22,7 +22,7 @@ export const RETRIEVED = '2026-08-26';
  * page's visible content changes; leave RETRIEVED alone unless the data
  * itself was re-fetched.
  */
-export const PAGE_UPDATED = '2026-10-13';
+export const PAGE_UPDATED = '2026-11-23';
 
 export interface Sourced<T> {
   value: T;
@@ -985,10 +985,10 @@ export const BILLS: Bill[] = [
     party: 'D',
     district: 'CA-24',
     introduced: '2025-06-17',
-    cosponsors: '7 (5 D, 2 R)',
+    cosponsors: '8 (6 D, 2 R)',
     approach: 'Repeal, with a duty attached',
     effect:
-      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the seven that pairs a repeal with a community-capacity obligation.',
+      'Strikes the age-bar clause and makes the conforming changes, then adds a new §1902(a)(20)(D) requiring each state to have a plan — and to report on it annually — for increasing outpatient and community-based behavioral health care, crisis call centers, mobile crisis units, coordinated crisis response, and data sharing between physical health, mental health and addiction providers. It is the only one of the seven that pairs a repeal with a community-capacity obligation. Rep. Zoe Lofgren of California joined as a cosponsor on November 18, 2026 (checked against the bill’s Congress.gov cosponsor list on 2026-11-23).',
     status: 'Introduced; referred to committee',
     congressUrl: 'https://www.congress.gov/bill/119th-congress/house-bill/4022',
   },
